@@ -48,6 +48,7 @@ public:
 	/// 行列を転送する
 	/// </summary>
 	void TransferMatrix();
+	void UpdateMatrix();
 	/// <summary>
 	/// 定数バッファの取得
 	/// </summary>
