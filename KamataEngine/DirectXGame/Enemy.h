@@ -1,77 +1,86 @@
 #pragma once
-#include "3D/Model.h"
-#include "3D/WorldTransform.h"
-#include "3D/camera.h"
+#include "3d/WorldTransform.h"
+#include "3d/Camera.h"
+#include "3d/Model.h"
+#include "math/MathUtility.h"
+#include "kMath.h"
+#include "base/TextureManager.h"
 #include "EnemyBullet.h"
+#include <list>
 
+// 行動フェーズ
+enum class Phase {
+	Approach, // 接近する
+	Leave,    // 離脱する
+};
+
+// 前方宣言
 class Player;
+class GameScene;
 
 class Enemy {
-
-	//行動フェーズ
-	enum class Phase {
-
-		Approach, //接近
-		Leave //離脱
-
-	};
-
 public:
-
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Enemy();
-
-	void Initialze(KamataEngine::Model* model, uint32_t textureHandle, const KamataEngine::Vector3& position);
-
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position);
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-
-	void Draw(KamataEngine::Camera* camera);
-
-	// 接近フェーズの処理
-	void Approach();
-
-	//接近フェーズ初期化
-	void ApproachInitialize();
-
-	// 離脱フェーズの処理
-	void Leave();
-
-	void Fire();
-
-	//発射間隔
-	static const int kFireInterval = 60;
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void Draw(KamataEngine::Camera& camera);
 
 	void SetPlayer(Player* player) { player_ = player; }
 
-	//ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
 
-	//衝突を検出したら呼び出されるコールバック関数
+	// 発射間隔
+	static const int kFireInterval = 60;
+
+	void InitializeFirePhase();
+
+	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
-	//弾リストを取得
-	const std::list<EnemyBullet*>& GetBullets() const { return bullets_; }
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 private:
-
-	//ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
-
-	//モデル
 	KamataEngine::Model* model_ = nullptr;
 
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
+	// ゲームシーン
+	GameScene* gameScene_ = nullptr;
 
-	//フェーズ
+	uint32_t textureHandle_ = 0;
+
+	// 移動速度
+	KamataEngine::Vector3 velocity_ = { 0.0f, 0.0f, 0.02f };
+
+
+	// 行動
+	void movePhase();
 	Phase phase_ = Phase::Approach;
+	KamataEngine::Vector3 ApproachVelocity = { 0.0f, 0.0f, -0.02f };
+	KamataEngine::Vector3 LeaveVelocity = { -0.1f, 0.05f, 0.02f };
 
-	//弾
-	std::list<EnemyBullet*> bullets_;
+	/// <summary>
+	/// 弾発射
+	/// </summary>
+	void Fire();
 
-	//発射タイマー
-	int32_t fireTimer = 0;
+	// 発射タイマー
+	int32_t fireTimer_ = 0;
 
-	//自キャラ
+
+	// 自キャラ
 	Player* player_ = nullptr;
-
 };
+
+

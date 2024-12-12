@@ -1,68 +1,117 @@
 #pragma once
-#include <KamataEngine.h>
+
+#include "3d/WorldTransform.h"
+#include "audio/Audio.h"
+#include <base\DirectXCommon.h>
+#include <input\Input.h>
+#include "3d/Model.h"
+#include "2d/Sprite.h"
+#include "3d/Camera.h"
+#include "3d/WorldTransform.h"
+#include <math\MathUtility.h>
+#include <math\Matrix4x4.h>
+#include <math\Vector3.h>
+#include <math\Vector4.h>
+#include <cmath>
+#include "3d/DebugCamera.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "skydome.h"
-#include "3d/DebugCamera.h"
-#include "3d/Camera.h"
+#include "Skydome.h"
+#include "RailCamera.h"
+#include "EnemyBullet.h"
+#include <sstream>
 
-using namespace KamataEngine;
-
+/// <summary>
+/// ゲームシーン
+/// </summary>
 class GameScene {
 
-	//メンバ関数
-public:
-
-	//コンストラクタ
+public: // メンバ関数
+	/// <summary>
+	/// コンストクラタ
+	/// </summary>
 	GameScene();
 
-	//デストラクタ
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~GameScene();
 
-	//初期化
-	void Initialze();
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	void Initialize();
 
-	//毎フレーム処理
+	/// <summary>
+	/// 毎フレーム処理
+	/// </summary>
 	void Update();
 
-	//描画
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
-	void CheckAllCollision();
+	/// <summary>
+	/// 衝突判定と応答
+	/// </summary>
+	void CheckAllCollisions();
 
-	//メンバ変数
-private:
+	/// <summary>
+	/// 敵弾を追加する
+	/// </summary>
+	/// <param name="enemyBullet"></param>
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
 
-	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
-	Audio* audio_ = nullptr;
+	/// <summary>
+	/// 敵発生データの読み込み
+	/// </summary>
+	void LoadEnemyPopData();
 
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0;
-	uint32_t enemyTextureHandle_ = 0;
+	/// <summary>
+	/// 敵発生コマンドの更新
+	/// </summary>
+	void UpdateEnemyPopCommands();
 
-	//3Dモデル
-	Model* model_ = nullptr;
+private: // メンバ変数
+	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
+	KamataEngine::Input* input_ = nullptr;
+	KamataEngine::Audio* audio_ = nullptr;
 
-	//ビュープロジェクション(カメラ)
-	Camera camera_;
+	// デバッグカメラ
+	bool isDebugCameraActive_ = false;
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 
-	//プレイヤー
+	KamataEngine::WorldTransform worldTransform_;
+	KamataEngine::Camera camera_;
+
 	Player* player_ = nullptr;
+	KamataEngine::Model* modelPlayer_ = nullptr;
 
-	//敵
-	Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;
+	KamataEngine::Model* modelEnemy_ = nullptr;
 
-	//天球
-	Skydome* skydome_ = nullptr;
+	std::list<EnemyBullet*> enemyBullets_;
 
-	//天球モデル
-	Model* modelSkydome_ = nullptr;
+	// 弾リストを取得
+	const std::list<EnemyBullet*>& GetEnemyBullets() const { return enemyBullets_; }
 
-	//デバッグカメラ有効
-	bool isDebugcameraActive_ = false;
+	// 天球
+	Skydome* skyDome_ = nullptr;
+	KamataEngine::Model* modelSkydome_ = nullptr;
 
-	//デバッグカメラ
-	DebugCamera* debugCamera_ = nullptr;
+	// レールカメラ
+	RailCamera* railCamera_ = nullptr;
 
+	// 敵発生コマンド
+	std::stringstream enemyPopCommands;
+
+	// 敵発生コマンドの待機
+	bool waitFlag = false;
+	int32_t waitTimer = 0;
+
+
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 };
