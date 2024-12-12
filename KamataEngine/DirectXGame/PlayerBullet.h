@@ -1,48 +1,53 @@
 #pragma once
-#include <KamataEngine.h>
-#include <3d/Model.h>
-#include <math/Vector3.h>
-#include <3d/Camera.h>
+#include "3d/WorldTransform.h"
+//#include <base\WinApp.h>
+#include "3d/Camera.h"
+#include "3d/Model.h"
+#include <3d\ObjectColor.h>
+#include <input\Input.h>
+#include <math\Vector3.h>
+#include "kMath.h"
+#include <2d\Sprite.h>
+#include <base\TextureManager.h>
+#include "3d/ObjectColor.h"
 
 class PlayerBullet {
-
 public:
-
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
-
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw(const KamataEngine::Camera& camera);
 
-	//ワールド座標を取得
-	KamataEngine::Vector3 GetWorldPosition();
+	// getter
+	bool IsDead() const { return isDead_; }
 
-	bool isDead() const { return isDead_; }
-
-	//衝突を検出したら呼び出されるコールバック関数
+	// 衝突を検出したら呼び出されるコールバック関数
 	void OnCollision();
 
+	KamataEngine::Vector3 GetWorldPosition();
+
 private:
-
-	//ワールド変換データ
+	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;
-
-	//モデル
+	KamataEngine::ObjectColor objectColor_;
+	KamataEngine::Camera camera_;
 	KamataEngine::Model* model_ = nullptr;
 
-	//テクスチャハンドル
-	uint32_t textureHandle_ = 0u;
-
-	//速度
+	// 移動速度
 	KamataEngine::Vector3 velocity_;
 
-	//消えるまでの時間
+	// 消滅までの時間(寿命)<frm>
 	static const int32_t kLifeTime = 60 * 5;
-
-	//デスタイマー
+	// デスタイマー
 	int32_t deathTimer_ = kLifeTime;
-
-	//デスフラグ
+	// デスフラグ
 	bool isDead_ = false;
-
 };
