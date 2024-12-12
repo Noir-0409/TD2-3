@@ -39,7 +39,7 @@ void Enemy::Update()
 	//デスフラグの立った弾を削除
 	bullets_.remove_if([](EnemyBullet* bullet) {
 
-		if (bullet->isDead()) {
+		if (bullet->IsDead()) {
 
 			delete bullet;
 			return true;
@@ -74,7 +74,7 @@ void Enemy::Update()
 	//弾更新
 	for (EnemyBullet* bullet : bullets_) {
 
-		bullet->update();
+		bullet->Update();
 
 	}
 
@@ -186,7 +186,7 @@ void Enemy::Fire()
 
 	// 弾を生成して初期化
 	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->initialize(model_, enemyPos, velocity);
+	newBullet->Initialize(model_, enemyPos, velocity);
 
 	// 弾を登録
 	bullets_.push_back(newBullet);

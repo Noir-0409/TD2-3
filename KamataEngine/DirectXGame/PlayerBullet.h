@@ -8,9 +8,9 @@ class PlayerBullet {
 
 public:
 
-	void initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
 
-	void update();
+	void Update();
 
 	void Draw(const KamataEngine::Camera& camera);
 

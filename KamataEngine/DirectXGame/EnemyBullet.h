@@ -8,13 +8,13 @@ class EnemyBullet {
 
 public:
 
-	void initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
 
-	void update();
+	void Update();
 
 	void Draw(const KamataEngine::Camera& camera);
 
-	bool isDead() const { return isDead_; }
+	bool IsDead() const { return isDead_; }
 
 	//ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();

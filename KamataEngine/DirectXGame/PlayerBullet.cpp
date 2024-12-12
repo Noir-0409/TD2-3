@@ -2,7 +2,7 @@
 
 using namespace KamataEngine;
 
-void PlayerBullet::initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity)
+void PlayerBullet::Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity)
 {
 	//NULLポインタチェック
 	assert(model);
@@ -21,7 +21,7 @@ void PlayerBullet::initialize(KamataEngine::Model* model, const KamataEngine::Ve
 
 }
 
-void PlayerBullet::update()
+void PlayerBullet::Update()
 {
 
 	worldTransform_.translation_.x += velocity_.x;
