@@ -2,7 +2,7 @@
 
 using namespace KamataEngine;
 
-void EnemyBullet::initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity)
+void EnemyBullet::Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity)
 {
 
 	//NULLポインタチェック
@@ -22,7 +22,7 @@ void EnemyBullet::initialize(KamataEngine::Model* model, const KamataEngine::Vec
 
 }
 
-void EnemyBullet::update()
+void EnemyBullet::Update()
 {
 
 	worldTransform_.translation_.x -= velocity_.x;

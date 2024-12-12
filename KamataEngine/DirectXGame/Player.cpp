@@ -109,7 +109,7 @@ void Player::Update() {
 	//弾更新
 	for (PlayerBullet* bullet : bullets_) {
 
-		bullet->update();
+		bullet->Update();
 
 	}
 
@@ -163,7 +163,7 @@ void Player::Attack()
 
 		//弾を生成して初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->initialize(model_, worldTransform_.translation_, velocity);
+		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
 		//弾を登録
 		bullets_.push_back(newBullet);
