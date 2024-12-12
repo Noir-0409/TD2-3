@@ -10,6 +10,7 @@ public:
 	/// 初期化
 	/// </summary>
 	void Initialize(const KamataEngine::WorldTransform& worldTransform);
+
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -18,6 +19,13 @@ public:
 	KamataEngine::Camera& GetCamera() { return camera; }
 
 	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	
+	/// <summary>
+	/// 親となるワールドトランスフォームをセット
+	/// </summary>
+	/// <param name="parent">親となるワールドトランスフォーム</param>
+	void SetParent(const KamataEngine::WorldTransform* parent);
 
 private:
 	// ワールド変換データ

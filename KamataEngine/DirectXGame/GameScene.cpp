@@ -33,13 +33,14 @@ void GameScene::Initialize() {
 	// プレイヤーの初期化
 	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("enemy");
 	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_, Vector3{ -4.0f, -4.0f, 20.0f });
+	player_->Initialize(modelPlayer_, &camera_, Vector3{ 0.0f, 0.0f, 0.0f });
 
 	// レールカメラ
 	railCamera_ = new RailCamera();
 	railCamera_->Initialize(player_->GetWorldTransform());
 	// 自キャラとレールカメラの親子関係を結ぶ
-	player_->SetParent(&railCamera_->GetWorldTransform());
+	//player_->SetParent(&railCamera_->GetWorldTransform());
+	railCamera_->SetParent(&player_->GetWorldTransform());
 
 	// 敵の初期化
 	modelEnemy_ = KamataEngine::Model::CreateFromOBJ("cube");
@@ -56,8 +57,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	player_->Update();
 	UpdateEnemyPopCommands();
+	player_->Update();
 	railCamera_->Update();
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();

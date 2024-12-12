@@ -12,6 +12,8 @@ void RailCamera::Initialize(const WorldTransform& worldTransform) {
 }
 
 void RailCamera::Update() {
+	worldTransform_.translation_ = worldTransform_.parent_->translation_;
+	worldTransform_.rotation_ = worldTransform_.parent_->rotation_;
 
 	worldTransform_.translation_ += translation_;
 	worldTransform_.rotation_ += rotation_;
@@ -26,4 +28,9 @@ void RailCamera::Update() {
 	ImGui::DragFloat3("Rotation", &rotation_.x, 0.1f);
 	ImGui::End();
 
+}
+
+void RailCamera::SetParent(const WorldTransform* parent) {
+	// 親関係を結ぶ
+	worldTransform_.parent_ = parent;
 }
