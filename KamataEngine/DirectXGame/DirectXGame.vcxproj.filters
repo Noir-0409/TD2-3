@@ -16,37 +16,49 @@
     <Filter Include="シェーダー ファイル">
       <UniqueIdentifier>{718c7f4c-fc51-40ad-a221-b9456a7a1a3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{dffbff7c-3407-4ecc-9be2-09f42a31d00f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{147e0884-c0bf-40f7-aba6-d56dd25c12f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{e2788f35-4013-4f59-a05b-596351de74b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic">
+      <UniqueIdentifier>{82a93fd0-ec47-4b2b-8aba-5fadf5070b49}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="kMath.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Player.cpp">
+      <Filter>Player</Filter>
     </ClCompile>
     <ClCompile Include="PlayerBullet.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Player</Filter>
     </ClCompile>
-    <ClCompile Include="Skydome.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="WorldTransformEX.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="kMath.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="RailCamera.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="Skydome.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldTransformEX.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,32 +112,32 @@
     <None Include="imgui.ini" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="kMath.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBullet.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Player</Filter>
     </ClInclude>
-    <ClInclude Include="Skydome.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="kMath.h">
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="AABB.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="RailCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Skydome.h">
+      <Filter>Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
