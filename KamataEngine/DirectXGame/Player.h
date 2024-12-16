@@ -63,12 +63,15 @@ private:
 	// キャラクターの速さ
 	const float kCharacterSpeed = 0.2f;
 	// 移動限界座標
-	const float kMoveLimitX = 35.0f;
-	const float kMoveLimitY = 19.0f;
+	const float kMoveLimitX = 1000.0f;
+	const float kMoveLimitY = 1000.0f;
 
 	/// キャラクターの回転
 	// 回転の速さ[ラジアン/frame]
 	const float kRotSpeed = 0.02f;
+
+	// プレイヤーの移動量
+	float moveAmountZ_ = 0.0f;
 
 	// 弾
 	std::list<PlayerBullet*> bullets_;

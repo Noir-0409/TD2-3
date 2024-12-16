@@ -23,7 +23,7 @@ void GameScene::Initialize() {
 	input_ = KamataEngine::Input::GetInstance();
 	audio_ = KamataEngine::Audio::GetInstance();
 
-	debugCamera_ = new DebugCamera(1280, 720);
+	debugCamera_ = new DebugCamera(1920, 1080);
 
 	// 軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
@@ -53,7 +53,9 @@ void GameScene::Initialize() {
 
 
 	worldTransform_.Initialize();
+	camera_.farZ = 2000.0f;
 	camera_.Initialize();
+
 }
 
 void GameScene::Update() {

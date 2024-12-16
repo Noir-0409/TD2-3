@@ -53,6 +53,7 @@ void Player::Update() {
 	//worldTransform_.TransferMatrix();
 	ImGui::Begin("PlayerState");
 	ImGui::DragFloat3("pos", &worldTransform_.translation_.x, 0.1f);
+	ImGui::DragFloat("moveAmountZ", &moveAmountZ_, 0.01f);
 	ImGui::End();
 }
 
@@ -73,6 +74,8 @@ void Player::wolk() {
 	else if (input_->PushKey(DIK_W)) {
 		move.y += kCharacterSpeed;
 	}
+
+	worldTransform_.translation_.z += moveAmountZ_;
 
 	worldTransform_.translation_ += move;
 	// 範囲を超えないように処理
@@ -102,7 +105,7 @@ void Player::Attack() {
 
 		// 弾を生成し、初期化
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, GetWorldPosition(), velocity);
+		newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z}, velocity);
 
 		// 弾を登録する
 		bullets_.push_back(newBullet);
