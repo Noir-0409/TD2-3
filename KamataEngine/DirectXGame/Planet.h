@@ -13,6 +13,12 @@ public:
 
 	void Draw(KamataEngine::WorldTransform& worldTransform, KamataEngine::Camera& camera);
 
+	// 座標を設定する
+	void SetPosition(const KamataEngine::Vector3& position);
+
+	// 座標を取得する
+	KamataEngine::Vector3 GetPosition() const;
+
 private:
 
 //ワールドトランスフォーム
