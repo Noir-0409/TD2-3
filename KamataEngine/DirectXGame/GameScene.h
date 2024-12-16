@@ -19,6 +19,7 @@
 #include "Skydome.h"
 #include "RailCamera.h"
 #include "EnemyBullet.h"
+#include "Planet.h"
 #include <sstream>
 
 /// <summary>
@@ -99,6 +100,10 @@ private: // メンバ変数
 	// 天球
 	Skydome* skyDome_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
+
+	//惑星
+	Planet* planet_ = nullptr;
+	KamataEngine::Model* modelPlanet_ = nullptr;
 
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;

@@ -51,6 +51,10 @@ void GameScene::Initialize() {
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
 
+	//惑星の初期化
+	modelPlanet_ = Model::CreateFromOBJ("planet");
+	planet_ = new Planet();
+	planet_->Initialize(modelPlanet_,Vector3(0.0f,30.0f,5.0f));
 
 	worldTransform_.Initialize();
 	camera_.Initialize();
@@ -75,6 +79,7 @@ void GameScene::Update() {
 		enemyBullet->Update();
 	}
 	skyDome_->Update();
+	planet_->Update();
 	CheckAllCollisions();
 
 #ifdef _DEBUG
@@ -127,6 +132,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	skyDome_->Draw(worldTransform_, camera_);
+	planet_->Draw(worldTransform_, camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(camera_);

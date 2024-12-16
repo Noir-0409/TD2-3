@@ -60,6 +60,9 @@
     <ClCompile Include="WorldTransformEX.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Planet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -138,6 +141,9 @@
     </ClInclude>
     <ClInclude Include="Skydome.h">
       <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Planet.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
