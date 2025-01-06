@@ -21,13 +21,15 @@ void RailCamera::Update() {
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	// カメラオブジェクトのワールド行列からビュー行列を計算する
 	camera.matView = Inverse(worldTransform_.matWorld_);
+}
 
-
+void RailCamera::UpdateImgui() {
+#ifdef _DEBUG
 	ImGui::Begin("Camera");
 	ImGui::DragFloat3("Translation", &translation_.x, 0.1f);
 	ImGui::DragFloat3("Rotation", &rotation_.x, 0.1f);
 	ImGui::End();
-
+#endif // _DEBUG
 }
 
 void RailCamera::SetParent(const WorldTransform* parent) {

@@ -3,6 +3,7 @@
 #include "AABB.h"
 //#include "Matrix4x4.h"
 #include <math\Vector3.h>
+#include <math/Vector2.h>
 #include <math\Matrix4x4.h>
 //#include "Vector3.h"
 #define _USE_MATH_DEFINES
@@ -60,8 +61,10 @@ KamataEngine::Vector3 MathTransform(const KamataEngine::Vector3& vector, const K
 // ベクトル変換
 KamataEngine::Vector3 TransformNormal(const KamataEngine::Vector3& v, const KamataEngine::Matrix4x4& m);
 
-// 正規化
+// 正規化Vector3
 KamataEngine::Vector3 Normalize(const KamataEngine::Vector3& v);
+// 正規化Vector2
+KamataEngine::Vector2 Normalize(const KamataEngine::Vector2& v);
 
 // 逆行列
 // 逆行列

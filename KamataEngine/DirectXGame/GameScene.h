@@ -110,6 +110,16 @@ private: // メンバ変数
 	bool waitFlag = false;
 	int32_t waitTimer = 0;
 
+	// マウスカーソルの表示非表示
+	bool showCursor_ = false;
+	int cursor = ShowCursor(showCursor_);
+
+	bool showMenu_ = false;
+
+	bool useTarget_ = false;
+
+	void UpdateCursor();
+
 
 	/// <summary>
 	/// ゲームシーン用
