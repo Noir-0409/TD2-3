@@ -19,6 +19,8 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() {
 
+	SetCursorPos(990, 540);
+
 	dxCommon_ = KamataEngine::DirectXCommon::GetInstance();
 	input_ = KamataEngine::Input::GetInstance();
 	audio_ = KamataEngine::Audio::GetInstance();
@@ -34,6 +36,7 @@ void GameScene::Initialize() {
 	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("enemy");
 	player_ = new Player();
 	player_->Initialize(modelPlayer_, &camera_, Vector3{ 0.0f, 0.0f, 0.0f });
+	useTarget_ = player_->UseTarget();
 
 	// レールカメラ
 	railCamera_ = new RailCamera();
@@ -59,25 +62,39 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	UpdateEnemyPopCommands();
-	player_->Update();
-	railCamera_->Update();
-	for (Enemy* enemy : enemies_) {
-		enemy->Update();
-	}
-	// デスフラグの立った弾を削除
-	enemyBullets_.remove_if([](EnemyBullet* bullet) {
-		if (bullet->IsDead()) {
-			delete bullet;
-			return true;
+	UpdateCursor();
+#ifdef _DEBUG
+	player_->UpdateImgui();
+	railCamera_->UpdateImgui();
+#endif // _DEBUG
+
+	// メニューを開いていているかどうか
+	if (!showMenu_) {
+		UpdateEnemyPopCommands();
+		player_->Update();
+		railCamera_->Update();
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
 		}
-		return false;
+		// デスフラグの立った弾を削除
+		enemyBullets_.remove_if([](EnemyBullet* bullet) {
+			if (bullet->IsDead()) {
+				delete bullet;
+				return true;
+			}
+			return false;
 		});
-	for (EnemyBullet* enemyBullet : enemyBullets_) {
-		enemyBullet->Update();
+		for (EnemyBullet* enemyBullet : enemyBullets_) {
+			enemyBullet->Update();
+		}
+		skyDome_->Update();
+		CheckAllCollisions();
+	} else {
+		if (input_->TriggerKey(DIK_T)) {
+			useTarget_ = !useTarget_;
+			player_->SetUseTarget(useTarget_);
+		}
 	}
-	skyDome_->Update();
-	CheckAllCollisions();
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_0)) {
@@ -180,7 +197,9 @@ void GameScene::CheckAllCollisions() {
 		// 弾と弾の交差判定
 		if (dist <= len) {
 			// 自キャラの衝突時コールバックを呼び出す
-			player_->OnCollision();
+			if (!player_->IsDamage()) {
+				player_->OnCollision();
+			}
 			// 敵弾の衝突時コールバックを呼び出す
 			bullet->OnCollision();
 		}
@@ -204,7 +223,9 @@ void GameScene::CheckAllCollisions() {
 			// 弾と弾の交差
 			if (dist <= len) {
 				// 敵キャラの衝突コールバックを呼び出す
-				enemy->OnCollision();
+				if (!enemy->IsDamage()) {
+					enemy->OnCollision();
+				}
 				// 自弾の衝突コールバックを呼び出す
 				bullet->OnCollision();
 			}
@@ -239,6 +260,22 @@ void GameScene::CheckAllCollisions() {
 void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
 	// リストに登録する
 	enemyBullets_.push_back(enemyBullet);
+}
+
+void GameScene::UpdateCursor() {
+	if (input_->TriggerKey(DIK_ESCAPE)) {
+		showCursor_ = !showCursor_;
+		showMenu_ = showCursor_;
+		cursor = ShowCursor(showCursor_);
+		if (showCursor_) {
+			SetCursorPos(990, 540);
+		}
+	}
+	if (cursor >= 0) {
+		cursor = 1;
+	} else if (cursor <= 0) {
+		cursor = -1;
+	}
 }
 
 // 敵発生コマンド
@@ -313,7 +350,6 @@ void GameScene::UpdateEnemyPopCommands() {
 
 			// 待ち時間
 			int32_t waitTime = atoi(word.c_str());
-
 			// 待機開始
 			waitFlag = true;
 			waitTimer = waitTime;

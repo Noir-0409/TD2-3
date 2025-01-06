@@ -51,9 +51,33 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	bool IsDead() { return isDead_; }
+
+	bool IsDelete() { return isDelete_; }
+
+	bool IsDamage() { return isDamage_; }
+
+	bool IsTarget() const { return target_; }
+
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;
+
+	// HP
+	float hp_ = 100.0f;
+	// 生きているかのフラグ
+	bool isDead_ = false;
+
+	// ダメージを受けたかどうか
+	bool isDamage_ = false;
+	// ダメージを受けた後の無敵時間
+	float damageDelayTime_ = 1.0f;
+	float damageDelayTimer_ = 0.0f;
+
+	// ダメージを受けた時に敵を描画する時間
+	int inDamageDrawCount_ = 1;
+	// カウンター
+	uint8_t inDamageDrawCounter_ = 0;
 
 	// ゲームシーン
 	GameScene* gameScene_ = nullptr;
@@ -81,6 +105,13 @@ private:
 
 	// 自キャラ
 	Player* player_ = nullptr;
+
+	// 消滅までの時間
+	float delTime_ = 0.0f;
+	bool isDelete_ = false;
+
+	// ターゲットされているか
+	bool target_ = false;
 };
 
 

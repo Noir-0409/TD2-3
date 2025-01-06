@@ -16,6 +16,8 @@ public:
 	/// </summary>
 	void Update();
 
+	void UpdateImgui();
+
 	KamataEngine::Camera& GetCamera() { return camera; }
 
 	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }

@@ -9,6 +9,8 @@
 #include "kMath.h"
 #include "PlayerBullet.h"
 #include <list>
+#include <Windows.h>
+#include <iostream>
 
 class PlayerBullet;
 
@@ -48,6 +50,19 @@ public:
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 
+	bool IsDead() { return isDead_; }
+
+	bool IsDelete() { return isDelete_; }
+
+	bool IsDamage() { return isDamage_; }
+
+	bool UseTarget() const { return useTarget_; }
+
+	void SetUseTarget(bool useTarget) { useTarget_ = useTarget; }
+
+	void UpdateImgui();
+
+
 private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;
@@ -55,10 +70,28 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
 
+	// HP
+	float hp_ = 100.0f;
+	// 生きているかのフラグ
+	bool isDead_ = false;
+
+	// ダメージを受けたかどうか
+	bool isDamage_ = false;
+	// ダメージを受けた後の無敵時間
+	float damageDelayTime_ = 1.0f;
+	float damageDelayTimer_ = 0.0f;
+
+	// ダメージを受けた時に敵を描画する時間
+	int inDamageDrawCount_ = 1;
+	// カウンター
+	uint8_t inDamageDrawCounter_ = 0;
+
 	void Move();
 	void wolk();
 	void Rotate();
 
+	KamataEngine::Vector2 GetMousePosition();
+	KamataEngine::Vector2 mousePos_;
 
 	// キャラクターの速さ
 	const float kCharacterSpeed = 0.2f;
@@ -77,4 +110,15 @@ private:
 	std::list<PlayerBullet*> bullets_;
 	void Attack();
 
+	// 攻撃間隔
+	bool isAttack_ = false;
+	float fireDelayTimer_ = 0.0f;
+	float fireDelayTime_ = 0.5f;
+
+	// 消滅までの時間
+	float delTime_ = 0.0f;
+	bool isDelete_ = false;
+
+	// ターゲット機能のon/off
+	bool useTarget_ = true;
 };

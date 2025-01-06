@@ -214,6 +214,13 @@ Vector3 Normalize(const Vector3& v) {
 	return ans;
 };
 
+Vector2 Normalize(const Vector2& v) {
+	Vector2 ans;
+	ans.x = v.x / sqrtf((v.x * v.x) + (v.y * v.y));
+	ans.y = v.y / sqrtf((v.x * v.x) + (v.y * v.y));
+	return ans;
+};
+
 // 逆行列
 Matrix4x4 Inverse(const Matrix4x4& m) {
 	Matrix4x4 ans;
