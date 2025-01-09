@@ -66,6 +66,9 @@ KamataEngine::Vector3 Normalize(const KamataEngine::Vector3& v);
 // 正規化Vector2
 KamataEngine::Vector2 Normalize(const KamataEngine::Vector2& v);
 
+// 内積
+float Dot(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
+
 // 逆行列
 // 逆行列
 KamataEngine::Matrix4x4 Inverse(const KamataEngine::Matrix4x4& m);

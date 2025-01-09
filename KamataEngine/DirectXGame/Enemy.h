@@ -59,6 +59,8 @@ public:
 
 	bool IsTarget() const { return target_; }
 
+	void SetTarget(bool target) { target_ = target; }
+
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;

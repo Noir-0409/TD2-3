@@ -1,6 +1,8 @@
 #include "Player.h"
 #include <imgui.h>
 #include "algorithm"
+#include <cassert>
+#include "GameScene.h"
 using namespace KamataEngine;
 
 Player::~Player() {
@@ -21,19 +23,45 @@ Vector3 Player::GetWorldPosition() {
 	return worldPos;
 }
 
+// ターゲットのワールド座標を取得
+Vector3 Player::GetTargetWorldPosition() {
+	// ワールド座標を入れる変数
+	Vector3 worldPos;
+	float dist = 10.0f;
+	// playerのワールド座標を入れながらターゲットの位置を出力させる
+	Vector3 world = {worldTransform_.matWorld_.m[3][0], worldTransform_.matWorld_.m[3][1], worldPos.z = worldTransform_.matWorld_.m[3][2] + dist};
+	worldPos = TransformNormal(world, targetWorldTransform_.matWorld_);
+	//// ワールド座標の平行同成分を取得
+	//worldPos.x = world.matWorld_.m[3][0];
+	//worldPos.y = world.matWorld_.m[3][1];
+	//worldPos.z = world.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
 void Player::Initialize(Model* model, KamataEngine::Camera* camera, const Vector3& position) {
 	input_ = KamataEngine::Input::GetInstance();
+	assert(model);
 	model_ = model;
+
+	targetModel_ = Model::CreateFromOBJ("target");
 	worldTransform_.Initialize();
+	targetWorldTransform_.Initialize();
+	targetWorldTransform_.translation_ = position;
 	worldTransform_.translation_ = position;
 	objectColor_.Initialize();
+	targetObjectColor_.Initialize();
+	targetObjectColor_.SetColor(Vector4{65.0f, 255.0f, 75.0f, 1.0f});
 	camera_ = camera;
 }
 
 void Player::Update() {
+	mousePos_ = gameScene_->GetMousePos();
 	wolk();
+	TargetUpdate();
 	Rotate();
 	Attack();
+
 
 	// ダメージを受けたら実行
 	if (isDamage_) {
@@ -58,9 +86,10 @@ void Player::Update() {
 		bullet->Update();
 	}
 
-	mousePos_ = GetMousePosition();
+	//mousePos_ = GetMousePosition();
 	//worldTransform_.rotation_.y = (mousePos_.x - 990.0f) / 200;
 	//worldTransform_.rotation_.x = (mousePos_.y - 540.0f) / 200;
+	targetWorldTransform_.UpdateMatrix();
 	worldTransform_.UpdateMatrix();
 	//worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
@@ -74,6 +103,7 @@ void Player::UpdateImgui() {
 	ImGui::DragFloat("moveAmountZ", &moveAmountZ_, 0.01f);
 	ImGui::DragFloat2("mousePos", &mousePos_.x, 0.01f);
 	ImGui::Checkbox("useTarget", &useTarget_);
+	ImGui::Checkbox("isTarget", &isTarget_);
 	ImGui::End();
 #endif // _DEBUG
 }
@@ -114,29 +144,72 @@ void Player::Rotate() {
 	}
 }
 
+void Player::TargetUpdate() {
+	// 代入
+	targetWorldTransform_.translation_ = worldTransform_.translation_;
+	//targetWorldTransform_.translation_.z = worldTransform_.translation_.z - 1.4f;
+	mousePos_.x = std::clamp(mousePos_.x, 0.0f, 1980.0f);
+	mousePos_.y = std::clamp(mousePos_.y, 0.0f, 1000.0f);
+	// 照準の回転を変更して動かす
+	targetWorldTransform_.rotation_.y = (mousePos_.x - 990.0f) / 1920;
+	targetWorldTransform_.rotation_.x = (mousePos_.y - 540.0f) / 2040;
+	targetWorldTransform_.rotation_.y = std::clamp(targetWorldTransform_.rotation_.y, (0 - 990.0f) / 1920, (1919 - 990.0f) / 1920);
+	targetWorldTransform_.rotation_.x = std::clamp(targetWorldTransform_.rotation_.x, (0 - 990.0f) / 2040, (1919 - 990.0f) / 2040);
+	targetWorldTransform_.scale_ = worldTransform_.scale_;
+}
+
 void Player::Attack() {
-	if (input_->PushKey(DIK_SPACE) && !isAttack_) {
-		isAttack_ = true;
-		// 弾の速度
-		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
+	if (useTarget_ && isTarget_) {
+		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
 
-		// 速度ベクトルを自機の向きに合わせて回転させる
-		velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+			isAttack_ = true;
+			// 弾の速度
+			const float kBulletSpeed = 5.0f;
+			Vector3 worldPos = GetWorldPosition();
+			Vector3 velocity = targetWorldPosition_ - worldPos;
+			velocity = Normalize(velocity);
+			velocity *= kBulletSpeed;
+			// 速度ベクトルを自機の向きに合わせて回転させる
+			velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
-		// 弾を生成し、初期化
-		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z}, velocity);
+			// 弾を生成し、初期化
+			PlayerBullet* newBullet = new PlayerBullet();
+			newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z}, velocity);
 
-		// 弾を登録する
-		bullets_.push_back(newBullet);
-	} else if (isAttack_) { // 攻撃間隔
-		fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
-		if (fireDelayTimer_ >= 1.0f) {
-			isAttack_ = false;
-			fireDelayTimer_ = 0.0f;
-			/*fireDelayTime_ -= 0.08f;
-			fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+			// 弾を登録する
+			bullets_.push_back(newBullet);
+		} else if (isAttack_) { // 攻撃間隔
+			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
+			if (fireDelayTimer_ >= 1.0f) {
+				isAttack_ = false;
+				fireDelayTimer_ = 0.0f;
+				/*fireDelayTime_ -= 0.08f;
+				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+			}
+		}
+	} else {
+		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
+			isAttack_ = true;
+			// 弾の速度
+			const float kBulletSpeed = 5.0f;
+			Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
+			// 速度ベクトルを自機の向きに合わせて回転させる
+			velocity = TransformNormal(velocity, targetWorldTransform_.matWorld_);
+
+			// 弾を生成し、初期化
+			PlayerBullet* newBullet = new PlayerBullet();
+			newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z}, velocity);
+
+			// 弾を登録する
+			bullets_.push_back(newBullet);
+		} else if (isAttack_) { // 攻撃間隔
+			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
+			if (fireDelayTimer_ >= 1.0f) {
+				isAttack_ = false;
+				fireDelayTimer_ = 0.0f;
+				/*fireDelayTime_ -= 0.08f;
+				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+			}
 		}
 	}
 	/*if (!input_->PushKey(DIK_SPACE)) {
@@ -150,9 +223,11 @@ void Player::Draw(KamataEngine::Camera& camera) {
 	if (isDamage_) {
 		if (inDamageDrawCount_ & inDamageDrawCounter_) {
 			model_->Draw(worldTransform_, camera, &objectColor_);
+			targetModel_->Draw(targetWorldTransform_, camera, &targetObjectColor_);
 		}
 	} else {
 		model_->Draw(worldTransform_, camera, &objectColor_);
+		targetModel_->Draw(targetWorldTransform_, camera, &targetObjectColor_);
 	}
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Draw(camera);
@@ -167,14 +242,4 @@ void Player::OnCollision() {
 void Player::SetParent(const WorldTransform* parent) {
 	// 親関係を結ぶ
 	worldTransform_.parent_ = parent;
-}
-
-Vector2 Player::GetMousePosition() { 
-	POINT mousePoint;
-	GetCursorPos(&mousePoint);
-	Vector2 mousePosition;
-	mousePosition.x = float(mousePoint.x);
-	mousePosition.y = float(mousePoint.y);
-
-	return mousePosition;
 }

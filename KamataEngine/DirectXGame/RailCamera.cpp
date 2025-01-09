@@ -29,6 +29,7 @@ void RailCamera::UpdateImgui() {
 	ImGui::DragFloat3("Translation", &translation_.x, 0.1f);
 	ImGui::DragFloat3("Rotation", &rotation_.x, 0.1f);
 	ImGui::End();
+	//camera.UpdateMatrix();
 #endif // _DEBUG
 }
 

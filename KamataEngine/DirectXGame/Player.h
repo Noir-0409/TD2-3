@@ -13,6 +13,7 @@
 #include <iostream>
 
 class PlayerBullet;
+class GameScene;
 
 class Player {
 public:
@@ -42,10 +43,16 @@ public:
 	/// <param name="parent">親となるワールドトランスフォーム</param>
 	void SetParent(const KamataEngine::WorldTransform* parent);
 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
+
+	void SetTargetPositoin(KamataEngine::Vector3 targetPos) { targetWorldPosition_ = targetPos; }
+
 	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }
 
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition();
+	// ターゲットのワールド座標を取得
+	KamataEngine::Vector3 GetTargetWorldPosition();
 
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
@@ -62,13 +69,21 @@ public:
 
 	void UpdateImgui();
 
+	bool IsTarget() const { return isTarget_; }
+
+	void SetTarget(bool target) { isTarget_ = target; }
 
 private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;
+	KamataEngine::WorldTransform targetWorldTransform_;
 	KamataEngine::Camera* camera_ = nullptr;
 	KamataEngine::Model* model_ = nullptr;
+	KamataEngine::Model* targetModel_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
+	KamataEngine::ObjectColor targetObjectColor_;
+
+	GameScene* gameScene_ = nullptr;
 
 	// HP
 	float hp_ = 100.0f;
@@ -90,7 +105,7 @@ private:
 	void wolk();
 	void Rotate();
 
-	KamataEngine::Vector2 GetMousePosition();
+	//KamataEngine::Vector2 GetMousePosition();
 	KamataEngine::Vector2 mousePos_;
 
 	// キャラクターの速さ
@@ -113,7 +128,7 @@ private:
 	// 攻撃間隔
 	bool isAttack_ = false;
 	float fireDelayTimer_ = 0.0f;
-	float fireDelayTime_ = 0.5f;
+	float fireDelayTime_ = 0.3f;
 
 	// 消滅までの時間
 	float delTime_ = 0.0f;
@@ -121,4 +136,13 @@ private:
 
 	// ターゲット機能のon/off
 	bool useTarget_ = true;
+
+	// 敵をターゲットしているか
+	bool isTarget_ = false;
+
+	void TargetUpdate();
+
+	// ターゲットのワールド座標の取得
+	KamataEngine::Vector3 targetWorldPosition_ = {0.0f, 0.0f, 0.0f};
+	
 };

@@ -221,6 +221,13 @@ Vector2 Normalize(const Vector2& v) {
 	return ans;
 };
 
+// 内積
+float Dot(const Vector3& v1, const Vector3& v2) {
+	float ans;
+	ans = (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+	return ans;
+};
+
 // 逆行列
 Matrix4x4 Inverse(const Matrix4x4& m) {
 	Matrix4x4 ans;
