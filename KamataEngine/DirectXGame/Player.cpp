@@ -161,6 +161,7 @@ void Player::TargetUpdate() {
 void Player::Attack() {
 	if (useTarget_ && isTarget_) {
 		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
+
 			isAttack_ = true;
 			// 弾の速度
 			const float kBulletSpeed = 5.0f;
