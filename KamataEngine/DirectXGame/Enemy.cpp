@@ -82,14 +82,14 @@ void Enemy::movePhase() {
 	case Phase::Approach:
 	default:
 		// 移動(ベクトルを加算)
-		worldTransform_.translation_ += ApproachVelocity;
+		worldTransform_.translation_ += ApproachVelocity *0.0f;
 		if (worldTransform_.translation_.z < 0.0f) {
 			phase_ = Phase::Leave;
 		}
 		break;
 	case Phase::Leave:
 		// 移動(ベクトルを加算)
-		worldTransform_.translation_ += LeaveVelocity;
+		worldTransform_.translation_ += LeaveVelocity  * 0.0f;
 		break;
 	}
 	// 射撃

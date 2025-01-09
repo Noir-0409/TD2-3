@@ -2,6 +2,9 @@
 #include <cassert>
 #include <3d\AxisIndicator.h>
 #include "fstream"
+#include <imgui.h>
+#include <algorithm>
+
 using namespace KamataEngine;
 
 GameScene::GameScene() {}
@@ -20,6 +23,8 @@ GameScene::~GameScene() {
 void GameScene::Initialize() {
 
 	SetCursorPos(990, 540);
+	mousePos_ = GetMousePosition();
+	mouseSensi_ = {0.5f, 1.7f};
 
 	dxCommon_ = KamataEngine::DirectXCommon::GetInstance();
 	input_ = KamataEngine::Input::GetInstance();
@@ -36,6 +41,7 @@ void GameScene::Initialize() {
 	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("enemy");
 	player_ = new Player();
 	player_->Initialize(modelPlayer_, &camera_, Vector3{ 0.0f, 0.0f, 0.0f });
+	player_->SetGameScene(this);
 	useTarget_ = player_->UseTarget();
 
 	// レールカメラ
@@ -54,7 +60,6 @@ void GameScene::Initialize() {
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
 
-
 	worldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();
@@ -66,6 +71,9 @@ void GameScene::Update() {
 #ifdef _DEBUG
 	player_->UpdateImgui();
 	railCamera_->UpdateImgui();
+	if (input_->TriggerKey(DIK_AT)) {
+		printf("");
+	}
 #endif // _DEBUG
 
 	// メニューを開いていているかどうか
@@ -89,6 +97,9 @@ void GameScene::Update() {
 		}
 		skyDome_->Update();
 		CheckAllCollisions();
+		if (player_->UseTarget()) {
+			CheckLockOn();
+		}
 	} else {
 		if (input_->TriggerKey(DIK_T)) {
 			useTarget_ = !useTarget_;
@@ -257,12 +268,57 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 }
 
+void GameScene::CheckLockOn() { 
+	Vector3 posA, posB, posC;
+
+	posA = player_->GetWorldPosition();
+	posB = player_->GetTargetWorldPosition();
+
+	Vector3 TargetVector = posB - posA;
+	TargetVector = Normalize(TargetVector);
+	
+	for (Enemy* enemy : enemies_) {
+		posC = enemy->GetWorldPosition();
+		Vector3 enemyVector = posC - posA;
+		enemyVector = Normalize(enemyVector);
+		float rotate = std::acos(Dot(TargetVector, enemyVector));
+		if (rotate <= 0.1f && !player_->IsTarget()) {
+			lockonTimer_ += 1.0f / 60 / lockonTime_;
+		} else if (rotate > 0.1f&& enemy->IsTarget()) {
+			enemy->SetTarget(false);
+			player_->SetTarget(false);
+		}
+		if (lockonTimer_ >= 1.0f) {
+			lockonTimer_ = 0.0f;
+			enemy->SetTarget(true);
+			player_->SetTarget(true);
+			player_->SetTargetPositoin(posC);
+		}
+	}
+}
+
 void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
 	// リストに登録する
 	enemyBullets_.push_back(enemyBullet);
 }
 
 void GameScene::UpdateCursor() {
+	// ゲーム中
+	if (!showCursor_) {
+		Vector2 mousePos = GetMousePosition();
+		if (mousePos.x != 990.0f) {
+			mousePos_.x += (mousePos.x - 990.0f) * mouseSensi_.x;
+			SetCursorPos(990, 540);
+		}
+		if (mousePos.y != 540.0f) {
+			mousePos_.y += (mousePos.y - 540.0f) * mouseSensi_.y;
+			SetCursorPos(990, 540);
+		}
+	}
+	mousePos_.x = std::clamp(mousePos_.x, 0.0f, 1920.0f);
+	mousePos_.y = std::clamp(mousePos_.y, 0.0f, 1000.0f);
+
+	// メニュー
 	if (input_->TriggerKey(DIK_ESCAPE)) {
 		showCursor_ = !showCursor_;
 		showMenu_ = showCursor_;
@@ -276,6 +332,16 @@ void GameScene::UpdateCursor() {
 	} else if (cursor <= 0) {
 		cursor = -1;
 	}
+}
+
+Vector2 GameScene::GetMousePosition() {
+	POINT mousePoint;
+	GetCursorPos(&mousePoint);
+	Vector2 mousePosition;
+	mousePosition.x = float(mousePoint.x);
+	mousePosition.y = float(mousePoint.y);
+
+	return mousePosition;
 }
 
 // 敵発生コマンド

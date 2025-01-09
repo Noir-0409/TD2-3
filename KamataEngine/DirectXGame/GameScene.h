@@ -58,6 +58,11 @@ public: // メンバ関数
 	void CheckAllCollisions();
 
 	/// <summary>
+	/// ロックオン
+	/// </summary>
+	void CheckLockOn();
+
+	/// <summary>
 	/// 敵弾を追加する
 	/// </summary>
 	/// <param name="enemyBullet"></param>
@@ -72,6 +77,12 @@ public: // メンバ関数
 	/// 敵発生コマンドの更新
 	/// </summary>
 	void UpdateEnemyPopCommands();
+
+	bool UseTarget() { return useTarget_; }
+	// マウスの位置を取得
+	KamataEngine::Vector2 GetMousePosition();
+	// マウスの移動量の取得
+	KamataEngine::Vector2 GetMousePos() const { return mousePos_; }
 
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
@@ -118,8 +129,17 @@ private: // メンバ変数
 
 	bool useTarget_ = false;
 
+	// ロックオンタイマー
+	float lockonTimer_ = 0.0f;
+	float lockonTime_ = 1.0f;
+
+	KamataEngine::Vector2 mousePos_;
+
+	// カーソル処理の更新
 	void UpdateCursor();
 
+	// マウス感度
+	KamataEngine::Vector2 mouseSensi_; 
 
 	/// <summary>
 	/// ゲームシーン用
