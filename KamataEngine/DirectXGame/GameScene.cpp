@@ -163,11 +163,23 @@ void GameScene::Update() {
 		//操作を反転
 		player_->InvertControls();
 
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::fog;
+
+		}
+
 		break;
 
 	case Planet::fog:
 
 		//視界悪化
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::newEnemy;
+
+		}
 
 		break;
 
@@ -175,11 +187,23 @@ void GameScene::Update() {
 
 		//新しい敵
 
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::heal;
+
+		}
+
 		break;
 
 	case Planet::heal:
 
 		//HP回復
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::damage;
+
+		}
 
 		break;
 
@@ -188,11 +212,23 @@ void GameScene::Update() {
 
 		//HP減少
 
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::attack;
+
+		}
+
 		break;
 
 	case Planet::attack:
 
 		//攻撃力変化
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::bullet;
+
+		}
 
 		break;
 
@@ -200,11 +236,23 @@ void GameScene::Update() {
 
 		//弾の軌道
 
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::obstacle;
+
+		}
+
 		break;
 
 	case Planet::obstacle:
 
 		//障害物
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::time;
+
+		}
 
 		break;
 
@@ -212,11 +260,23 @@ void GameScene::Update() {
 
 		//時間の流れ
 
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::gravity;
+
+		}
+
 		break;
 
 	case Planet::gravity:
 
 		//重力
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::normal;
+
+		}
 
 		break;
 
