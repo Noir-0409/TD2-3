@@ -25,7 +25,7 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() {
 
-	SetCursorPos(990, 540);
+	SetCursorPos(960, 540);
 	mousePos_ = GetMousePosition();
 	mouseSensi_ = {0.5f, 1.7f};
 
@@ -64,6 +64,7 @@ void GameScene::Initialize() {
 	skyDome_->Initialize(modelSkydome_);
 
 	worldTransform_.Initialize();
+	planetWorldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();
 
@@ -79,6 +80,7 @@ void GameScene::Update() {
 	}
 	ImGui::Begin("mouseSensi");
 	ImGui::DragFloat2("sensi", &mouseSensi_.x, 0.1f);
+	ImGui::DragFloat("fov", &camera_.fovAngleY, 0.01f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -117,6 +119,8 @@ void GameScene::Update() {
 		if (player_->UseTarget()) {
 			CheckLockOn();
 		}
+		planetWorldTransform_.translation_.z -= 1;
+		planetWorldTransform_.UpdateMatrix();
 	} else {
 		if (input_->TriggerKey(DIK_T)) {
 			useTarget_ = !useTarget_;
@@ -140,7 +144,6 @@ void GameScene::Update() {
 		// カメラ行列の更新と転送
 		camera_.UpdateMatrix();
 	}
-
 	camera_.matView = railCamera_->GetCamera().matView;
 	// camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
@@ -173,7 +176,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	skyDome_->Draw(worldTransform_, camera_);
+	skyDome_->Draw(planetWorldTransform_ , camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(camera_);
@@ -371,13 +374,13 @@ void GameScene::UpdateCursor() {
 	// ゲーム中
 	if (!showCursor_) {
 		Vector2 mousePos = GetMousePosition();
-		if (mousePos.x != 990.0f) {
-			mousePos_.x += (mousePos.x - 990.0f) * mouseSensi_.x;
-			SetCursorPos(990, 540);
+		if (mousePos.x != 960.0f) {
+			mousePos_.x += (mousePos.x - 960.0f) * mouseSensi_.x;
+			SetCursorPos(960, 540);
 		}
 		if (mousePos.y != 540.0f) {
 			mousePos_.y += (mousePos.y - 540.0f) * mouseSensi_.y;
-			SetCursorPos(990, 540);
+			SetCursorPos(960, 540);
 		}
 	}
 	mousePos_.x = std::clamp(mousePos_.x, 0.0f, 1920.0f);
@@ -388,7 +391,7 @@ void GameScene::UpdateCursor() {
 		showCursor_ = !showCursor_;
 		showMenu_ = showCursor_;
 		cursor = ShowCursor(showCursor_);
-		SetCursorPos(990, 540);
+		SetCursorPos(960, 540);
 	}
 	if (cursor >= 0) {
 		cursor = 1;

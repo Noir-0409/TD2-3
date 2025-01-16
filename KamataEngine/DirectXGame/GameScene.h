@@ -119,6 +119,9 @@ private: // メンバ変数
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Camera camera_;
 
+	// 天球移動用
+	KamataEngine::WorldTransform planetWorldTransform_;
+
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
 
