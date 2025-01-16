@@ -107,6 +107,30 @@ void Player::UpdateImgui() {
 #endif // _DEBUG
 }
 
+void Player::InvertControls()
+{
+	// キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	if (input_->PushKey(DIK_A)) {
+		move.x += kCharacterSpeed * 2;
+	} else if (input_->PushKey(DIK_D)) {
+		move.x -= kCharacterSpeed * 2;
+	}
+
+	if (input_->PushKey(DIK_S)) {
+		move.y += kCharacterSpeed * 2;
+	} else if (input_->PushKey(DIK_W)) {
+		move.y -= kCharacterSpeed * 2;
+	}
+
+	worldTransform_.translation_ += move;
+	// 範囲を超えないように処理
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+
+}
+
 void Player::wolk() {
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };

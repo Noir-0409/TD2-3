@@ -145,6 +145,29 @@ void GameScene::Update() {
 	// camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
 	//worldTransform_.UpdateMatirx();
+
+	switch (planet_) {
+
+	case Planet::normal:
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::control;
+
+		}
+
+		break;
+
+	case Planet::control:
+
+		//操作を反転
+		player_->InvertControls();
+
+		break;
+
+	
+
+	}
 }
 
 void GameScene::Draw() {

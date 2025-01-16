@@ -73,6 +73,8 @@ public:
 
 	void SetTarget(bool target) { isTarget_ = target; }
 
+	void InvertControls();
+
 private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;
