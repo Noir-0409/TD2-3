@@ -211,6 +211,7 @@ void GameScene::CheckAllCollisions() {
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 	// 敵弾リストの取得
 	const std::list<EnemyBullet*> enemyBullets = GetEnemyBullets();
+	const std::list<EnemyTrackingBullet*> enemyTrackingBullets = GetEnemyTrackingBullets();
 
 #pragma	 region 自キャラと敵弾の当たり判定
 	// 自キャラの座標
@@ -218,6 +219,25 @@ void GameScene::CheckAllCollisions() {
 
 	// 自キャラと敵弾全ての当たり判定
 	for (EnemyBullet* bullet : enemyBullets) {
+		// 敵弾の座標
+		posB = bullet->GetWorldPosition();
+
+		// 座標AとBの距離を求める
+		float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+		float len = pow((1.0f + 1.0f), 2.0f);
+
+		// 弾と弾の交差判定
+		if (dist <= len) {
+			// 自キャラの衝突時コールバックを呼び出す
+			if (!player_->IsDamage()) {
+				player_->OnCollision();
+			}
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+	// 自キャラと敵弾全ての当たり判定
+	for (EnemyTrackingBullet* bullet : enemyTrackingBullets) {
 		// 敵弾の座標
 		posB = bullet->GetWorldPosition();
 
@@ -282,6 +302,26 @@ void GameScene::CheckAllCollisions() {
 				playerBullet->OnCollision();
 				// 敵弾の衝突コールバックを呼び出す
 				enemyBullet->OnCollision();
+			}
+		}
+	}
+	for (PlayerBullet* playerBullet : playerBullets) {
+		// 自弾の座標
+		posA = playerBullet->GetWorldPosition();
+		for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets) {
+			// 敵弾の座標
+			posB = enemyTrackingBullet->GetWorldPosition();
+
+			// 座標AとBの距離を求める
+			float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+			float len = pow((1.0f + 1.0f), 2.0f);
+
+			// 弾と弾の交差
+			if (dist <= len) {
+				// 自弾の衝突コールバックを呼び出す
+				playerBullet->OnCollision();
+				// 敵弾の衝突コールバックを呼び出す
+				enemyTrackingBullet->OnCollision();
 			}
 		}
 	}
