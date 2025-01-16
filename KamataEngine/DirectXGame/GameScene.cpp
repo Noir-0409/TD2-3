@@ -74,6 +74,9 @@ void GameScene::Update() {
 	if (input_->TriggerKey(DIK_AT)) {
 		printf("");
 	}
+	ImGui::Begin("mouseSensi");
+	ImGui::DragFloat2("sensi", &mouseSensi_.x, 0.1f);
+	ImGui::End();
 #endif // _DEBUG
 
 	// メニューを開いていているかどうか
@@ -323,9 +326,7 @@ void GameScene::UpdateCursor() {
 		showCursor_ = !showCursor_;
 		showMenu_ = showCursor_;
 		cursor = ShowCursor(showCursor_);
-		if (showCursor_) {
-			SetCursorPos(990, 540);
-		}
+		SetCursorPos(990, 540);
 	}
 	if (cursor >= 0) {
 		cursor = 1;
