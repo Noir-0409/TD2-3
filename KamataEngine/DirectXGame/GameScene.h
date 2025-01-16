@@ -19,7 +19,23 @@
 #include "Skydome.h"
 #include "RailCamera.h"
 #include "EnemyBullet.h"
+#include "EnemyTrackingBullet.h"
 #include <sstream>
+
+// 惑星
+enum class Planet {
+	normal, // ノーマル
+	control, // 操作反転
+	fog, // 視界悪化(霧)
+	newEnemy, // 新しい敵
+	heal, // HP回復
+	damage, // HP減少
+	attack, // 攻撃力変化
+	bullet, // 弾の軌道
+	obstacle, // 障害物
+	time, // 時間の流れ
+	gravity, // 重力
+};
 
 /// <summary>
 /// ゲームシーン
@@ -67,6 +83,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="enemyBullet"></param>
 	void AddEnemyBullet(EnemyBullet* enemyBullet);
+	void AddEnemyTrackingBullet(EnemyTrackingBullet* enemyTrackingBullet);
 
 	/// <summary>
 	/// 敵発生データの読み込み
@@ -77,6 +94,12 @@ public: // メンバ関数
 	/// 敵発生コマンドの更新
 	/// </summary>
 	void UpdateEnemyPopCommands();
+
+	/// <summary>
+	/// 惑星
+	/// </summary>
+	Planet GetPlanet() const { return planet_; }
+
 
 	bool UseTarget() { return useTarget_; }
 	// マウスの位置を取得
@@ -103,9 +126,11 @@ private: // メンバ変数
 	KamataEngine::Model* modelEnemy_ = nullptr;
 
 	std::list<EnemyBullet*> enemyBullets_;
+	std::list<EnemyTrackingBullet*> enemyTrackingBullets_;
 
 	// 弾リストを取得
 	const std::list<EnemyBullet*>& GetEnemyBullets() const { return enemyBullets_; }
+	const std::list<EnemyTrackingBullet*>& GetEnemyTrackingBullets() const { return enemyTrackingBullets_; }
 
 	// 天球
 	Skydome* skyDome_ = nullptr;
@@ -141,7 +166,6 @@ private: // メンバ変数
 	// マウス感度
 	KamataEngine::Vector2 mouseSensi_; 
 
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
+	// 惑星シーン
+	Planet planet_ = Planet::normal;
 };

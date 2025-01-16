@@ -62,7 +62,6 @@ void Player::Update() {
 	Rotate();
 	Attack();
 
-
 	// ダメージを受けたら実行
 	if (isDamage_) {
 		damageDelayTimer_ += 1.0f / 60 / damageDelayTime_ * 10.0f;
