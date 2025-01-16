@@ -230,7 +230,7 @@ void GameScene::CheckAllCollisions() {
 		float len = pow((1.0f + 1.0f), 2.0f);
 
 		// 弾と弾の交差判定
-		if (dist <= len) {
+		if (dist <= len && !player_->IsDamage()) {
 			// 自キャラの衝突時コールバックを呼び出す
 			if (!player_->IsDamage()) {
 				player_->OnCollision();
@@ -275,7 +275,7 @@ void GameScene::CheckAllCollisions() {
 			float len = pow((1.0f + 1.0f), 2.0f);
 
 			// 弾と弾の交差
-			if (dist <= len) {
+			if (dist <= len && !enemy->IsDamage()) {
 				// 敵キャラの衝突コールバックを呼び出す
 				if (!enemy->IsDamage()) {
 					enemy->OnCollision();
