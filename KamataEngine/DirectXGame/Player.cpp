@@ -93,6 +93,8 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix();
 	//worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
+	worldTransform_.translation_.z += 0.15f;
+
 	//worldTransform_.TransferMatrix();
 }
 

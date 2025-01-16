@@ -9,7 +9,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -22,4 +22,7 @@ public:
 private:
 	// モデル
 	KamataEngine::Model* model_ = nullptr;
+
+	//ワールドトランスフォーム
+	KamataEngine::WorldTransform worldTransform_;
 };

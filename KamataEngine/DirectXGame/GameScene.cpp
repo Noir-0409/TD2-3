@@ -58,7 +58,7 @@ void GameScene::Initialize() {
 	// 天球の初期化
 	modelSkydome_ = Model::CreateFromOBJ("skyDome");
 	skyDome_ = new Skydome();
-	skyDome_->Initialize(modelSkydome_);
+	skyDome_->Initialize(modelSkydome_, Vector3{ 0.0f, 0.0f, 0.0f });
 
 	worldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
