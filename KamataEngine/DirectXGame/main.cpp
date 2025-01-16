@@ -1,7 +1,34 @@
 #include <KamataEngine.h>
 #include "GameScene.h"
+#include "TitleScene.h"
+#include "Explanation.h"
+#include "ResultScene.h"
 
 using namespace KamataEngine;
+
+GameScene* gameScene = nullptr;
+TitleScene* titleScene = nullptr;
+ExplanationScene* explanationScene = nullptr;
+ResultScene* resultScene = nullptr;
+
+//シーン
+enum class Scene {
+
+	kUnkmown = 0,
+
+	kTitle,
+	kExplanation,
+	kGame,
+	kResult
+
+};
+
+//現在シーン
+Scene scene = Scene::kUnkmown;
+
+void ChangeScene();
+void UpdateScene();
+void DrawScene();
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -12,7 +39,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Audio* audio = nullptr;
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
-	GameScene* gameScene = nullptr;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -55,8 +81,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 #pragma endregion
 
+	titleScene = new TitleScene();
+	titleScene->Initialize();
+
+	explanationScene = new ExplanationScene();
+	explanationScene->Initialize();
+
 	gameScene = new GameScene();
 	gameScene->Initialize();
+
+	resultScene = new ResultScene();
+	resultScene->Initialize();
+
+	scene = Scene::kTitle;
 
 	// メインループ
 	while (true) {
@@ -90,6 +127,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		dxCommon->PostDraw();
 	}
 
+	//各種解放
+	delete titleScene;
+	delete explanationScene;
+	delete gameScene;
+	delete resultScene;
+
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();
@@ -100,4 +143,49 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	win->TerminateGameWindow();
 
 	return 0;
+}
+
+void ChangeScene()
+{
+
+	switch (scene) {
+
+	case Scene::kTitle:
+
+		if (titleScene->IsFinished()) {
+
+			scene = Scene::kExplanation;
+			delete titleScene;
+			titleScene = nullptr;
+			explanationScene = new ExplanationScene();
+			explanationScene->Initialize();
+
+		}
+
+		break;
+
+	case Scene::kExplanation:
+
+		if (explanationScene->IsFinished()) {
+
+			scene = Scene::kGame;
+			delete explanationScene;
+			explanationScene = nullptr;
+			gameScene = new GameScene();
+			gameScene->Initialize();
+
+		}
+
+		break;
+
+	}
+
+}
+
+void UpdateScene()
+{
+}
+
+void DrawScene()
+{
 }
