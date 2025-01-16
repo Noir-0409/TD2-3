@@ -112,9 +112,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="kMath.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAnime.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="RailCamera.cpp" />
+    <ClCompile Include="Rule.cpp" />
     <ClCompile Include="Skydome.cpp" />
+    <ClCompile Include="Title.cpp" />
     <ClCompile Include="WorldTransformEX.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,9 +203,12 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="kMath.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAnime.h" />
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="RailCamera.h" />
+    <ClInclude Include="Rule.h" />
     <ClInclude Include="Skydome.h" />
+    <ClInclude Include="Title.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
