@@ -79,6 +79,8 @@ public:
 
 	void TimeFlow();
 
+	void HealHP();
+
 private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;
@@ -150,5 +152,6 @@ private:
 
 	// ターゲットのワールド座標の取得
 	KamataEngine::Vector3 targetWorldPosition_ = {0.0f, 0.0f, 0.0f};
+
 	
 };

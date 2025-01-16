@@ -171,6 +171,53 @@ void Player::TimeFlow()
 
 }
 
+//void Player::HealHP()
+//{
+//
+//	if (hp_ < 100 && hp_ > 0) {
+//
+//		//10秒ごとにHPを回復させる
+//
+//
+//	}
+//
+//}
+
+void Player::HealHP() {
+	// 回復間隔（フレーム数）
+	static const int kHealInterval = 600; //10秒
+
+	// 回復タイマー
+	static int healTimer = 0;
+
+	if (hp_ < 100 && hp_ > 0) {
+
+		// タイマーを増加
+		healTimer++;
+
+		// 回復間隔に達したらHPを回復
+		if (healTimer >= kHealInterval) {
+
+			hp_ += 10; 
+
+			if (hp_ > 100) {
+
+				hp_ = 100;
+			
+			}
+			
+			//タイマーをリセット
+			healTimer = 0;
+		}
+
+	} else {
+
+		healTimer = 0;
+
+	}
+}
+
+
 void Player::wolk() {
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
