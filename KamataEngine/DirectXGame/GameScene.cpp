@@ -259,6 +259,7 @@ void GameScene::Update() {
 	case Planet::time:
 
 		//時間の流れ
+		player_->TimeFlow();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
