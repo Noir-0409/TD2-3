@@ -243,6 +243,13 @@ void Player::DamageHP()
 
 }
 
+void Player::PowerUp()
+{
+
+	hp_ -= 10;
+
+}
+
 
 void Player::wolk() {
 	// キャラクターの移動ベクトル
