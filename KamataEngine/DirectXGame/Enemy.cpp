@@ -18,11 +18,30 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
-void Enemy::Initialize(Model* model, const Vector3& position) {
+void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity, const float& health, const int& bulletType) {
 	assert(model);
 	model_ = model;
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
+	
+	// healthの指定がなければ100(デフォルト)に設定
+	if (health != NULL) {
+		hp_ = health;
+	} else {
+		hp_ = 100.0f;
+	}
+	
+	// 弾のタイプを設定 してされている値以外が入力されていればノーマルにする
+	if (bulletType == 1) {
+		bulletType_ = BulletType::normal;
+	} else if (bulletType == 2) {
+		bulletType_ = BulletType::tracking;
+		kFireInterval = 60 * 4;
+	} else {
+		bulletType_ = BulletType::normal;
+	}
+
+	velocity_ = velocity;
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
@@ -54,27 +73,45 @@ void Enemy::Update() {
 }
 
 void Enemy::Fire() {
-	assert(player_);
-	// 弾の速度
-	const float kBulletSpeed = 1.0f;
-	//Vector3 velocity(0, 0, kBulletSpeed);
+	if (bulletType_ == BulletType::normal) { // 弾のタイプがノーマルなら
+		assert(player_);
+		// 弾の速度
+		const float kBulletSpeed = 1.0f;
+		// Vector3 velocity(0, 0, kBulletSpeed);
 
-	// 速度ベクトルを自機の向きに合わせて回転させる
-	//velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		// velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
-	Vector3 plWorldPos = player_->GetWorldPosition();
-	Vector3 EmWorldPos = GetWorldPosition();
+		Vector3 plWorldPos = player_->GetWorldPosition();
+		Vector3 EmWorldPos = GetWorldPosition();
 
-	Vector3 BulletWorldPos = plWorldPos - EmWorldPos;
-	BulletWorldPos = Normalize(BulletWorldPos);
-	Vector3 velocity = BulletWorldPos * kBulletSpeed;
+		Vector3 BulletWorldPos = plWorldPos - EmWorldPos;
+		BulletWorldPos = Normalize(BulletWorldPos);
+		Vector3 velocity = BulletWorldPos * kBulletSpeed;
 
-	// 弾を生成し、初期化
-	EnemyBullet* newBullet = new EnemyBullet();
-	newBullet->Initialize(model_, worldTransform_.translation_, velocity);
+		// 弾を生成し、初期化
+		EnemyBullet* newBullet = new EnemyBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_, velocity);
 
-	// 弾を登録する
-	gameScene_->AddEnemyBullet(newBullet);
+		// 弾を登録する
+		gameScene_->AddEnemyBullet(newBullet);
+	} else if (bulletType_ == BulletType::tracking) { // 弾のタイプが追尾なら
+		assert(player_);
+		// 弾の速度
+		const float kBulletSpeed = 0.3f;
+		// Vector3 velocity(0, 0, kBulletSpeed);
+
+		// 速度ベクトルを自機の向きに合わせて回転させる
+		// velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+
+		// 弾を生成し、初期化
+		EnemyTrackingBullet* newBullet = new EnemyTrackingBullet();
+		newBullet->Initialize(model_, worldTransform_.translation_, kBulletSpeed, player_);
+
+		// 弾を登録する
+		gameScene_->AddEnemyTrackingBullet(newBullet);
+	}
 }
 
 void Enemy::movePhase() {

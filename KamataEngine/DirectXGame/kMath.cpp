@@ -1,4 +1,5 @@
 #include "kMath.h"
+#include <algorithm>
 using namespace KamataEngine;
 
 // Vector3の足し算
@@ -61,22 +62,14 @@ const Vector3 operator*(const Vector3& v, float s) {
 // ease In-Out
 float easeInOut(float t, float x1, float x2) {
 	float x;
+	float time = t;
+	time = std::clamp(time, 0.0f, 1.0f);
 	// easeOut
-	float easedT = -(cos(float(M_PI * t)) - 1.0f) / 2.0f;
+	float easedT = -(cos(float(M_PI * time)) - 1.0f) / 2.0f;
 
 	x = (1.0f - easedT) * x1 + easedT * x2;
 	return x;
 };
-
-bool IsCollision(const AABB& aabb1, const AABB& aabb2) {
-	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && // x軸
-		(aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && // y軸
-		(aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z))   // z軸
-	{
-		return true;
-	}
-	return false;
-}
 
 //
 
@@ -294,3 +287,46 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 
 	return ans;
 };
+
+Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
+	Vector3 ans;
+	ans.x = v1.x - v2.x;
+	ans.y = v1.y - v2.y;
+	ans.z = v1.z - v2.z;
+	return ans;
+};
+
+float Length(const Vector3& v) {
+	float ans;
+	ans = sqrtf((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+	return ans;
+};
+
+bool IsCollision(const AABB& aabb1, const AABB& aabb2) {
+	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && // x軸
+	    (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y) && // y軸
+	    (aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z))   // z軸
+	{
+		return true;
+	}
+	return false;
+}
+
+// 球体とAABBの当たり判定
+bool IsCollision(const AABB& aabb, const Sphere& sphere) {
+	// 　最近接点を求める
+	Vector3 closestPoint{
+	    std::clamp(sphere.center.x, aabb.min.x, aabb.max.x),
+	    std::clamp(sphere.center.y, aabb.min.y, aabb.max.y),
+	    std::clamp(sphere.center.z, aabb.min.z, aabb.max.z),
+	};
+	// 最近接点と弾の中心との距離を求める
+	float distance = Length(Subtract(closestPoint, sphere.center));
+
+	// 距離が半径よりも小さければ衝突
+	if (distance <= sphere.radius) {
+		// 衝突
+		return true;
+	}
+	return false;
+}

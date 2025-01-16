@@ -60,6 +60,9 @@
     <ClCompile Include="WorldTransformEX.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyTrackingBullet.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -138,6 +141,12 @@
     </ClInclude>
     <ClInclude Include="Skydome.h">
       <Filter>Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyTrackingBullet.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

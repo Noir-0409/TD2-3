@@ -17,6 +17,9 @@ GameScene::~GameScene() {
 	for (EnemyBullet* enemyBullet : enemyBullets_) {
 		delete enemyBullet;
 	}
+	for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
+		delete enemyTrackingBullet;
+	}
 	delete debugCamera_;
 }
 
@@ -98,6 +101,17 @@ void GameScene::Update() {
 		for (EnemyBullet* enemyBullet : enemyBullets_) {
 			enemyBullet->Update();
 		}
+		// デスフラグの立った弾を削除
+		enemyTrackingBullets_.remove_if([](EnemyTrackingBullet* bullet) {
+			if (bullet->IsDead()) {
+				delete bullet;
+				return true;
+			}
+			return false;
+		});
+		for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
+			enemyTrackingBullet->Update();
+		}
 		skyDome_->Update();
 		CheckAllCollisions();
 		if (player_->UseTarget()) {
@@ -166,6 +180,9 @@ void GameScene::Draw() {
 	}
 	for (EnemyBullet* enemyBullet : enemyBullets_) {
 		enemyBullet->Draw(camera_);
+	}
+	for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
+		enemyTrackingBullet->Draw(camera_);
 	}
 
 	// 3Dオブジェクト描画後処理
@@ -305,6 +322,11 @@ void GameScene::AddEnemyBullet(EnemyBullet* enemyBullet) {
 	enemyBullets_.push_back(enemyBullet);
 }
 
+void GameScene::AddEnemyTrackingBullet(EnemyTrackingBullet* enemyTrackingBullet) {
+	// リストに登録する
+	enemyTrackingBullets_.push_back(enemyTrackingBullet);
+}
+
 void GameScene::UpdateCursor() {
 	// ゲーム中
 	if (!showCursor_) {
@@ -407,7 +429,7 @@ void GameScene::UpdateEnemyPopCommands() {
 			// 敵を発生させる
 			Enemy* enemy = new Enemy();
 			enemy->SetPlayer(player_);
-			enemy->Initialize(modelEnemy_, Vector3{ x, y, z });
+			enemy->Initialize(modelEnemy_, Vector3{ x, y, z }, Vector3{ 0.0f, 0.0f, 0.0f }, 100.0f, 2);
 			enemy->SetGameScene(this);
 			enemies_.push_back(enemy);
 
