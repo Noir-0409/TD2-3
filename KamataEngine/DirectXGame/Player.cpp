@@ -152,15 +152,15 @@ void Player::TimeFlow()
 	Vector3 move = { 0, 0, 0 };
 
 	if (input_->PushKey(DIK_A)) {
-		move.x -= kCharacterSpeed*4;
+		move.x -= kCharacterSpeed * -0.5f;
 	} else if (input_->PushKey(DIK_D)) {
-		move.x += kCharacterSpeed*4;
+		move.x += kCharacterSpeed * -0.5f;
 	}
 
 	if (input_->PushKey(DIK_S)) {
-		move.y -= kCharacterSpeed*4;
+		move.y -= kCharacterSpeed * -0.5f;
 	} else if (input_->PushKey(DIK_W)) {
-		move.y += kCharacterSpeed*4;
+		move.y += kCharacterSpeed * -0.5f;
 	}
 
 	worldTransform_.translation_ += move;
@@ -171,20 +171,9 @@ void Player::TimeFlow()
 
 }
 
-//void Player::HealHP()
-//{
-//
-//	if (hp_ < 100 && hp_ > 0) {
-//
-//		//10秒ごとにHPを回復させる
-//
-//
-//	}
-//
-//}
-
 void Player::HealHP() {
-	// 回復間隔（フレーム数）
+
+	//回復間隔
 	static const int kHealInterval = 600; //10秒
 
 	// 回復タイマー
@@ -215,6 +204,43 @@ void Player::HealHP() {
 		healTimer = 0;
 
 	}
+}
+
+void Player::DamageHP()
+{
+
+	//ダメージ間隔
+	static const int kDamageInterval = 600; //10秒
+
+	//ダメージタイマー
+	static int damageTimer = 0;
+
+	if (hp_ < 100 && hp_ > 0) {
+
+		// タイマーを増加
+		damageTimer++;
+
+		// 回復間隔に達したらHPを回復
+		if (damageTimer >= kDamageInterval) {
+
+			hp_ -= 10;
+
+			if (hp_ < 1) {
+
+				hp_ = 1;
+
+			}
+
+			//タイマーをリセット
+			damageTimer = 0;
+		}
+
+	} else {
+
+		damageTimer = 0;
+
+	}
+
 }
 
 

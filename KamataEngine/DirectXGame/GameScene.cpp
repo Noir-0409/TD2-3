@@ -198,6 +198,7 @@ void GameScene::Update() {
 	case Planet::heal:
 
 		//HP回復
+		player_->HealHP();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
@@ -211,6 +212,7 @@ void GameScene::Update() {
 	case Planet::damage:
 
 		//HP減少
+		player_->DamageHP();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
