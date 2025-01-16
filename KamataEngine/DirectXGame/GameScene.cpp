@@ -165,7 +165,60 @@ void GameScene::Update() {
 
 		break;
 
-	
+	case Planet::fog:
+
+		//視界悪化
+
+		break;
+
+	case Planet::newEnemy:
+
+		//新しい敵
+
+		break;
+
+	case Planet::heal:
+
+		//HP回復
+
+		break;
+
+
+	case Planet::damage:
+
+		//HP減少
+
+		break;
+
+	case Planet::attack:
+
+		//攻撃力変化
+
+		break;
+
+	case Planet::bullet:
+
+		//弾の軌道
+
+		break;
+
+	case Planet::obstacle:
+
+		//障害物
+
+		break;
+
+	case Planet::time:
+
+		//時間の流れ
+
+		break;
+
+	case Planet::gravity:
+
+		//重力
+
+		break;
 
 	}
 }
