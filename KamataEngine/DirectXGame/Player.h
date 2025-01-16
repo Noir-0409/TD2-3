@@ -75,6 +75,8 @@ public:
 
 	void InvertControls();
 
+	void AffectGravity();
+
 private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;

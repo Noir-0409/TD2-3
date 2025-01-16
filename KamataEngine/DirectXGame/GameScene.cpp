@@ -271,6 +271,7 @@ void GameScene::Update() {
 	case Planet::gravity:
 
 		//重力
+		player_->AffectGravity();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 

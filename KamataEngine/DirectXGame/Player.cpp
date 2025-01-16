@@ -131,6 +131,20 @@ void Player::InvertControls()
 
 }
 
+void Player::AffectGravity()
+{
+	// キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	move.y -= 0.1f;
+
+	worldTransform_.translation_ += move;
+	// 範囲を超えないように処理
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+
+}
+
 void Player::wolk() {
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
