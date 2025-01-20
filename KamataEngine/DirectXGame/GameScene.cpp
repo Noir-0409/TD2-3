@@ -21,6 +21,7 @@ GameScene::~GameScene() {
 		delete enemyTrackingBullet;
 	}
 	delete debugCamera_;
+	delete fogSprite_;
 }
 
 void GameScene::Initialize() {
@@ -66,6 +67,9 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();
+	
+	fogTexturehandle_ = KamataEngine::TextureManager::Load("fog.png");
+	fogSprite_ = Sprite::Create(fogTexturehandle_, { 0.0f,0.0f });
 
 }
 
@@ -174,6 +178,7 @@ void GameScene::Update() {
 	case Planet::fog:
 
 		//視界悪化
+		EmitFog();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
@@ -506,6 +511,19 @@ Vector2 GameScene::GetMousePosition() {
 	mousePosition.y = float(mousePoint.y);
 
 	return mousePosition;
+}
+
+void GameScene::EmitFog()
+{
+
+	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+
+	Sprite::PreDraw(commandList);
+
+	fogSprite_->Draw();
+
+	Sprite::PostDraw();
+
 }
 
 // 敵発生コマンド

@@ -20,6 +20,7 @@
 #include "RailCamera.h"
 #include "EnemyBullet.h"
 #include "EnemyTrackingBullet.h"
+#include "2d/Sprite.h"
 #include <sstream>
 
 // 惑星
@@ -107,6 +108,9 @@ public: // メンバ関数
 	// マウスの移動量の取得
 	KamataEngine::Vector2 GetMousePos() const { return mousePos_; }
 
+	//霧発生
+	void EmitFog();
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -168,4 +172,8 @@ private: // メンバ変数
 
 	// 惑星シーン
 	Planet planet_ = Planet::normal;
+
+	KamataEngine::Sprite* fogSprite_ = nullptr;
+	uint32_t fogTexturehandle_ = 0;
+
 };
