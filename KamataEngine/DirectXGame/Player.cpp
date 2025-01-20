@@ -152,15 +152,15 @@ void Player::TimeFlow()
 	Vector3 move = { 0, 0, 0 };
 
 	if (input_->PushKey(DIK_A)) {
-		move.x -= kCharacterSpeed * -0.5f;
+		move.x -= kCharacterSpeed * 10.0f;
 	} else if (input_->PushKey(DIK_D)) {
-		move.x += kCharacterSpeed * -0.5f;
+		move.x += kCharacterSpeed * 10.0f;
 	}
 
 	if (input_->PushKey(DIK_S)) {
-		move.y -= kCharacterSpeed * -0.5f;
+		move.y -= kCharacterSpeed * 10.0f;
 	} else if (input_->PushKey(DIK_W)) {
-		move.y += kCharacterSpeed * -0.5f;
+		move.y += kCharacterSpeed * 10.0f;
 	}
 
 	worldTransform_.translation_ += move;
@@ -246,7 +246,7 @@ void Player::DamageHP()
 void Player::PowerUp()
 {
 
-	hp_ -= 10;
+
 
 }
 

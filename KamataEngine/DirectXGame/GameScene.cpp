@@ -225,11 +225,6 @@ void GameScene::Update() {
 	case Planet::attack:
 
 		//攻撃力変化
-	/*	if (player_->OnCollision()) {
-
-			player_->PowerUp();
-
-		}*/
 
 
 		if (input_->TriggerKey(DIK_RETURN)) {
