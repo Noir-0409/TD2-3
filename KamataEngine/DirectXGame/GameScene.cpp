@@ -64,12 +64,12 @@ void GameScene::Initialize() {
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
 
+	fogTexturehandle_ = KamataEngine::TextureManager::Load("fog.png");
+	fogSprite_ = Sprite::Create(fogTexturehandle_, { 0.0f,0.0f });
+
 	worldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();
-	
-	fogTexturehandle_ = KamataEngine::TextureManager::Load("fog.png");
-	fogSprite_ = Sprite::Create(fogTexturehandle_, { 0.0f,0.0f });
 
 }
 
