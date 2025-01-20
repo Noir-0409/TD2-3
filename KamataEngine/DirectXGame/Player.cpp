@@ -169,6 +169,60 @@ void Player::TimeFlow()
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
 	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
 
+	if (useTarget_ && isTarget_) {
+		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
+
+			isAttack_ = true;
+			// 弾の速度
+			const float kBulletSpeed = 10.0f;
+			Vector3 worldPos = GetWorldPosition();
+			Vector3 velocity = targetWorldPosition_ - worldPos;
+			velocity = Normalize(velocity);
+			velocity *= kBulletSpeed;
+			// 速度ベクトルを自機の向きに合わせて回転させる
+			velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+
+			// 弾を生成し、初期化
+			PlayerBullet* newBullet = new PlayerBullet();
+			newBullet->Initialize(model_, Vector3{ GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z }, velocity);
+
+			// 弾を登録する
+			bullets_.push_back(newBullet);
+		} else if (isAttack_) { // 攻撃間隔
+			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
+			if (fireDelayTimer_ >= 1.0f) {
+				isAttack_ = false;
+				fireDelayTimer_ = 0.0f;
+				/*fireDelayTime_ -= 0.08f;
+				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+			}
+		}
+	} else {
+		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
+			isAttack_ = true;
+			// 弾の速度
+			const float kBulletSpeed = 10.0f;
+			Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
+			// 速度ベクトルを自機の向きに合わせて回転させる
+			velocity = TransformNormal(velocity, targetWorldTransform_.matWorld_);
+
+			// 弾を生成し、初期化
+			PlayerBullet* newBullet = new PlayerBullet();
+			newBullet->Initialize(model_, Vector3{ GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z }, velocity);
+
+			// 弾を登録する
+			bullets_.push_back(newBullet);
+		} else if (isAttack_) { // 攻撃間隔
+			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
+			if (fireDelayTimer_ >= 1.0f) {
+				isAttack_ = false;
+				fireDelayTimer_ = 0.0f;
+				/*fireDelayTime_ -= 0.08f;
+				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+			}
+		}
+	}
+
 }
 
 void Player::wolk() {
