@@ -11,6 +11,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete player_;
+	delete stars_;
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
@@ -62,6 +63,11 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skyDome");
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
+
+	modelStars_ = Model::CreateFromOBJ("star");
+	stars_ = new Stars();
+	stars_->Initialize(modelStars_);
+	stars_->SetPlayer(player_);
 
 	worldTransform_.Initialize();
 	planetWorldTransform_.Initialize();
@@ -115,11 +121,11 @@ void GameScene::Update() {
 			enemyTrackingBullet->Update();
 		}
 		skyDome_->Update();
+		stars_->Update();
 		CheckAllCollisions();
 		if (player_->UseTarget()) {
 			CheckLockOn();
 		}
-		planetWorldTransform_.translation_.z -= 1;
 		planetWorldTransform_.UpdateMatrix();
 	} else {
 		if (input_->TriggerKey(DIK_T)) {
@@ -176,7 +182,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	skyDome_->Draw(planetWorldTransform_ , camera_);
+	skyDome_->Draw(worldTransform_, camera_);
+	stars_->Draw(camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(camera_);

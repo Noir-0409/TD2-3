@@ -20,6 +20,7 @@
 #include "RailCamera.h"
 #include "EnemyBullet.h"
 #include "EnemyTrackingBullet.h"
+#include "Stars.h"
 #include <sstream>
 
 // 惑星
@@ -171,4 +172,8 @@ private: // メンバ変数
 
 	// 惑星シーン
 	Planet planet_ = Planet::normal;
+
+	// 移動演出
+	Stars* stars_ = nullptr;
+	KamataEngine::Model* modelStars_;
 };
