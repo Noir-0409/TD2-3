@@ -238,6 +238,7 @@ void GameScene::Update() {
 	case Planet::bullet:
 
 		//弾の軌道
+	//	player_->ChangeBullet();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 

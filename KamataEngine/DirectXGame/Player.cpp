@@ -254,6 +254,13 @@ void Player::PowerUp()
 
 }
 
+void Player::ChangeBullet()
+{
+
+
+
+}
+
 
 void Player::wolk() {
 	// キャラクターの移動ベクトル
