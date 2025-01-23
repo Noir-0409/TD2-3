@@ -44,7 +44,8 @@ void Player::Initialize(Model* model, const Vector3& position) {
 	assert(model);
 	model_ = model;
 
-	targetModel_ = Model::CreateFromOBJ("target");
+	//targetModel_ = Model::CreateFromOBJ("target");
+	targetModel_ = Model::CreateFromOBJ("debugTarget");
 	worldTransform_.Initialize();
 	targetWorldTransform_.Initialize();
 	targetWorldTransform_.translation_ = position;
@@ -117,12 +118,12 @@ void Player::wolk() {
 		move.x += kCharacterSpeed;
 	}
 
-	if (input_->PushKey(DIK_S)) {
-		move.y -= kCharacterSpeed;
-	}
-	else if (input_->PushKey(DIK_W)) {
-		move.y += kCharacterSpeed;
-	}
+	//if (input_->PushKey(DIK_S)) {
+	//	move.y -= kCharacterSpeed;
+	//}
+	//else if (input_->PushKey(DIK_W)) {
+	//	move.y += kCharacterSpeed;
+	//}
 
 	worldTransform_.translation_.z += moveAmountZ_;
 
@@ -172,7 +173,7 @@ void Player::Attack() {
 
 			// 弾を生成し、初期化
 			PlayerBullet* newBullet = new PlayerBullet();
-			newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z}, velocity);
+			newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
 
 			// 弾を登録する
 			bullets_.push_back(newBullet);
