@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AABB.h"
+#include "Sphere.h"
 //#include "Matrix4x4.h"
 #include <math\Vector3.h>
 #include <math/Vector2.h>
@@ -9,6 +10,7 @@
 #define _USE_MATH_DEFINES
 #include <cassert>
 #include <cmath>
+
 // 代入演算子オーバーロード
 // Vector3の足し算
 KamataEngine::Vector3& operator+=(KamataEngine::Vector3& lhs, const KamataEngine::Vector3& rhv);
@@ -22,8 +24,6 @@ KamataEngine::Vector3 operator+(const KamataEngine::Vector3& v1, const KamataEng
 KamataEngine::Vector3 operator-(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
 
 KamataEngine::Vector3& operator-=(KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
-
-bool IsCollision(const AABB& aabb1, const AABB& aabb2);
 
 // 代入演算子オーバーロード
 // Vector3の掛け算
@@ -66,9 +66,17 @@ KamataEngine::Vector3 Normalize(const KamataEngine::Vector3& v);
 // 正規化Vector2
 KamataEngine::Vector2 Normalize(const KamataEngine::Vector2& v);
 
+KamataEngine::Vector3 Subtract(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
+
 // 内積
 float Dot(const KamataEngine::Vector3& v1, const KamataEngine::Vector3& v2);
+
+float Length(const KamataEngine::Vector3& v);
 
 // 逆行列
 // 逆行列
 KamataEngine::Matrix4x4 Inverse(const KamataEngine::Matrix4x4& m);
+
+bool IsCollision(const AABB& aabb1, const AABB& aabb2);
+
+bool IsCollision(const AABB& aabb, const Sphere& sphere);

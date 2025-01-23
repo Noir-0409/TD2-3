@@ -14,6 +14,12 @@ enum class Phase {
 	Leave,    // 離脱する
 };
 
+// 弾のタイプ
+enum class BulletType { 
+	normal,
+	tracking,
+};
+
 // 前方宣言
 class Player;
 class GameScene;
@@ -27,7 +33,10 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position);
+	/// <param name="model">: モデル</param>
+	/// <param name="position">: 初期位置</param>
+	/// <param name="bulletType">: 弾のタイプ (1 = ノーマル / 2 = 追尾)</param>
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity, const float& health, const int& bulletType);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -42,7 +51,7 @@ public:
 	KamataEngine::Vector3 GetWorldPosition();
 
 	// 発射間隔
-	static const int kFireInterval = 60;
+	int kFireInterval = 60 * 1;
 
 	void InitializeFirePhase();
 
@@ -100,6 +109,9 @@ private:
 	/// 弾発射
 	/// </summary>
 	void Fire();
+
+	// 弾のタイプ
+	BulletType bulletType_ = BulletType::normal;
 
 	// 発射タイマー
 	int32_t fireTimer_ = 0;

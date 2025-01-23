@@ -1,20 +1,20 @@
 #pragma once
-#include "3d/WorldTransform.h"
-#include "3d/Model.h"
 #include "3d/Camera.h"
+#include "3d/Model.h"
+#include "3d/ObjectColor.h"
+#include "3d/WorldTransform.h"
 #include "base/TextureManager.h"
 #include "kMath.h"
 #include "math/MathUtility.h"
-#include "3d/ObjectColor.h"
 
+class Player;
 
-
-class EnemyBullet {
+class EnemyTrackingBullet {
 public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, float bulletSpeed, Player* target);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -37,16 +37,17 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
 
+	Player* player_ = nullptr;
+
 	uint32_t textureHandle_ = 0;
 
-	// 移動速度
-	KamataEngine::Vector3 velocity_;
+	// 弾の速度
+	float kBulletSpeed_ = 0;
 
 	// 消滅までの時間(寿命)<frm>
-	static const int32_t kLifeTime = 60 * 5;
+	static const int32_t kLifeTime = 60 * 10;
 	// デスタイマー
 	int32_t deathTimer_ = kLifeTime;
 	// デスフラグ
 	bool isDead_ = false;
-
 };

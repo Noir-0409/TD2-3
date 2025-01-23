@@ -71,6 +71,11 @@
     </ClCompile>
     <ClCompile Include="Title.cpp">
       <Filter>Scene</Filter>
+    <ClCompile Include="EnemyTrackingBullet.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Stars.cpp">
+      <Filter>Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +164,13 @@
     </ClInclude>
     <ClInclude Include="Rule.h">
       <Filter>Scene</Filter>
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyTrackingBullet.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Stars.h">
+      <Filter>Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
