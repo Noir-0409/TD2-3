@@ -21,6 +21,7 @@
 #include "EnemyBullet.h"
 #include "EnemyTrackingBullet.h"
 #include <sstream>
+#include "Fog.h"
 
 // 惑星
 enum class Planet {
@@ -139,6 +140,11 @@ private: // メンバ変数
 
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;
+
+	//霧
+	Fog* fog_ = nullptr;
+	KamataEngine::Sprite* spriteFog_ = nullptr;
+	uint32_t fogTextureHandle_ = 0;
 
 	// 敵発生コマンド
 	std::stringstream enemyPopCommands;

@@ -63,6 +63,10 @@ void GameScene::Initialize() {
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
 
+	//霧の初期化
+	fogTextureHandle_ = KamataEngine::TextureManager::Load("./Resources./fog./fog.png");
+	spriteFog_ = KamataEngine::Sprite::Create(fogTextureHandle_, { 0.0f,0.0f });
+
 	worldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();

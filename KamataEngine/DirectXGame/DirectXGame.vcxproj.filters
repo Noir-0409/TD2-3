@@ -63,6 +63,9 @@
     <ClCompile Include="EnemyTrackingBullet.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Fog.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\SpritePS.hlsl">
@@ -147,6 +150,9 @@
     </ClInclude>
     <ClInclude Include="EnemyTrackingBullet.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Fog.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
