@@ -25,7 +25,6 @@ void Stars::Initialize(Model* model) {
 	moveTranslationZ_ = distributionScale(randomEngine);
 
 	for (auto& worldTransform : worldTransforms_) {
-
 		worldTransform.Initialize();
 		worldTransform.translation_ = {distributionXY(randomEngine), distributionXY(randomEngine), distributionZ(randomEngine)};
 		worldTransform.rotation_.y = distributionRotate(randomEngine);
