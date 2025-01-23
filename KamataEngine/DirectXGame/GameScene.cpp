@@ -21,6 +21,7 @@ GameScene::~GameScene() {
 		delete enemyTrackingBullet;
 	}
 	delete debugCamera_;
+	delete spriteFog_;
 }
 
 void GameScene::Initialize() {
