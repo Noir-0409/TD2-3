@@ -49,11 +49,11 @@ void GameScene::Initialize() {
 	useTarget_ = player_->UseTarget();
 
 	// レールカメラ
-	railCamera_ = new RailCamera();
-	railCamera_->Initialize(player_->GetWorldTransform());
-	// 自キャラとレールカメラの親子関係を結ぶ
-	//player_->SetParent(&railCamera_->GetWorldTransform());
-	railCamera_->SetParent(&player_->GetWorldTransform());
+	//railCamera_ = new RailCamera();
+	//railCamera_->Initialize(player_->GetWorldTransform());
+	//// 自キャラとレールカメラの親子関係を結ぶ
+	////player_->SetParent(&railCamera_->GetWorldTransform());
+	//railCamera_->SetParent(&player_->GetWorldTransform());
 
 	// 敵の初期化
 	modelEnemy_ = KamataEngine::Model::CreateFromOBJ("cube");
@@ -80,7 +80,7 @@ void GameScene::Update() {
 	UpdateCursor();
 #ifdef _DEBUG
 	player_->UpdateImgui();
-	railCamera_->UpdateImgui();
+	//railCamera_->UpdateImgui();
 	if (input_->TriggerKey(DIK_AT)) {
 		printf("");
 	}
@@ -94,7 +94,7 @@ void GameScene::Update() {
 	if (!showMenu_) {
 		UpdateEnemyPopCommands();
 		player_->Update();
-		railCamera_->Update();
+		//railCamera_->Update();
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
@@ -150,7 +150,8 @@ void GameScene::Update() {
 		// カメラ行列の更新と転送
 		camera_.UpdateMatrix();
 	}
-	camera_.matView = railCamera_->GetCamera().matView;
+	//camera_.matView = railCamera_->GetCamera().matView;
+	camera_.matView = player_->GetCamera().matView;
 	// camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
 	//worldTransform_.UpdateMatirx();

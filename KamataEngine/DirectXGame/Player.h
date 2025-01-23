@@ -73,10 +73,13 @@ public:
 
 	void SetTarget(bool target) { isTarget_ = target; }
 
+	KamataEngine::Camera& GetCamera() { return camera_; }
+
 private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::WorldTransform targetWorldTransform_;
+	KamataEngine::Camera camera_;
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::Model* targetModel_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
@@ -88,6 +91,9 @@ private:
 	float hp_ = 100.0f;
 	// 生きているかのフラグ
 	bool isDead_ = false;
+
+	// ダメージを受けた時にカメラをシェイクするかどうか
+	bool damageShake_ = true;
 
 	// ダメージを受けたかどうか
 	bool isDamage_ = false;
@@ -110,8 +116,8 @@ private:
 	// キャラクターの速さ
 	const float kCharacterSpeed = 0.2f;
 	// 移動限界座標
-	const float kMoveLimitX = 30.0f;
-	const float kMoveLimitY = 5.0f;
+	const float kMoveLimitX = 50.0f;
+	const float kMoveLimitY = 50.0f;
 
 	/// キャラクターの回転
 	// 回転の速さ[ラジアン/frame]
