@@ -73,6 +73,9 @@ public:
 	//HPを多く減らす
 	void TakeDamage();
 
+	//時間の流れ変化
+	void TimeFlow();
+
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;

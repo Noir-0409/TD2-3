@@ -263,6 +263,12 @@ void GameScene::Update() {
 
 		//時間の流れ
 		player_->TimeFlow();
+		
+		for (Enemy* enemy : GetEnemies()) {
+
+			enemy->TimeFlow();
+
+		}
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 

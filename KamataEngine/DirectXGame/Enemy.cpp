@@ -166,3 +166,10 @@ void Enemy::TakeDamage()
 	hp_ -= 5;
 
 }
+
+void Enemy::TimeFlow()
+{
+
+	//移動とか発射間隔とか早くする(仮)
+
+}
