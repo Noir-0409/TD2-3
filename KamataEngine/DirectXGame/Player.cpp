@@ -39,7 +39,7 @@ Vector3 Player::GetTargetWorldPosition() {
 	return worldPos;
 }
 
-void Player::Initialize(Model* model, KamataEngine::Camera* camera, const Vector3& position) {
+void Player::Initialize(Model* model, const Vector3& position) {
 	input_ = KamataEngine::Input::GetInstance();
 	assert(model);
 	model_ = model;
@@ -52,7 +52,6 @@ void Player::Initialize(Model* model, KamataEngine::Camera* camera, const Vector
 	objectColor_.Initialize();
 	targetObjectColor_.Initialize();
 	targetObjectColor_.SetColor(Vector4{65.0f, 255.0f, 75.0f, 1.0f});
-	camera_ = camera;
 }
 
 void Player::Update() {

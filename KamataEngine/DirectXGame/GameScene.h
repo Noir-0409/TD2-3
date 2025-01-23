@@ -108,6 +108,9 @@ public: // メンバ関数
 	// マウスの移動量の取得
 	KamataEngine::Vector2 GetMousePos() const { return mousePos_; }
 
+	// デスフラグのgetter
+	bool IsFinished() const { return finished_; }
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -170,7 +173,15 @@ private: // メンバ変数
 	// マウス感度
 	KamataEngine::Vector2 mouseSensi_; 
 
-	// 惑星シーン
+	//シーン終了フラグ
+	bool finished_ = false;
+
+
+
+
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 	Planet planet_ = Planet::normal;
 
 	// 移動演出

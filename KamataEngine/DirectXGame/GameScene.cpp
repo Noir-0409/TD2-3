@@ -44,7 +44,7 @@ void GameScene::Initialize() {
 	// プレイヤーの初期化
 	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("enemy");
 	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_, Vector3{ 0.0f, 0.0f, 0.0f });
+	player_->Initialize(modelPlayer_, Vector3{ 0.0f, 0.0f, 0.0f });
 	player_->SetGameScene(this);
 	useTarget_ = player_->UseTarget();
 

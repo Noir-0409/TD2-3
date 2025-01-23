@@ -24,7 +24,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -77,7 +77,6 @@ private:
 	KamataEngine::Input* input_ = nullptr;
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::WorldTransform targetWorldTransform_;
-	KamataEngine::Camera* camera_ = nullptr;
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::Model* targetModel_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
