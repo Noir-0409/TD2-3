@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <imgui.h>
+#include <random>
 #include "algorithm"
 #include <cassert>
 #include "GameScene.h"
@@ -44,34 +45,27 @@ void Player::Initialize(Model* model, const Vector3& position) {
 	assert(model);
 	model_ = model;
 
-	//targetModel_ = Model::CreateFromOBJ("target");
-	targetModel_ = Model::CreateFromOBJ("debugTarget");
+	targetModel_ = Model::CreateFromOBJ("target");
+	//targetModel_ = Model::CreateFromOBJ("debugTarget");
 	worldTransform_.Initialize();
 	targetWorldTransform_.Initialize();
+	camera_.Initialize();
 	targetWorldTransform_.translation_ = position;
 	worldTransform_.translation_ = position;
 	objectColor_.Initialize();
 	targetObjectColor_.Initialize();
 	targetObjectColor_.SetColor(Vector4{65.0f, 255.0f, 75.0f, 1.0f});
+	
 }
 
 void Player::Update() {
 	mousePos_ = gameScene_->GetMousePos();
 	wolk();
 	TargetUpdate();
-	Rotate();
+	//Rotate();
 	Attack();
 
-	// ダメージを受けたら実行
-	if (isDamage_) {
-		damageDelayTimer_ += 1.0f / 60 / damageDelayTime_ * 10.0f;
-		if (damageDelayTimer_ >= 10.0f) {
-			isDamage_ = false;
-			damageDelayTimer_ = 0.0f;
-			inDamageDrawCounter_ = 0;
-		}
-		inDamageDrawCounter_ += 1;
-	}
+
 
 	// デスフラグの立った弾を削除
 	bullets_.remove_if([](PlayerBullet* bullet) {
@@ -90,6 +84,30 @@ void Player::Update() {
 	//worldTransform_.rotation_.x = (mousePos_.y - 540.0f) / 200;
 	targetWorldTransform_.UpdateMatrix();
 	worldTransform_.UpdateMatrix();
+	// カメラオブジェクトのワールド行列からビュー行列を計算する
+	camera_.matView = Inverse(worldTransform_.matWorld_);
+	// ダメージを受けたら実行
+	if (isDamage_) {
+		damageDelayTimer_ += 1.0f / 60 / damageDelayTime_;
+		damageDelayTimer_ = std::clamp(damageDelayTimer_, 0.0f, 1.0f);
+		// 乱数生成の初期化
+		std::random_device seedGenarator;
+		std::mt19937 randomEngine(seedGenarator());
+		// 乱数範囲
+		std::uniform_real_distribution<float> distributionShake{-0.05f + damageDelayTimer_ / 20, 0.05f - damageDelayTimer_ / 20};
+		// ダメージを受けた時にカメラをシェイクする
+		if (damageShake_) {
+			camera_.matView.m[3][0] += distributionShake(randomEngine);
+			camera_.matView.m[3][1] += distributionShake(randomEngine);
+		}
+		if (damageDelayTimer_ >= 1.0f) {
+
+			isDamage_ = false;
+			damageDelayTimer_ = 0.0f;
+			inDamageDrawCounter_ = 0;
+		}
+		inDamageDrawCounter_ += 1;
+	}
 	//worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	//worldTransform_.TransferMatrix();
@@ -103,6 +121,7 @@ void Player::UpdateImgui() {
 	ImGui::DragFloat2("mousePos", &mousePos_.x, 0.01f);
 	ImGui::Checkbox("useTarget", &useTarget_);
 	ImGui::Checkbox("isTarget", &isTarget_);
+	ImGui::Checkbox("shake", &damageShake_);
 	ImGui::End();
 #endif // _DEBUG
 }
@@ -118,12 +137,12 @@ void Player::wolk() {
 		move.x += kCharacterSpeed;
 	}
 
-	//if (input_->PushKey(DIK_S)) {
-	//	move.y -= kCharacterSpeed;
-	//}
-	//else if (input_->PushKey(DIK_W)) {
-	//	move.y += kCharacterSpeed;
-	//}
+	if (input_->PushKey(DIK_S)) {
+		move.y -= kCharacterSpeed;
+	}
+	else if (input_->PushKey(DIK_W)) {
+		move.y += kCharacterSpeed;
+	}
 
 	worldTransform_.translation_.z += moveAmountZ_;
 

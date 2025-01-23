@@ -19,6 +19,7 @@ void RailCamera::Update() {
 	worldTransform_.rotation_ += rotation_;
 	// スケール、回転、平行移動を合成して行列を計算する
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
 	// カメラオブジェクトのワールド行列からビュー行列を計算する
 	camera.matView = Inverse(worldTransform_.matWorld_);
 }
