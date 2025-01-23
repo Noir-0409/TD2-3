@@ -94,6 +94,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	titleScene = new Title();
 	titleScene->Initialize();
 
+#ifdef _DEBUG
+	// 最初のシーンの初期化
+	scene = Scene::kGame;
+	// タイトルシーンの初期化
+	delete  titleScene;
+	titleScene = nullptr;
+	gameScene = new GameScene();
+	gameScene->Initialize();
+#endif // _DEBUG
+
+
 
 	// メインループ
 	while (true) {

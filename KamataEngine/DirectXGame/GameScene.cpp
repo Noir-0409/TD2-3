@@ -352,6 +352,7 @@ void GameScene::CheckLockOn() {
 		Vector3 enemyVector = posC - posA;
 		enemyVector = Normalize(enemyVector);
 		float rotate = std::acos(Dot(TargetVector, enemyVector));
+
 		if (rotate <= 0.1f && !player_->IsTarget()) {
 			lockonTimer_ += 1.0f / 60 / lockonTime_;
 		} else if (rotate > 0.1f&& enemy->IsTarget()) {

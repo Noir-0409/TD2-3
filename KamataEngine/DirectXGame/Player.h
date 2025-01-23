@@ -110,8 +110,8 @@ private:
 	// キャラクターの速さ
 	const float kCharacterSpeed = 0.2f;
 	// 移動限界座標
-	const float kMoveLimitX = 1000.0f;
-	const float kMoveLimitY = 1000.0f;
+	const float kMoveLimitX = 30.0f;
+	const float kMoveLimitY = 5.0f;
 
 	/// キャラクターの回転
 	// 回転の速さ[ラジアン/frame]
