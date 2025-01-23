@@ -31,6 +31,10 @@ private:
 	bool finished_ = false;
 	static inline const float kTimeTitleMove = 2.0f;
 
+	// キーが反応するようになるまでの時間
+	float canFinishCounter_ = 0.0f;
+	const float canFinishCount_ = 0.2f;
+
 	uint32_t textureHandle_ = 0;
 	KamataEngine::Sprite* sprite_ = nullptr;
 

@@ -21,7 +21,10 @@ void Title::Initialize()
 
 void Title::Update() {
 
-	if (KamataEngine::Input::GetInstance()->PushKey(DIK_SPACE)) {
+	canFinishCounter_ += 1.0f / 60;
+
+	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE) && canFinishCounter_ >= canFinishCount_) {
+		canFinishCounter_ = 0.0f;
 		finished_ = true;
 	}
 

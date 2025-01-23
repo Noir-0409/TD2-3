@@ -5,6 +5,7 @@
 #include <input\Input.h>
 #include <2d\Sprite.h>
 #include <base\TextureManager.h>
+#include "PlayerAnime.h"
 
 class Rule
 {
@@ -20,15 +21,23 @@ public:
 	bool IsFinished() const { return finished_; }
 
 private:
-	KamataEngine::Camera viewProjection_;
+	KamataEngine::Camera camera_;
 	KamataEngine::WorldTransform worldTransformTitle_;
 	KamataEngine::WorldTransform worldTransformPlayer_;
-	KamataEngine::Model* model_ = nullptr;
+	KamataEngine::Model* modelPlayerAnime_ = nullptr;
+
+	PlayerAnime* playerAnime_ = nullptr;
+
+	bool startAnimation_ = false;
 
 	float counter_ = 0.0f;
 	// 終了フラグ
 	bool finished_ = false;
 	static inline const float kTimeTitleMove = 2.0f;
+
+	// キーが反応するようになるまでの時間
+	float canFinishCounter_ = 0.0f;
+	const float canFinishCount_ = 1.0f;
 
 	uint32_t textureHandle_ = 0;
 	KamataEngine::Sprite* sprite_ = nullptr;
