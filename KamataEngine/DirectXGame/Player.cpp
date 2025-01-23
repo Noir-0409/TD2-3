@@ -246,7 +246,11 @@ void Player::DamageHP()
 void Player::PowerUp()
 {
 
+	for (Enemy* enemy : gameScene_->GetEnemies()) {
 
+		enemy->TakeDamage();
+
+	}
 
 }
 

@@ -100,6 +100,7 @@ public: // メンバ関数
 	/// </summary>
 	Planet GetPlanet() const { return planet_; }
 
+	std::list<Enemy*>& GetEnemies() { return enemies_; }
 
 	bool UseTarget() { return useTarget_; }
 	// マウスの位置を取得

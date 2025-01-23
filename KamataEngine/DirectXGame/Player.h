@@ -14,6 +14,7 @@
 
 class PlayerBullet;
 class GameScene;
+class Enemy;
 
 class Player {
 public:
