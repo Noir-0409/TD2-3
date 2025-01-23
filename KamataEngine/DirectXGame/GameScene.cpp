@@ -465,6 +465,7 @@ void GameScene::UpdateEnemyPopCommands() {
 
 		// POPコマンド
 		if (word.find("POP") == 0) {
+
 			// x座標
 			std::getline(line_stream, word, ',');
 			float x = (float)std::atof(word.c_str());
@@ -477,10 +478,25 @@ void GameScene::UpdateEnemyPopCommands() {
 			std::getline(line_stream, word, ',');
 			float z = (float)std::stof(word.c_str());
 
+			// 弾の種類
+			bool normalBullet = true;
+			std::getline(line_stream, word, ',');
+			if (word.find("tracking") == 0) {
+				normalBullet = false;
+			} else {
+				normalBullet = true;
+			}
+
+
+
 			// 敵を発生させる
 			Enemy* enemy = new Enemy();
 			enemy->SetPlayer(player_);
-			enemy->Initialize(modelEnemy_, Vector3{ x, y, z }, Vector3{ 0.0f, 0.0f, 0.0f }, 100.0f, 2);
+			if (!normalBullet) {
+				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::tracking);
+			} else {
+				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::normal);
+			}
 			enemy->SetGameScene(this);
 			enemies_.push_back(enemy);
 
