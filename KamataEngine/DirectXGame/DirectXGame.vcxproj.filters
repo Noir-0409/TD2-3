@@ -1,176 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="シェーダー ファイル">
-      <UniqueIdentifier>{718c7f4c-fc51-40ad-a221-b9456a7a1a3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Player">
-      <UniqueIdentifier>{dffbff7c-3407-4ecc-9be2-09f42a31d00f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy">
-      <UniqueIdentifier>{147e0884-c0bf-40f7-aba6-d56dd25c12f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Math">
-      <UniqueIdentifier>{e2788f35-4013-4f59-a05b-596351de74b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphic">
-      <UniqueIdentifier>{82a93fd0-ec47-4b2b-8aba-5fadf5070b49}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{8a511635-34e6-41af-be29-80dd046cf95d}</UniqueIdentifier>
-    </Filter>
+    <FxCompile Include="Resources\shaders\TerrainPS.hlsl" />
+    <FxCompile Include="Resources\shaders\TerrainVS.hlsl" />
+    <FxCompile Include="Resources\shaders\ObjPS.hlsl" />
+    <FxCompile Include="Resources\shaders\ObjVS.hlsl" />
+    <FxCompile Include="Resources\shaders\PrimitivePS.hlsl" />
+    <FxCompile Include="Resources\shaders\PrimitiveVS.hlsl" />
+    <FxCompile Include="Resources\shaders\ShapePS.hlsl" />
+    <FxCompile Include="Resources\shaders\ShapeVS.hlsl" />
+    <FxCompile Include="Resources\shaders\SpritePS.hlsl" />
+    <FxCompile Include="Resources\shaders\SpriteVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBullet.cpp">
-      <Filter>Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyBullet.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="kMath.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="RailCamera.cpp">
-      <Filter>Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="Skydome.cpp">
-      <Filter>Graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="WorldTransformEX.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerAnime.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Rule.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>Scene</Filter>
-    <ClCompile Include="EnemyTrackingBullet.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Stars.cpp">
-      <Filter>Graphic</Filter>
-    </ClCompile>
+    <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="EnemyTrackingBullet.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="kMath.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerAnime.cpp" />
+    <ClCompile Include="PlayerBullet.cpp" />
+    <ClCompile Include="RailCamera.cpp" />
+    <ClCompile Include="Rule.cpp" />
+    <ClCompile Include="Skydome.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Stars.cpp" />
+    <ClCompile Include="WorldTransformEX.cpp" />
+    <ClCompile Include="OverScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resources\shaders\SpritePS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\SpriteVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ShapeVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ShapePS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ObjPS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ObjVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\PrimitivePS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\PrimitiveVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\TerrainVS.hlsl">
-      <Filter>シェーダー ファイル</Filter>
-    </FxCompile>
+    <ClInclude Include="AABB.h" />
+    <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="EnemyTrackingBullet.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="kMath.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerAnime.h" />
+    <ClInclude Include="PlayerBullet.h" />
+    <ClInclude Include="RailCamera.h" />
+    <ClInclude Include="Rule.h" />
+    <ClInclude Include="Skydome.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Stars.h" />
+    <ClInclude Include="OverScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\shaders\Sprite.hlsli">
-      <Filter>シェーダー ファイル</Filter>
-    </None>
-    <None Include="Resources\shaders\Shape.hlsli">
-      <Filter>シェーダー ファイル</Filter>
-    </None>
-    <None Include="Resources\shaders\Obj.hlsli">
-      <Filter>シェーダー ファイル</Filter>
-    </None>
-    <None Include="Resources\shaders\Primitive.hlsli">
-      <Filter>シェーダー ファイル</Filter>
-    </None>
-    <None Include="Resources\shaders\Terrain.hlsli">
-      <Filter>シェーダー ファイル</Filter>
-    </None>
     <None Include="imgui.ini" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Player</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBullet.h">
-      <Filter>Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyBullet.h">
-      <Filter>Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="kMath.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="AABB.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="RailCamera.h">
-      <Filter>Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="Skydome.h">
-      <Filter>Graphic</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerAnime.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Rule.h">
-      <Filter>Scene</Filter>
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyTrackingBullet.h">
-      <Filter>Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Stars.h">
-      <Filter>Graphic</Filter>
-    </ClInclude>
+    <None Include="Resources\shaders\Obj.hlsli" />
+    <None Include="Resources\shaders\Primitive.hlsli" />
+    <None Include="Resources\shaders\Shape.hlsli" />
+    <None Include="Resources\shaders\Terrain.hlsli" />
+    <None Include="Resources\shaders\Sprite.hlsli" />
   </ItemGroup>
 </Project>
