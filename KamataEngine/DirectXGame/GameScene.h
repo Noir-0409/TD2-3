@@ -138,6 +138,10 @@ private: // メンバ変数
 	Skydome* skyDome_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
 
+	//霧
+	KamataEngine::Sprite* fogSprite_ = nullptr;
+	uint32_t fogTextureHandle_ = 0;
+
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;
 

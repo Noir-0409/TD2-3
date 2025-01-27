@@ -21,6 +21,7 @@ GameScene::~GameScene() {
 		delete enemyTrackingBullet;
 	}
 	delete debugCamera_;
+	delete fogSprite_;
 }
 
 void GameScene::Initialize() {
@@ -62,6 +63,10 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skyDome");
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
+
+	//霧の初期化
+	fogTextureHandle_ = KamataEngine::TextureManager::Load("fog.png");
+	fogSprite_ = Sprite::Create(fogTextureHandle_, { 0.0f,0.0f });
 
 	worldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
@@ -337,6 +342,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
+	fogSprite_->Draw();
 
 	// スプライト描画後処理
 	KamataEngine::Sprite::PostDraw();
