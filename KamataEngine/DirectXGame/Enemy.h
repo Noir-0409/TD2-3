@@ -36,7 +36,7 @@ public:
 	/// <param name="model">: モデル</param>
 	/// <param name="position">: 初期位置</param>
 	/// <param name="bulletType">: 弾のタイプ (1 = ノーマル / 2 = 追尾)</param>
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity, const float& health, const int& bulletType);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity, const float& health, BulletType bulletType);
 	/// <summary>
 	/// 更新
 	/// </summary>

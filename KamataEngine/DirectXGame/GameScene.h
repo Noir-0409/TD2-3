@@ -20,6 +20,7 @@
 #include "RailCamera.h"
 #include "EnemyBullet.h"
 #include "EnemyTrackingBullet.h"
+#include "Stars.h"
 #include <sstream>
 
 // 惑星
@@ -109,6 +110,9 @@ public: // メンバ関数
 	// マウスの移動量の取得
 	KamataEngine::Vector2 GetMousePos() const { return mousePos_; }
 
+	// デスフラグのgetter
+	bool IsFinished() const { return finished_; }
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -120,6 +124,9 @@ private: // メンバ変数
 
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Camera camera_;
+
+	// 天球移動用
+	KamataEngine::WorldTransform planetWorldTransform_;
 
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
@@ -168,6 +175,18 @@ private: // メンバ変数
 	// マウス感度
 	KamataEngine::Vector2 mouseSensi_; 
 
-	// 惑星シーン
+	//シーン終了フラグ
+	bool finished_ = false;
+
+
+
+
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 	Planet planet_ = Planet::normal;
+
+	// 移動演出
+	Stars* stars_ = nullptr;
+	KamataEngine::Model* modelStars_;
 };
