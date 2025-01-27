@@ -35,6 +35,7 @@ enum class Planet {
 	obstacle, // 障害物
 	time, // 時間の流れ
 	gravity, // 重力
+
 };
 
 /// <summary>
