@@ -28,6 +28,9 @@
     <Filter Include="Graphic">
       <UniqueIdentifier>{82a93fd0-ec47-4b2b-8aba-5fadf5070b49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{8a511635-34e6-41af-be29-80dd046cf95d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,8 +63,19 @@
     <ClCompile Include="WorldTransformEX.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerAnime.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Rule.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>Scene</Filter>
     <ClCompile Include="EnemyTrackingBullet.cpp">
       <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Stars.cpp">
+      <Filter>Graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,11 +156,21 @@
     <ClInclude Include="Skydome.h">
       <Filter>Graphic</Filter>
     </ClInclude>
-    <ClInclude Include="Sphere.h">
+    <ClInclude Include="PlayerAnime.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Rule.h">
+      <Filter>Scene</Filter>
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="EnemyTrackingBullet.h">
       <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Stars.h">
+      <Filter>Graphic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
-void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity, const float& health, const int& bulletType) {
+void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity, const float& health, BulletType bulletType) {
 	assert(model);
 	model_ = model;
 
@@ -32,9 +32,9 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 	}
 	
 	// 弾のタイプを設定 してされている値以外が入力されていればノーマルにする
-	if (bulletType == 1) {
+	if (bulletType == BulletType::normal) {
 		bulletType_ = BulletType::normal;
-	} else if (bulletType == 2) {
+	} else if (bulletType == BulletType::tracking) {
 		bulletType_ = BulletType::tracking;
 		kFireInterval = 60 * 4;
 	} else {

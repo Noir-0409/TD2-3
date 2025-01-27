@@ -12,6 +12,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete player_;
+	delete stars_;
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
@@ -27,7 +28,7 @@ GameScene::~GameScene() {
 
 void GameScene::Initialize() {
 
-	SetCursorPos(990, 540);
+	SetCursorPos(960, 540);
 	mousePos_ = GetMousePosition();
 	mouseSensi_ = {0.5f, 1.7f};
 
@@ -45,16 +46,16 @@ void GameScene::Initialize() {
 	// プレイヤーの初期化
 	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("enemy");
 	player_ = new Player();
-	player_->Initialize(modelPlayer_, &camera_, Vector3{ 0.0f, 0.0f, 0.0f });
+	player_->Initialize(modelPlayer_, Vector3{ 0.0f, 0.0f, 0.0f });
 	player_->SetGameScene(this);
 	useTarget_ = player_->UseTarget();
 
 	// レールカメラ
-	railCamera_ = new RailCamera();
-	railCamera_->Initialize(player_->GetWorldTransform());
-	// 自キャラとレールカメラの親子関係を結ぶ
-	//player_->SetParent(&railCamera_->GetWorldTransform());
-	railCamera_->SetParent(&player_->GetWorldTransform());
+	//railCamera_ = new RailCamera();
+	//railCamera_->Initialize(player_->GetWorldTransform());
+	//// 自キャラとレールカメラの親子関係を結ぶ
+	////player_->SetParent(&railCamera_->GetWorldTransform());
+	//railCamera_->SetParent(&player_->GetWorldTransform());
 
 	// 敵の初期化
 	modelEnemy_ = KamataEngine::Model::CreateFromOBJ("cube");
@@ -69,7 +70,13 @@ void GameScene::Initialize() {
 	fogTextureHandle_ = KamataEngine::TextureManager::Load("fog.png");
 	fogSprite_ = Sprite::Create(fogTextureHandle_, { 0.0f,0.0f });
 
+	modelStars_ = Model::CreateFromOBJ("star");
+	stars_ = new Stars();
+	stars_->Initialize(modelStars_);
+	stars_->SetPlayer(player_);
+
 	worldTransform_.Initialize();
+	planetWorldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();
 
@@ -81,12 +88,13 @@ void GameScene::Update() {
 	UpdateCursor();
 #ifdef _DEBUG
 	player_->UpdateImgui();
-	railCamera_->UpdateImgui();
+	//railCamera_->UpdateImgui();
 	if (input_->TriggerKey(DIK_AT)) {
 		printf("");
 	}
 	ImGui::Begin("mouseSensi");
 	ImGui::DragFloat2("sensi", &mouseSensi_.x, 0.1f);
+	ImGui::DragFloat("fov", &camera_.fovAngleY, 0.01f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -94,7 +102,7 @@ void GameScene::Update() {
 	if (!showMenu_) {
 		UpdateEnemyPopCommands();
 		player_->Update();
-		railCamera_->Update();
+		//railCamera_->Update();
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
@@ -121,10 +129,12 @@ void GameScene::Update() {
 			enemyTrackingBullet->Update();
 		}
 		skyDome_->Update();
+		stars_->Update();
 		CheckAllCollisions();
 		if (player_->UseTarget()) {
 			CheckLockOn();
 		}
+		planetWorldTransform_.UpdateMatrix();
 	} else {
 		if (input_->TriggerKey(DIK_T)) {
 			useTarget_ = !useTarget_;
@@ -148,8 +158,8 @@ void GameScene::Update() {
 		// カメラ行列の更新と転送
 		camera_.UpdateMatrix();
 	}
-
-	camera_.matView = railCamera_->GetCamera().matView;
+	//camera_.matView = railCamera_->GetCamera().matView;
+	camera_.matView = player_->GetCamera().matView;
 	// camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
 	//worldTransform_.UpdateMatirx();
@@ -335,6 +345,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	skyDome_->Draw(worldTransform_, camera_);
+	stars_->Draw(camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(camera_);
@@ -374,6 +385,7 @@ void GameScene::CheckAllCollisions() {
 	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
 	// 敵弾リストの取得
 	const std::list<EnemyBullet*> enemyBullets = GetEnemyBullets();
+	const std::list<EnemyTrackingBullet*> enemyTrackingBullets = GetEnemyTrackingBullets();
 
 #pragma	 region 自キャラと敵弾の当たり判定
 	// 自キャラの座標
@@ -381,6 +393,25 @@ void GameScene::CheckAllCollisions() {
 
 	// 自キャラと敵弾全ての当たり判定
 	for (EnemyBullet* bullet : enemyBullets) {
+		// 敵弾の座標
+		posB = bullet->GetWorldPosition();
+
+		// 座標AとBの距離を求める
+		float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+		float len = pow((1.0f + 1.0f), 2.0f);
+
+		// 弾と弾の交差判定
+		if (dist <= len && !player_->IsDamage()) {
+			// 自キャラの衝突時コールバックを呼び出す
+			if (!player_->IsDamage()) {
+				player_->OnCollision();
+			}
+			// 敵弾の衝突時コールバックを呼び出す
+			bullet->OnCollision();
+		}
+	}
+	// 自キャラと敵弾全ての当たり判定
+	for (EnemyTrackingBullet* bullet : enemyTrackingBullets) {
 		// 敵弾の座標
 		posB = bullet->GetWorldPosition();
 
@@ -415,7 +446,7 @@ void GameScene::CheckAllCollisions() {
 			float len = pow((1.0f + 1.0f), 2.0f);
 
 			// 弾と弾の交差
-			if (dist <= len) {
+			if (dist <= len && !enemy->IsDamage()) {
 				// 敵キャラの衝突コールバックを呼び出す
 				if (!enemy->IsDamage()) {
 					enemy->OnCollision();
@@ -448,6 +479,26 @@ void GameScene::CheckAllCollisions() {
 			}
 		}
 	}
+	for (PlayerBullet* playerBullet : playerBullets) {
+		// 自弾の座標
+		posA = playerBullet->GetWorldPosition();
+		for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets) {
+			// 敵弾の座標
+			posB = enemyTrackingBullet->GetWorldPosition();
+
+			// 座標AとBの距離を求める
+			float dist = pow((posB.x - posA.x), 2.0f) + pow((posB.y - posA.y), 2.0f) + pow((posB.z - posA.z), 2.0f);
+			float len = pow((1.0f + 1.0f), 2.0f);
+
+			// 弾と弾の交差
+			if (dist <= len) {
+				// 自弾の衝突コールバックを呼び出す
+				playerBullet->OnCollision();
+				// 敵弾の衝突コールバックを呼び出す
+				enemyTrackingBullet->OnCollision();
+			}
+		}
+	}
 #pragma endregion
 }
 
@@ -465,6 +516,7 @@ void GameScene::CheckLockOn() {
 		Vector3 enemyVector = posC - posA;
 		enemyVector = Normalize(enemyVector);
 		float rotate = std::acos(Dot(TargetVector, enemyVector));
+
 		if (rotate <= 0.1f && !player_->IsTarget()) {
 			lockonTimer_ += 1.0f / 60 / lockonTime_;
 		} else if (rotate > 0.1f&& enemy->IsTarget()) {
@@ -494,13 +546,13 @@ void GameScene::UpdateCursor() {
 	// ゲーム中
 	if (!showCursor_) {
 		Vector2 mousePos = GetMousePosition();
-		if (mousePos.x != 990.0f) {
-			mousePos_.x += (mousePos.x - 990.0f) * mouseSensi_.x;
-			SetCursorPos(990, 540);
+		if (mousePos.x != 960.0f) {
+			mousePos_.x += (mousePos.x - 960.0f) * mouseSensi_.x;
+			SetCursorPos(960, 540);
 		}
 		if (mousePos.y != 540.0f) {
 			mousePos_.y += (mousePos.y - 540.0f) * mouseSensi_.y;
-			SetCursorPos(990, 540);
+			SetCursorPos(960, 540);
 		}
 	}
 	mousePos_.x = std::clamp(mousePos_.x, 0.0f, 1920.0f);
@@ -511,7 +563,7 @@ void GameScene::UpdateCursor() {
 		showCursor_ = !showCursor_;
 		showMenu_ = showCursor_;
 		cursor = ShowCursor(showCursor_);
-		SetCursorPos(990, 540);
+		SetCursorPos(960, 540);
 	}
 	if (cursor >= 0) {
 		cursor = 1;
@@ -615,6 +667,7 @@ void GameScene::UpdateEnemyPopCommands() {
 
 		// POPコマンド
 		if (word.find("POP") == 0) {
+
 			// x座標
 			std::getline(line_stream, word, ',');
 			float x = (float)std::atof(word.c_str());
@@ -627,10 +680,25 @@ void GameScene::UpdateEnemyPopCommands() {
 			std::getline(line_stream, word, ',');
 			float z = (float)std::stof(word.c_str());
 
+			// 弾の種類
+			bool normalBullet = true;
+			std::getline(line_stream, word, ',');
+			if (word.find("tracking") == 0) {
+				normalBullet = false;
+			} else {
+				normalBullet = true;
+			}
+
+
+
 			// 敵を発生させる
 			Enemy* enemy = new Enemy();
 			enemy->SetPlayer(player_);
-			enemy->Initialize(modelEnemy_, Vector3{ x, y, z }, Vector3{ 0.0f, 0.0f, 0.0f }, 100.0f, 2);
+			if (!normalBullet) {
+				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::tracking);
+			} else {
+				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::normal);
+			}
 			enemy->SetGameScene(this);
 			enemies_.push_back(enemy);
 

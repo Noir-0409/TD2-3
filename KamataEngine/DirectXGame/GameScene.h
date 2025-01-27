@@ -20,6 +20,7 @@
 #include "RailCamera.h"
 #include "EnemyBullet.h"
 #include "EnemyTrackingBullet.h"
+#include "Stars.h"
 #include <sstream>
 #include <chrono>
 
@@ -113,6 +114,9 @@ public: // メンバ関数
 	//霧の濃さを変える
 	void ChangeFogAlpha(float deltaTime);
 
+	// デスフラグのgetter
+	bool IsFinished() const { return finished_; }
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -124,6 +128,9 @@ private: // メンバ変数
 
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Camera camera_;
+
+	// 天球移動用
+	KamataEngine::WorldTransform planetWorldTransform_;
 
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
@@ -176,7 +183,15 @@ private: // メンバ変数
 	// マウス感度
 	KamataEngine::Vector2 mouseSensi_; 
 
-	// 惑星シーン
+	//シーン終了フラグ
+	bool finished_ = false;
+
+
+
+
+	/// <summary>
+	/// ゲームシーン用
+	/// </summary>
 	Planet planet_ = Planet::normal;
 
 	//霧の透明度
@@ -184,5 +199,9 @@ private: // メンバ変数
 	float fogAlphaStep_ = 0.15f;
 
 	std::chrono::steady_clock::time_point previousTime_;
+
+	// 移動演出
+	Stars* stars_ = nullptr;
+	KamataEngine::Model* modelStars_;
 
 };
