@@ -21,6 +21,7 @@
 #include "EnemyBullet.h"
 #include "EnemyTrackingBullet.h"
 #include <sstream>
+#include <chrono>
 
 // 惑星
 enum class Planet {
@@ -109,6 +110,9 @@ public: // メンバ関数
 	// マウスの移動量の取得
 	KamataEngine::Vector2 GetMousePos() const { return mousePos_; }
 
+	//霧の濃さを変える
+	void ChangeFogAlpha(float deltaTime);
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -174,4 +178,11 @@ private: // メンバ変数
 
 	// 惑星シーン
 	Planet planet_ = Planet::normal;
+
+	//霧の透明度
+	float fogAlpha_ = 0.0f;
+	float fogAlphaStep_ = 0.15f;
+
+	std::chrono::steady_clock::time_point previousTime_;
+
 };

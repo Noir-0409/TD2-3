@@ -5,6 +5,7 @@
 #include <imgui.h>
 #include <algorithm>
 
+
 using namespace KamataEngine;
 
 GameScene::GameScene() {}
@@ -71,6 +72,8 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();
+
+	previousTime_ = std::chrono::steady_clock::now();
 
 }
 
@@ -150,6 +153,18 @@ void GameScene::Update() {
 	// camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
 	//worldTransform_.UpdateMatirx();
+
+	  // 現在の時間を取得
+	auto currentTime = std::chrono::steady_clock::now();
+
+	// 前回の時間との差を計算（経過時間）
+	std::chrono::duration<float> deltaTime = currentTime - previousTime_;
+
+	// deltaTime（経過時間）を次回のフレームに使うために記録
+	previousTime_ = currentTime;
+
+
+	ChangeFogAlpha(deltaTime.count());
 
 	switch (planet_) {
 
@@ -514,6 +529,44 @@ Vector2 GameScene::GetMousePosition() {
 
 	return mousePosition;
 }
+
+//void GameScene::ChangeFogAlpha(float deltaTime)
+//{
+//
+//	fogAlpha_ += fogAlphaStep_ * deltaTime;
+//
+//	if (planet_ == Planet::fog) {
+//
+//		fogSprite_->SetColor({ 1.0f,1.0f,1.0f,0.5f });
+//
+//	} else {
+//
+//		fogSprite_->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+//
+//	}
+//
+//}
+
+void GameScene::ChangeFogAlpha(float deltaTime) {
+
+	if (planet_ == Planet::fog) {
+		// 霧の濃さを増加させる（最大値1.0まで）
+		fogAlpha_ += fogAlphaStep_ * deltaTime;
+
+		// アルファ値の制限（0.0 ～ 1.0）
+		if (fogAlpha_ > 1.0f) fogAlpha_ = 1.0f;
+	} else {
+		// 他のフェーズでは霧を薄くしていく（最小値0.0まで）
+		fogAlpha_ -= fogAlphaStep_ * deltaTime;
+
+		// アルファ値の制限（0.0 ～ 1.0）
+		if (fogAlpha_ < 0.0f) fogAlpha_ = 0.0f;
+	}
+
+	// スプライトに反映
+	fogSprite_->SetColor({ 1.0f, 1.0f, 1.0f, fogAlpha_ });
+}
+
 
 // 敵発生コマンド
 void GameScene::LoadEnemyPopData() {
