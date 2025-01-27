@@ -316,6 +316,12 @@ void GameScene::Update() {
 		break;
 
 	}
+
+	if (input_->TriggerKey(DIK_1)) {
+
+		finished_ = true;
+
+	}
 }
 
 void GameScene::Draw() {

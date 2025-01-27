@@ -3,6 +3,7 @@
 
 #include "Title.h"
 #include "Rule.h"
+#include "ClearScene.h"
 
 #include <2d\ImGuiManager.h>
 #include <3d\AxisIndicator.h>
@@ -17,6 +18,7 @@ using namespace KamataEngine;
 Title* titleScene = nullptr;
 Rule* ruleScene = nullptr;
 GameScene* gameScene = nullptr;
+ClearScene* clearScene = nullptr;
 
 // シーン（型）
 enum class Scene {
@@ -24,10 +26,9 @@ enum class Scene {
 
 	kTitle,
 	kRule, // アクション
-	kGame
-
-	//kClear,
-	//kGameOver
+	kGame,
+	kClear,
+	kGameOver
 };
 // 現在シーン（型）
 Scene scene = Scene::kTitle;
@@ -187,15 +188,29 @@ void ChangeScene() {
 	case Scene::kGame:
 		if (gameScene->IsFinished()) {
 			// シーン変更
-			scene = Scene::kTitle;
+			scene = Scene::kClear;
 			// 旧シーンの解放
 			delete gameScene;
 			gameScene = nullptr;
 			// 新しいシーンの生成と初期化
-			titleScene = new Title;
-			titleScene->Initialize();
+			clearScene = new ClearScene();
+			clearScene->Initialize();
 		}
 		break;
+	case Scene::kClear:
+		if (clearScene->IsFinished()) {
+			//シーン変更
+			scene = Scene::kGame;
+			//旧シーンの解放
+			delete clearScene;
+			clearScene = nullptr;
+			//新しいシーンの生成と初期化
+			gameScene = new GameScene();
+			gameScene->Initialize();
+
+		}
+		break;
+
 	}
 
 
@@ -212,6 +227,9 @@ void UpdateScene() {
 	case Scene::kGame:
 		gameScene->Update();
 		break;
+	case Scene::kClear:
+		clearScene->Update();
+		break;
 	}
 }
 
@@ -225,6 +243,9 @@ void DrawScene() {
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
+		break;
+	case Scene::kClear:
+		clearScene->Draw();
 		break;
 	}
 }

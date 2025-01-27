@@ -117,6 +117,8 @@ public: // メンバ関数
 	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
+	bool IsCleared() const {return isCleard_; }
+
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
 	KamataEngine::Input* input_ = nullptr;
@@ -186,7 +188,7 @@ private: // メンバ変数
 	//シーン終了フラグ
 	bool finished_ = false;
 
-
+	bool isCleard_ = false;
 
 
 	/// <summary>
