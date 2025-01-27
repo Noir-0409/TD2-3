@@ -36,6 +36,7 @@ enum class Planet {
 	obstacle, // 障害物
 	time, // 時間の流れ
 	gravity, // 重力
+
 };
 
 /// <summary>
@@ -101,6 +102,7 @@ public: // メンバ関数
 	/// </summary>
 	Planet GetPlanet() const { return planet_; }
 
+	std::list<Enemy*>& GetEnemies() { return enemies_; }
 
 	bool UseTarget() { return useTarget_; }
 	// マウスの位置を取得

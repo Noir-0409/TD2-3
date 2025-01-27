@@ -155,6 +155,147 @@ void GameScene::Update() {
 	// camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
 	//worldTransform_.UpdateMatirx();
+
+	switch (planet_) {
+
+	case Planet::normal:
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::control;
+
+		}
+
+		break;
+
+	case Planet::control:
+
+		//操作を反転
+		player_->InvertControls();
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::fog;
+
+		}
+
+		break;
+
+	case Planet::fog:
+
+		//視界悪化
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::newEnemy;
+
+		}
+
+		break;
+
+	case Planet::newEnemy:
+
+		//新しい敵
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::heal;
+
+		}
+
+		break;
+
+	case Planet::heal:
+
+		//HP回復
+		player_->HealHP();
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::damage;
+
+		}
+
+		break;
+
+
+	case Planet::damage:
+
+		//HP減少
+		player_->DamageHP();
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::attack;
+
+		}
+
+		break;
+
+	case Planet::attack:
+
+		//攻撃力変化
+		player_->PowerUp();
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::bullet;
+
+		}
+
+		break;
+
+	case Planet::bullet:
+
+		//弾の軌道
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::obstacle;
+
+		}
+
+		break;
+
+	case Planet::obstacle:
+
+		//障害物
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::time;
+
+		}
+
+		break;
+
+	case Planet::time:
+
+		//時間の流れ
+		player_->TimeFlow();
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::gravity;
+
+		}
+
+		break;
+
+	case Planet::gravity:
+
+		//重力
+		player_->AffectGravity();
+
+		if (input_->TriggerKey(DIK_RETURN)) {
+
+			planet_ = Planet::normal;
+
+		}
+
+		break;
+
+	}
 }
 
 void GameScene::Draw() {

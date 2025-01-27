@@ -14,6 +14,7 @@
 
 class PlayerBullet;
 class GameScene;
+class Enemy;
 
 class Player {
 public:
@@ -73,7 +74,21 @@ public:
 
 	void SetTarget(bool target) { isTarget_ = target; }
 
+
+	void InvertControls();
+
+	void AffectGravity();
+
+	void TimeFlow();
+
+	void HealHP();
+
+	void DamageHP();
+
+	void PowerUp();
+
 	KamataEngine::Camera& GetCamera() { return camera_; }
+
 
 private:
 	KamataEngine::Input* input_ = nullptr;
@@ -149,5 +164,6 @@ private:
 
 	// ターゲットのワールド座標の取得
 	KamataEngine::Vector3 targetWorldPosition_ = {0.0f, 0.0f, 0.0f};
+
 	
 };

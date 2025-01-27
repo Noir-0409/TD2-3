@@ -70,6 +70,9 @@ public:
 
 	void SetTarget(bool target) { target_ = target; }
 
+	//HPを多く減らす
+	void TakeDamage();
+
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;

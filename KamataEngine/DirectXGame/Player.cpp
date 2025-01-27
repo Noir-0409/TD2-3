@@ -126,6 +126,154 @@ void Player::UpdateImgui() {
 #endif // _DEBUG
 }
 
+void Player::InvertControls()
+{
+	// キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	if (input_->PushKey(DIK_A)) {
+		move.x += kCharacterSpeed * 2;
+	} else if (input_->PushKey(DIK_D)) {
+		move.x -= kCharacterSpeed * 2;
+	}
+
+	if (input_->PushKey(DIK_S)) {
+		move.y += kCharacterSpeed * 2;
+	} else if (input_->PushKey(DIK_W)) {
+		move.y -= kCharacterSpeed * 2;
+	}
+
+	worldTransform_.translation_ += move;
+	// 範囲を超えないように処理
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+
+}
+
+void Player::AffectGravity()
+{
+	// キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	move.y -= 0.1f;
+
+	worldTransform_.translation_ += move;
+	// 範囲を超えないように処理
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+
+}
+
+void Player::TimeFlow()
+{
+
+	// キャラクターの移動ベクトル
+	Vector3 move = { 0, 0, 0 };
+
+	if (input_->PushKey(DIK_A)) {
+		move.x -= kCharacterSpeed * 10.0f;
+	} else if (input_->PushKey(DIK_D)) {
+		move.x += kCharacterSpeed * 10.0f;
+	}
+
+	if (input_->PushKey(DIK_S)) {
+		move.y -= kCharacterSpeed * 10.0f;
+	} else if (input_->PushKey(DIK_W)) {
+		move.y += kCharacterSpeed * 10.0f;
+	}
+
+	worldTransform_.translation_ += move;
+
+	// 範囲を超えないように処理
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -kMoveLimitX, kMoveLimitX);
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, -kMoveLimitY, kMoveLimitY);
+
+}
+
+void Player::HealHP() {
+
+	//回復間隔
+	static const int kHealInterval = 600; //10秒
+
+	// 回復タイマー
+	static int healTimer = 0;
+
+	if (hp_ < 100 && hp_ > 0) {
+
+		// タイマーを増加
+		healTimer++;
+
+		// 回復間隔に達したらHPを回復
+		if (healTimer >= kHealInterval) {
+
+			hp_ += 10; 
+
+			if (hp_ > 100) {
+
+				hp_ = 100;
+			
+			}
+			
+			//タイマーをリセット
+			healTimer = 0;
+		}
+
+	} else {
+
+		healTimer = 0;
+
+	}
+}
+
+void Player::DamageHP()
+{
+
+	//ダメージ間隔
+	static const int kDamageInterval = 600; //10秒
+
+	//ダメージタイマー
+	static int damageTimer = 0;
+
+	if (hp_ < 100 && hp_ > 0) {
+
+		// タイマーを増加
+		damageTimer++;
+
+		// 回復間隔に達したらHPを回復
+		if (damageTimer >= kDamageInterval) {
+
+			hp_ -= 10;
+
+			if (hp_ < 1) {
+
+				hp_ = 1;
+
+			}
+
+			//タイマーをリセット
+			damageTimer = 0;
+		}
+
+	} else {
+
+		damageTimer = 0;
+
+	}
+
+}
+
+void Player::PowerUp()
+{
+
+	for (Enemy* enemy : gameScene_->GetEnemies()) {
+
+		enemy->TakeDamage();
+
+	}
+
+}
+
+
 void Player::wolk() {
 	// キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };

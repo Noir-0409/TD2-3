@@ -160,3 +160,9 @@ void Enemy::OnCollision() {
 	hp_ -= 0;
 	isDamage_ = true;
 }
+
+void Enemy::TakeDamage()
+{
+	hp_ -= 5;
+
+}
