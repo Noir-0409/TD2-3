@@ -319,6 +319,12 @@ void GameScene::Update() {
 
 	if (input_->TriggerKey(DIK_1)) {
 
+		isCleard_ = true;
+
+	}
+
+	if (input_->TriggerKey(DIK_2)) {
+
 		finished_ = true;
 
 	}
