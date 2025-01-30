@@ -40,10 +40,12 @@ Vector3 Player::GetTargetWorldPosition() {
 	return worldPos;
 }
 
-void Player::Initialize(Model* model, const Vector3& position) {
+void Player::Initialize(Model* model, Model* bulletModel, const Vector3& position) {
 	input_ = KamataEngine::Input::GetInstance();
 	assert(model);
+	assert(bulletModel);
 	model_ = model;
+	bulletModel_ = bulletModel;
 
 	targetModel_ = Model::CreateFromOBJ("target");
 	//targetModel_ = Model::CreateFromOBJ("debugTarget");
@@ -314,13 +316,13 @@ void Player::TargetUpdate() {
 	// 代入
 	targetWorldTransform_.translation_ = worldTransform_.translation_;
 	//targetWorldTransform_.translation_.z = worldTransform_.translation_.z - 1.4f;
-	mousePos_.x = std::clamp(mousePos_.x, 0.0f, 1980.0f);
-	mousePos_.y = std::clamp(mousePos_.y, 0.0f, 1000.0f);
+	mousePos_.x = std::clamp(mousePos_.x, 380.0f, 1600.0f);
+	mousePos_.y = std::clamp(mousePos_.y, 180.0f, 850.0f);
 	// 照準の回転を変更して動かす
 	targetWorldTransform_.rotation_.y = (mousePos_.x - 990.0f) / 1920;
 	targetWorldTransform_.rotation_.x = (mousePos_.y - 540.0f) / 2040;
 	targetWorldTransform_.rotation_.y = std::clamp(targetWorldTransform_.rotation_.y, (0 - 990.0f) / 1920, (1919 - 990.0f) / 1920);
-	targetWorldTransform_.rotation_.x = std::clamp(targetWorldTransform_.rotation_.x, (0 - 990.0f) / 2040, (1919 - 990.0f) / 2040);
+	targetWorldTransform_.rotation_.x = std::clamp(targetWorldTransform_.rotation_.x, (0 - 990.0f) / 2160, (1919 - 990.0f) / 2160);
 	targetWorldTransform_.scale_ = worldTransform_.scale_;
 }
 
@@ -340,7 +342,7 @@ void Player::Attack() {
 
 			// 弾を生成し、初期化
 			PlayerBullet* newBullet = new PlayerBullet();
-			newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
+			newBullet->Initialize(bulletModel_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
 
 			// 弾を登録する
 			bullets_.push_back(newBullet);
@@ -364,7 +366,7 @@ void Player::Attack() {
 
 			// 弾を生成し、初期化
 			PlayerBullet* newBullet = new PlayerBullet();
-			newBullet->Initialize(model_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 1, GetWorldPosition().z}, velocity);
+			newBullet->Initialize(bulletModel_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
 
 			// 弾を登録する
 			bullets_.push_back(newBullet);

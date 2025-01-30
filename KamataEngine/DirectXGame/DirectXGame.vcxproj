@@ -112,6 +112,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="kMath.cpp" />
+    <ClCompile Include="Planets.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAnime.cpp" />
     <ClCompile Include="PlayerBullet.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="EnemyTrackingBullet.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="kMath.h" />
+    <ClInclude Include="Planets.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAnime.h" />
     <ClInclude Include="PlayerBullet.h" />
