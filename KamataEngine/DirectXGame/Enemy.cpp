@@ -157,8 +157,15 @@ void Enemy::Draw(Camera& camera) {
 
 // 衝突したら
 void Enemy::OnCollision() {
-	hp_ -= 0;
+	hp_ -= 50;
 	isDamage_ = true;
+
+	if (hp_ <= 0) {
+
+		isDead_ = true;
+
+		}
+
 }
 
 void Enemy::TakeDamage()

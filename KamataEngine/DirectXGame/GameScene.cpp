@@ -182,6 +182,21 @@ void GameScene::Update() {
 	ChangeFogAlpha(deltaTime.count());
 	ChangeDedAlpha(deltaTime.count());
 
+	enemies_.remove_if([](Enemy* enemy) {
+
+		if (enemy->IsDead()) {
+
+			delete enemy;
+			return true;
+
+		}
+
+		return false;
+
+		}
+
+	);
+
 	switch (planet_) {
 
 	case Planet::normal:
