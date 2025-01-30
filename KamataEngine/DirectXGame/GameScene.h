@@ -198,7 +198,7 @@ private: // メンバ変数
 
 	//霧の透明度
 	float fogAlpha_ = 0.0f;
-	float fogAlphaStep_ = 0.15f;
+	float fogAlphaStep_ = 0.1f;
 
 	std::chrono::steady_clock::time_point previousTime_;
 

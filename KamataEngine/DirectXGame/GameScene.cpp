@@ -614,20 +614,20 @@ Vector2 GameScene::GetMousePosition() {
 void GameScene::ChangeFogAlpha(float deltaTime) {
 
 	if (planet_ == Planet::fog) {
-		// 霧の濃さを増加させる（最大値1.0まで）
+		//霧の濃さを増加させる
 		fogAlpha_ += fogAlphaStep_ * deltaTime;
 
-		// アルファ値の制限（0.0 ～ 1.0）
-		if (fogAlpha_ > 1.0f) fogAlpha_ = 1.0f;
+		//アルファ値の制限
+		if (fogAlpha_ > 0.9f) fogAlpha_ = 0.9f;
 	} else {
-		// 他のフェーズでは霧を薄くしていく（最小値0.0まで）
+		//他のフェーズでは霧を薄くしていく
 		fogAlpha_ -= fogAlphaStep_ * deltaTime;
 
-		// アルファ値の制限（0.0 ～ 1.0）
+		//アルファ値の制限
 		if (fogAlpha_ < 0.0f) fogAlpha_ = 0.0f;
 	}
 
-	// スプライトに反映
+	//スプライトに反映
 	fogSprite_->SetColor({ 1.0f, 1.0f, 1.0f, fogAlpha_ });
 }
 
