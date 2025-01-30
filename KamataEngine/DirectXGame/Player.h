@@ -90,6 +90,8 @@ public:
 
 	KamataEngine::Camera& GetCamera() { return camera_; }
 
+	bool IsJustHealed() const;
+
 
 private:
 	KamataEngine::Input* input_ = nullptr;
@@ -171,5 +173,9 @@ private:
 
 	//ダメージタイマー
 	float damageTimer_ = 0.0f;
+
+	bool isJustHealed_ = false;
+	int justHealedTimer_ = 0; // 一瞬だけ描画するためのタイマー
+	const int justHealedDuration_ = 30;
 	
 };

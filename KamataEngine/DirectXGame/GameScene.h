@@ -117,6 +117,9 @@ public: // メンバ関数
 	//瀕死エフェクトの濃さを変える
 	void ChangeDedAlpha(float deltaTime);
 
+	//回復エフェクトの濃さを変える
+	void ChangeHealAlpha(float deltaTime);
+
 	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
@@ -161,6 +164,10 @@ private: // メンバ変数
 	//瀕死エフェクト
 	KamataEngine::Sprite* dedSprite_ = nullptr;
 	uint32_t dedTextureHandle_ = 0;
+
+	//回復エフェクト
+	KamataEngine::Sprite* healSprite_ = nullptr;
+	uint32_t healTextureHandle_ = 0;
 
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;
@@ -210,6 +217,10 @@ private: // メンバ変数
 	//瀕死エフェクトの透明度
 	float dedAlpha_ = 0.0f;
 	float dedAlphaStep_ = 0.9f;
+
+	//貝吹エフェクトの透明度
+	float healAlpha_ = 0.0f;
+	float healAlphaStep_ = 0.5f;
 
 	std::chrono::steady_clock::time_point previousTime_;
 

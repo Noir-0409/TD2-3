@@ -196,37 +196,114 @@ void Player::TimeFlow()
 
 }
 
+//void Player::HealHP() {
+//
+//	//回復間隔
+//	static const int kHealInterval = 300;
+//
+//	if (hp_ > 0) {
+//
+//		// タイマーを増加
+//		healTimer_++;
+//
+//		// 回復間隔に達したらHPを回復
+//		if (healTimer_ >= kHealInterval) {
+//
+//			hp_ += 5; 
+//
+//			if (hp_ > 100) {
+//
+//				hp_ = 100;
+//			
+//			}
+//			
+//			//タイマーをリセット
+//			healTimer_ = 0;
+//		}
+//
+//	} else {
+//
+//		healTimer_ = 0;
+//
+//	}
+//}
+
+//void Player::HealHP() {
+//
+//	// 回復間隔
+//	static const int kHealInterval = 300;
+//
+//	if (hp_ > 0) {
+//		// タイマーを増加
+//		healTimer_++;
+//
+//		// 回復間隔に達したらHPを回復
+//		if (healTimer_ >= kHealInterval) {
+//			hp_ += 5;
+//
+//			// 回復した瞬間にフラグを立てる
+//			isJustHealed_ = true;
+//			justHealedTimer_ = justHealedDuration_;
+//
+//			// HPが上限を超えないように
+//			if (hp_ > 100) {
+//				hp_ = 100;
+//			}
+//
+//			// タイマーをリセット
+//			healTimer_ = 0;
+//		}
+//	} else {
+//		healTimer_ = 0;
+//	}
+//
+//	// JustHealedのフラグ管理
+//	if (isJustHealed_) {
+//		justHealedTimer_--;
+//		if (justHealedTimer_ <= 0) {
+//			isJustHealed_ = false;
+//		}
+//	}
+//}
+
 void Player::HealHP() {
 
-	//回復間隔
+	// 回復間隔
 	static const int kHealInterval = 300;
 
-	if (hp_ > 0) {
-
+	if (hp_ > 0 && hp_ < 100) {  // hp_ が0より大きく、最大HP未満のときのみ回復
 		// タイマーを増加
 		healTimer_++;
 
 		// 回復間隔に達したらHPを回復
 		if (healTimer_ >= kHealInterval) {
+			hp_ += 5;
 
-			hp_ += 5; 
-
-			if (hp_ > 100) {
-
-				hp_ = 100;
-			
+			// 回復した瞬間にフラグを立てる
+			if (!isJustHealed_) {
+				isJustHealed_ = true;
+				justHealedTimer_ = justHealedDuration_;
 			}
-			
-			//タイマーをリセット
+
+			// HPが上限を超えないように
+			if (hp_ > 100) {
+				hp_ = 100;
+			}
+
+			// タイマーをリセット
 			healTimer_ = 0;
 		}
+	}
 
-	} else {
-
-		healTimer_ = 0;
-
+	// JustHealedのフラグ管理
+	if (isJustHealed_) {
+		justHealedTimer_--;
+		if (justHealedTimer_ <= 0) {
+			isJustHealed_ = false;
+		}
 	}
 }
+
 
 void Player::DamageHP()
 {
@@ -272,6 +349,11 @@ void Player::PowerUp()
 
 	}
 
+}
+
+bool Player::IsJustHealed() const
+{
+	return isJustHealed_;
 }
 
 

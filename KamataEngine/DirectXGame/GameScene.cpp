@@ -25,6 +25,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete fogSprite_;
 	delete dedSprite_;
+	delete healSprite_;
 }
 
 void GameScene::Initialize() {
@@ -74,6 +75,10 @@ void GameScene::Initialize() {
 	//瀕死エフェクトの初期化
 	dedTextureHandle_ = KamataEngine::TextureManager::Load("dedEffect.png");
 	dedSprite_ = Sprite::Create(dedTextureHandle_, { 0.0f,0.0f });
+
+	//回復エフェクトの初期化
+	healTextureHandle_ = KamataEngine::TextureManager::Load("healEffect.png");
+	healSprite_ = Sprite::Create(healTextureHandle_, { 0.0f,0.0f });
 
 	modelStars_ = Model::CreateFromOBJ("star");
 	stars_ = new Stars();
@@ -181,6 +186,7 @@ void GameScene::Update() {
 
 	ChangeFogAlpha(deltaTime.count());
 	ChangeDedAlpha(deltaTime.count());
+	ChangeHealAlpha(deltaTime.count());
 
 	switch (planet_) {
 
@@ -393,6 +399,7 @@ void GameScene::Draw() {
 
 	fogSprite_->Draw();
 	dedSprite_->Draw();
+	healSprite_->Draw();
 
 	// スプライト描画後処理
 	KamataEngine::Sprite::PostDraw();
@@ -652,6 +659,50 @@ void GameScene::ChangeDedAlpha(float deltaTime)
 
 	// スプライトに反映
 	dedSprite_->SetColor({ 1.0f, 1.0f, 1.0f, dedAlpha_ });
+}
+
+//void GameScene::ChangeHealAlpha(float deltaTime)
+//{
+//
+//	// 回復した瞬間に透明度を増加させる
+//	if (player_->IsJustHealed()) {
+//		healAlpha_ = 0.0f; // 透明からスタート
+//	}
+//
+//	// 透明度を徐々に増やす（0.8 まで）
+//	if (healAlpha_ < 0.8f) {
+//		healAlpha_ += healAlphaStep_ * deltaTime;
+//		if (healAlpha_ > 0.8f) healAlpha_ = 0.8f; // 上限
+//	}
+//
+//	// 徐々に透明にする
+//	if (healAlpha_ > 0.0f) {
+//		healAlpha_ -= healAlphaStep_ * deltaTime;
+//		if (healAlpha_ < 0.0f) healAlpha_ = 0.0f; // 下限
+//	}
+//
+//	// スプライトに適用（白色 & 透明度調整）
+//	healSprite_->SetColor({ 1.0f, 1.0f, 1.0f, healAlpha_ });
+//
+//}
+
+void GameScene::ChangeHealAlpha(float deltaTime) {
+	if (player_->IsJustHealed()) {
+		// 回復エフェクトの透明度を増加
+		healAlpha_ += healAlphaStep_ * deltaTime;
+
+		// 透明度の上限を設定
+		if (healAlpha_ > 1.0f) healAlpha_ = 1.0f;
+	} else {
+		// 透明度を減少させる
+		healAlpha_ -= healAlphaStep_ * deltaTime;
+
+		// 透明度の下限を設定
+		if (healAlpha_ < 0.0f) healAlpha_ = 0.0f;
+	}
+
+	// 透明度をスプライトに反映
+	healSprite_->SetColor({ 1.0f, 1.0f, 1.0f, healAlpha_ });
 }
 
 
