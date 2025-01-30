@@ -179,9 +179,8 @@ void GameScene::Update() {
 	camera_.TransferMatrix();
 	//worldTransform_.UpdateMatirx();
 
-	switch (planets_->GetPlanet()) {
 
-      // 現在の時間を取得
+	// 現在の時間を取得
 	auto currentTime = std::chrono::steady_clock::now();
 
 	// 前回の時間との差を計算（経過時間）
@@ -190,181 +189,160 @@ void GameScene::Update() {
 	// deltaTime（経過時間）を次回のフレームに使うために記録
 	previousTime_ = currentTime;
 
-
 	ChangeFogAlpha(deltaTime.count());
 	ChangeDedAlpha(deltaTime.count());
 
 	enemies_.remove_if([](Enemy* enemy) {
-
 		if (enemy->IsDead()) {
 
 			delete enemy;
 			return true;
-
 		}
 
 		return false;
-
-		}
+	}
 
 	);
 
-	switch (planet_) {
+	switch (planets_->GetPlanet()) {
 
 	case Planet::normal:
 
 		if (input_->TriggerKey(DIK_RETURN)) {
-
 			planet_ = Planet::control;
-
 		}
 
 		break;
 
 	case Planet::control:
 
-		//操作を反転
+		// 操作を反転
 		player_->InvertControls();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
 			planet_ = Planet::fog;
-
 		}
 
 		break;
 
 	case Planet::fog:
 
-		//視界悪化
+		// 視界悪化
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
 			planet_ = Planet::heal;
-
 		}
 
-		break;
+	break;
 
-	//case Planet::newEnemy:
+			// case Planet::newEnemy:
 
-	//	//新しい敵
+			//	//新しい敵
 
-	//	if (input_->TriggerKey(DIK_RETURN)) {
+			//	if (input_->TriggerKey(DIK_RETURN)) {
 
-	//		planet_ = Planet::heal;
+			//		planet_ = Planet::heal;
 
-	//	}
+			//	}
 
-	//	break;
+			//	break;
 
 	case Planet::heal:
 
-		//HP回復
+		// HP回復
 		player_->HealHP();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
-
 			planet_ = Planet::damage;
-
 		}
 
 		break;
 
-
 	case Planet::damage:
 
-		//HP減少
+		// HP減少
 		player_->DamageHP();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
 			planet_ = Planet::attack;
-
 		}
 
-		break;
+	break;
 
 	case Planet::attack:
 
-		//攻撃力変化
+		// 攻撃力変化
 		player_->PowerUp();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
-			//planet_ = Planet::bullet;
-
+			// planet_ = Planet::bullet;
 		}
 
-		break;
+	break;
 
-	//case Planet::bullet:
+			// case Planet::bullet:
 
-	//	//弾の軌道
+			//	//弾の軌道
 
-	//	if (input_->TriggerKey(DIK_RETURN)) {
+			//	if (input_->TriggerKey(DIK_RETURN)) {
 
-	//		planet_ = Planet::obstacle;
+			//		planet_ = Planet::obstacle;
 
-	//	}
+			//	}
 
-	//	break;
+			//	break;
 
 	case Planet::obstacle:
 
-		//障害物
+		// 障害物
 
 		if (input_->TriggerKey(DIK_RETURN)) {
-
 			planet_ = Planet::time;
-
 		}
 
 		break;
 
 	case Planet::time:
 
-		//時間の流れ
+		// 時間の流れ
 		player_->TimeFlow();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
 			planet_ = Planet::gravity;
-
 		}
 
 		break;
 
 	case Planet::gravity:
 
-		//重力
+		// 重力
 		player_->AffectGravity();
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
 			planet_ = Planet::normal;
-
 		}
 
 		break;
-
 	}
 
-	//最終的なクリアまでの時間決めたら戻す!!
-	//clearTimer_--;
+	// 最終的なクリアまでの時間決めたら戻す!!
+	// clearTimer_--;
 
 	if (clearTimer_ == 0) {
 
 		isCleard_ = true;
-
 	}
 
 	if (player_->IsDead()) {
 
 		finished_ = true;
-
 	}
-
 }
 
 void GameScene::Draw() {
