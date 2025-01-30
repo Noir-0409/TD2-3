@@ -165,5 +165,10 @@ private:
 	// ターゲットのワールド座標の取得
 	KamataEngine::Vector3 targetWorldPosition_ = {0.0f, 0.0f, 0.0f};
 
+	//回復タイマー
+	int healTimer_ = 0;
+
+	//ダメージタイマー
+	int damageTimer_ = 0;
 	
 };

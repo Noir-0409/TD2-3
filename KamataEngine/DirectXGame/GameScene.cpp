@@ -323,11 +323,12 @@ void GameScene::Update() {
 
 	}
 
-	if (input_->TriggerKey(DIK_2)) {
+	if (player_->IsDead()) {
 
 		finished_ = true;
 
 	}
+
 }
 
 void GameScene::Draw() {
@@ -593,23 +594,6 @@ Vector2 GameScene::GetMousePosition() {
 
 	return mousePosition;
 }
-
-//void GameScene::ChangeFogAlpha(float deltaTime)
-//{
-//
-//	fogAlpha_ += fogAlphaStep_ * deltaTime;
-//
-//	if (planet_ == Planet::fog) {
-//
-//		fogSprite_->SetColor({ 1.0f,1.0f,1.0f,0.5f });
-//
-//	} else {
-//
-//		fogSprite_->SetColor({ 1.0f,1.0f,1.0f,0.0f });
-//
-//	}
-//
-//}
 
 void GameScene::ChangeFogAlpha(float deltaTime) {
 
