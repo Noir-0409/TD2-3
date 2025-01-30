@@ -166,9 +166,9 @@ private:
 	KamataEngine::Vector3 targetWorldPosition_ = {0.0f, 0.0f, 0.0f};
 
 	//回復タイマー
-	int healTimer_ = 0;
+	float healTimer_ = 0.0f;
 
 	//ダメージタイマー
-	int damageTimer_ = 0;
+	float damageTimer_ = 0.0f;
 	
 };
