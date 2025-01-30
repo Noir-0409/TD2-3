@@ -625,47 +625,29 @@ void GameScene::ChangeFogAlpha(float deltaTime) {
 	fogSprite_->SetColor({ 1.0f, 1.0f, 1.0f, fogAlpha_ });
 }
 
-//void GameScene::ChangeDedAlpha(float deltaTime)
-//{
-//	if (player_->IsLowHP() && !player_->IsDead()) {
-//		// 透明度を増加（減少方向の修正）
-//		dedAlpha_ += dedAlphaStep_ * deltaTime;
-//
-//		// 透明度の制限
-//		if (dedAlpha_ > 0.9f) dedAlpha_ = 0.9f;
-//	} else {
-//		// 透明度を減少
-//		dedAlpha_ -= dedAlphaStep_ * deltaTime;
-//
-//		// 透明度の制限（透明度が0未満にならないように）
-//		if (dedAlpha_ < 0.0f) dedAlpha_ = 0.0f;
-//	}
-//
-//	// スプライトに反映
-//	dedSprite_->SetColor({ 1.0f, 1.0f, 1.0f, dedAlpha_ });
-//}
-
 void GameScene::ChangeDedAlpha(float deltaTime)
 {
-	// 瀕死状態かつ死亡していない場合
+	
 	if (player_->IsLowHP() && !player_->IsDead()) {
-		// 透明度が最大値（0.9f）に達したら減少に切り替え
+		
 		if (dedAlpha_ >= 0.9f) {
-			dedAlphaStep_ = -abs(dedAlphaStep_); // 減少方向に変更
+			dedAlphaStep_ = -abs(dedAlphaStep_); 
 		}
-		// 透明度が最小値（0.0f）に達したら増加に切り替え
+		
 		else if (dedAlpha_ <= 0.0f) {
-			dedAlphaStep_ = abs(dedAlphaStep_); // 増加方向に変更
+			dedAlphaStep_ = abs(dedAlphaStep_); 
 		}
 
-		// 透明度を変化
+	
 		dedAlpha_ += dedAlphaStep_ * deltaTime;
 	}
-	// 瀕死状態でない or 死亡している場合
+	
 	else {
-		// 透明度を0に戻す
+		
+
 		dedAlpha_ -= abs(dedAlphaStep_) * deltaTime;
 		if (dedAlpha_ < 0.0f) dedAlpha_ = 0.0f;
+
 	}
 
 	// スプライトに反映
