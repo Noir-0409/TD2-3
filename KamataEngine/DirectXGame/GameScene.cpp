@@ -627,23 +627,33 @@ void GameScene::ChangeFogAlpha(float deltaTime) {
 
 void GameScene::ChangeDedAlpha(float deltaTime)
 {
+	
 	if (player_->IsLowHP() && !player_->IsDead()) {
-		// 透明度を増加（減少方向の修正）
+		
+		if (dedAlpha_ >= 0.9f) {
+			dedAlphaStep_ = -abs(dedAlphaStep_); 
+		}
+		
+		else if (dedAlpha_ <= 0.0f) {
+			dedAlphaStep_ = abs(dedAlphaStep_); 
+		}
+
+	
 		dedAlpha_ += dedAlphaStep_ * deltaTime;
+	}
+	
+	else {
+		
 
-		// 透明度の制限
-		if (dedAlpha_ > 0.9f) dedAlpha_ = 0.9f;
-	} else {
-		// 透明度を減少
-		dedAlpha_ -= dedAlphaStep_ * deltaTime;
-
-		// 透明度の制限（透明度が0未満にならないように）
+		dedAlpha_ -= abs(dedAlphaStep_) * deltaTime;
 		if (dedAlpha_ < 0.0f) dedAlpha_ = 0.0f;
+
 	}
 
 	// スプライトに反映
 	dedSprite_->SetColor({ 1.0f, 1.0f, 1.0f, dedAlpha_ });
 }
+
 
 // 敵発生コマンド
 void GameScene::LoadEnemyPopData() {
