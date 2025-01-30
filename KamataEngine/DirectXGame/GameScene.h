@@ -206,4 +206,7 @@ private: // メンバ変数
 	Stars* stars_ = nullptr;
 	KamataEngine::Model* modelStars_;
 
+	//クリアまでのタイマー
+	float clearTimer_ = 300.0f;
+
 };

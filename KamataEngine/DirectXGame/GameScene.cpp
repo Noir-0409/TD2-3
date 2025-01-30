@@ -317,7 +317,10 @@ void GameScene::Update() {
 
 	}
 
-	if (input_->TriggerKey(DIK_1)) {
+	//最終的なクリアまでの時間決めたら戻す!!
+	//clearTimer_--;
+
+	if (clearTimer_ == 0) {
 
 		isCleard_ = true;
 
