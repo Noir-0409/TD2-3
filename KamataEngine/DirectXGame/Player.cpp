@@ -111,6 +111,7 @@ void Player::Update() {
 	//worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 
 	//worldTransform_.TransferMatrix();
+
 }
 
 void Player::UpdateImgui() {
@@ -193,20 +194,17 @@ void Player::TimeFlow()
 void Player::HealHP() {
 
 	//回復間隔
-	static const int kHealInterval = 600; //10秒
+	static const int kHealInterval = 300;
 
-	// 回復タイマー
-	static int healTimer = 0;
-
-	if (hp_ < 100 && hp_ > 0) {
+	if (hp_ > 0) {
 
 		// タイマーを増加
-		healTimer++;
+		healTimer_++;
 
 		// 回復間隔に達したらHPを回復
-		if (healTimer >= kHealInterval) {
+		if (healTimer_ >= kHealInterval) {
 
-			hp_ += 10; 
+			hp_ += 20; 
 
 			if (hp_ > 100) {
 
@@ -215,12 +213,12 @@ void Player::HealHP() {
 			}
 			
 			//タイマーをリセット
-			healTimer = 0;
+			healTimer_ = 0;
 		}
 
 	} else {
 
-		healTimer = 0;
+		healTimer_ = 0;
 
 	}
 }
@@ -229,20 +227,18 @@ void Player::DamageHP()
 {
 
 	//ダメージ間隔
-	static const int kDamageInterval = 600; //10秒
+	static const int kDamageInterval_ = 300;
 
-	//ダメージタイマー
-	static int damageTimer = 0;
-
-	if (hp_ < 100 && hp_ > 0) {
+	if (hp_ > 0) {
 
 		// タイマーを増加
-		damageTimer++;
+		damageTimer_++;
 
-		// 回復間隔に達したらHPを回復
-		if (damageTimer >= kDamageInterval) {
+		// ダメージ間隔に達したらHPを減らす
+		if (damageTimer_ >= kDamageInterval_) {
 
-			hp_ -= 10;
+			hp_ -= 20;
+			isDamage_ = true;
 
 			if (hp_ < 1) {
 
@@ -251,12 +247,12 @@ void Player::DamageHP()
 			}
 
 			//タイマーをリセット
-			damageTimer = 0;
+			damageTimer_ = 0;
 		}
 
 	} else {
 
-		damageTimer = 0;
+		damageTimer_ = 0;
 
 	}
 
@@ -401,8 +397,16 @@ void Player::Draw(KamataEngine::Camera& camera) {
 }
 
 void Player::OnCollision() {
-	hp_ -= 0;
+
+	hp_ -= 20;
 	isDamage_ = true;
+
+	if (hp_ == 0) {
+
+		isDead_ = true;
+
+}
+
 }
 
 void Player::SetParent(const WorldTransform* parent) {

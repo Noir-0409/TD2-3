@@ -199,6 +199,7 @@ void ChangeScene() {
 			// 新しいシーンの生成と初期化
 			clearScene = new ClearScene();
 			clearScene->Initialize();
+
 		}else if (gameScene->IsFinished()) {
 
 			//シーン変更
