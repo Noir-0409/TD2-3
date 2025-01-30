@@ -13,6 +13,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 	delete player_;
 	delete stars_;
+	delete planets_;
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
@@ -45,9 +46,10 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetTargetCamera(&camera_);
 
 	// プレイヤーの初期化
-	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("enemy");
+	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("player");
+	modelPlayerBullet_ = KamataEngine::Model::CreateFromOBJ("cube");
 	player_ = new Player();
-	player_->Initialize(modelPlayer_, Vector3{ 0.0f, 0.0f, 0.0f });
+	player_->Initialize(modelPlayer_, modelPlayerBullet_, Vector3{ 0.0f, 0.0f, 0.0f });
 	player_->SetGameScene(this);
 	useTarget_ = player_->UseTarget();
 
@@ -80,6 +82,12 @@ void GameScene::Initialize() {
 	stars_->Initialize(modelStars_);
 	stars_->SetPlayer(player_);
 
+	modelPlanets_ = Model::CreateFromOBJ("planet");
+	planets_ = new Planets();
+	planets_->Initialize(modelPlanets_, planet_);
+
+	player_->SetPlanets(planets_);
+
 	worldTransform_.Initialize();
 	planetWorldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
@@ -93,6 +101,7 @@ void GameScene::Update() {
 	UpdateCursor();
 #ifdef _DEBUG
 	player_->UpdateImgui();
+	planets_->UpdateImgui();
 	//railCamera_->UpdateImgui();
 	if (input_->TriggerKey(DIK_AT)) {
 		printf("");
@@ -135,6 +144,7 @@ void GameScene::Update() {
 		}
 		skyDome_->Update();
 		stars_->Update();
+		planets_->Update();
 		CheckAllCollisions();
 		if (player_->UseTarget()) {
 			CheckLockOn();
@@ -169,7 +179,9 @@ void GameScene::Update() {
 	camera_.TransferMatrix();
 	//worldTransform_.UpdateMatirx();
 
-	  // 現在の時間を取得
+	switch (planets_->GetPlanet()) {
+
+      // 現在の時間を取得
 	auto currentTime = std::chrono::steady_clock::now();
 
 	// 前回の時間との差を計算（経過時間）
@@ -228,23 +240,23 @@ void GameScene::Update() {
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
-			planet_ = Planet::newEnemy;
-
-		}
-
-		break;
-
-	case Planet::newEnemy:
-
-		//新しい敵
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-
 			planet_ = Planet::heal;
 
 		}
 
 		break;
+
+	//case Planet::newEnemy:
+
+	//	//新しい敵
+
+	//	if (input_->TriggerKey(DIK_RETURN)) {
+
+	//		planet_ = Planet::heal;
+
+	//	}
+
+	//	break;
 
 	case Planet::heal:
 
@@ -280,23 +292,23 @@ void GameScene::Update() {
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
-			planet_ = Planet::bullet;
+			//planet_ = Planet::bullet;
 
 		}
 
 		break;
 
-	case Planet::bullet:
+	//case Planet::bullet:
 
-		//弾の軌道
+	//	//弾の軌道
 
-		if (input_->TriggerKey(DIK_RETURN)) {
+	//	if (input_->TriggerKey(DIK_RETURN)) {
 
-			planet_ = Planet::obstacle;
+	//		planet_ = Planet::obstacle;
 
-		}
+	//	}
 
-		break;
+	//	break;
 
 	case Planet::obstacle:
 
@@ -383,6 +395,7 @@ void GameScene::Draw() {
 	/// </summary>
 	skyDome_->Draw(worldTransform_, camera_);
 	stars_->Draw(camera_);
+	planets_->Draw(camera_);
 	player_->Draw(camera_);
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw(camera_);
@@ -750,6 +763,7 @@ void GameScene::UpdateEnemyPopCommands() {
 				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::normal);
 			}
 			enemy->SetGameScene(this);
+			enemy->SetPlanets(planets_);
 			enemies_.push_back(enemy);
 
 		}

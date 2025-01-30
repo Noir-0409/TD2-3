@@ -22,23 +22,24 @@
 #include "EnemyTrackingBullet.h"
 #include "Stars.h"
 #include <sstream>
+#include "Planets.h"
 #include <chrono>
 
 // 惑星
-enum class Planet {
-	normal, // ノーマル
-	control, // 操作反転
-	fog, // 視界悪化(霧)
-	newEnemy, // 新しい敵
-	heal, // HP回復
-	damage, // HP減少
-	attack, // 攻撃力変化
-	bullet, // 弾の軌道
-	obstacle, // 障害物
-	time, // 時間の流れ
-	gravity, // 重力
-
-};
+//enum class Planet {
+//	normal, // ノーマル
+//	control, // 操作反転
+//	fog, // 視界悪化(霧)
+//	//newEnemy, // 新しい敵
+//	heal, // HP回復
+//	damage, // HP減少
+//	//attack, // 攻撃力変化
+//	//bullet, // 弾の軌道
+//	//obstacle, // 障害物
+//	time, // 時間の流れ
+//	gravity, // 重力
+//
+//};
 
 /// <summary>
 /// ゲームシーン
@@ -139,6 +140,7 @@ private: // メンバ変数
 
 	Player* player_ = nullptr;
 	KamataEngine::Model* modelPlayer_ = nullptr;
+	KamataEngine::Model* modelPlayerBullet_ = nullptr;
 
 	std::list<Enemy*> enemies_;
 	KamataEngine::Model* modelEnemy_ = nullptr;
@@ -195,8 +197,11 @@ private: // メンバ変数
 	//シーン終了フラグ
 	bool finished_ = false;
 
+	// 惑星
+	Planets* planets_ = nullptr;
+	KamataEngine::Model* modelPlanets_ = nullptr;
+ 
 	bool isCleard_ = false;
-
 
 	/// <summary>
 	/// ゲームシーン用

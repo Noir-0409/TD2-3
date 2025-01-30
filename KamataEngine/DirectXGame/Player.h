@@ -12,6 +12,7 @@
 #include <Windows.h>
 #include <iostream>
 
+class Planets;
 class PlayerBullet;
 class GameScene;
 class Enemy;
@@ -25,7 +26,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Model* bulletModel, const KamataEngine::Vector3& position);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -90,6 +91,8 @@ public:
 
 	KamataEngine::Camera& GetCamera() { return camera_; }
 
+	void SetPlanets(Planets* planets) { planets_ = planets; }
+
 
 private:
 	KamataEngine::Input* input_ = nullptr;
@@ -98,10 +101,12 @@ private:
 	KamataEngine::Camera camera_;
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::Model* targetModel_ = nullptr;
+	KamataEngine::Model* bulletModel_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
 	KamataEngine::ObjectColor targetObjectColor_;
 
 	GameScene* gameScene_ = nullptr;
+	Planets* planets_ = nullptr;
 
 	// HP
 	float hp_ = 100.0f;

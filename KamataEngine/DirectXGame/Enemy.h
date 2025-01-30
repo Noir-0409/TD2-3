@@ -21,6 +21,7 @@ enum class BulletType {
 };
 
 // 前方宣言
+class Planets;
 class Player;
 class GameScene;
 
@@ -70,12 +71,16 @@ public:
 
 	void SetTarget(bool target) { target_ = target; }
 
+	void SetPlanets(Planets* planets) { planets_ = planets; }
+
 	//HPを多く減らす
 	void TakeDamage();
 
 private:
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Model* model_ = nullptr;
+
+	Planets* planets_ = nullptr;
 
 	// HP
 	float hp_ = 100.0f;
