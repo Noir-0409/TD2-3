@@ -209,7 +209,7 @@ void Player::HealHP() {
 		// 回復間隔に達したらHPを回復
 		if (healTimer_ >= kHealInterval) {
 
-			hp_ += 20; 
+			hp_ += 5; 
 
 			if (hp_ > 100) {
 
@@ -242,7 +242,7 @@ void Player::DamageHP()
 		// ダメージ間隔に達したらHPを減らす
 		if (damageTimer_ >= kDamageInterval_) {
 
-			hp_ -= 20;
+			hp_ -= 5;
 			isDamage_ = true;
 
 			if (hp_ < 1) {
