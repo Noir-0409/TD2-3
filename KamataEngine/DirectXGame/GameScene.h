@@ -114,6 +114,9 @@ public: // メンバ関数
 	//霧の濃さを変える
 	void ChangeFogAlpha(float deltaTime);
 
+	//瀕死エフェクトの濃さを変える
+	void ChangeDedAlpha(float deltaTime);
+
 	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
@@ -154,6 +157,10 @@ private: // メンバ変数
 	//霧
 	KamataEngine::Sprite* fogSprite_ = nullptr;
 	uint32_t fogTextureHandle_ = 0;
+
+	//瀕死エフェクト
+	KamataEngine::Sprite* dedSprite_ = nullptr;
+	uint32_t dedTextureHandle_ = 0;
 
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;
@@ -199,6 +206,10 @@ private: // メンバ変数
 	//霧の透明度
 	float fogAlpha_ = 0.0f;
 	float fogAlphaStep_ = 0.1f;
+
+	//瀕死エフェクトの透明度
+	float dedAlpha_ = 0.0f;
+	float dedAlphaStep_ = 0.9f;
 
 	std::chrono::steady_clock::time_point previousTime_;
 

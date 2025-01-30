@@ -127,6 +127,11 @@ void Player::UpdateImgui() {
 #endif // _DEBUG
 }
 
+bool Player::IsLowHP()
+{
+	return hp_ <= 20;
+}
+
 void Player::InvertControls()
 {
 	// キャラクターの移動ベクトル
