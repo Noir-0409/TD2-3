@@ -398,16 +398,19 @@ void Player::Draw(KamataEngine::Camera& camera) {
 
 void Player::OnCollision() {
 
+
 	hp_ -= 20;
 	isDamage_ = true;
 
-	if (hp_ == 0) {
+	if (hp_ <= 0) {
 
+		hp_ = 0;
 		isDead_ = true;
+	
+	}
 
 }
 
-}
 
 void Player::SetParent(const WorldTransform* parent) {
 	// 親関係を結ぶ
