@@ -5,6 +5,7 @@
 #include <imgui.h>
 #include <algorithm>
 
+
 using namespace KamataEngine;
 
 GameScene::GameScene() {}
@@ -23,6 +24,8 @@ GameScene::~GameScene() {
 		delete enemyTrackingBullet;
 	}
 	delete debugCamera_;
+	delete fogSprite_;
+	delete dedSprite_;
 }
 
 void GameScene::Initialize() {
@@ -66,6 +69,14 @@ void GameScene::Initialize() {
 	skyDome_ = new Skydome();
 	skyDome_->Initialize(modelSkydome_);
 
+	//霧の初期化
+	fogTextureHandle_ = KamataEngine::TextureManager::Load("fog.png");
+	fogSprite_ = Sprite::Create(fogTextureHandle_, { 0.0f,0.0f });
+
+	//瀕死エフェクトの初期化
+	dedTextureHandle_ = KamataEngine::TextureManager::Load("dedEffect.png");
+	dedSprite_ = Sprite::Create(dedTextureHandle_, { 0.0f,0.0f });
+
 	modelStars_ = Model::CreateFromOBJ("star");
 	stars_ = new Stars();
 	stars_->Initialize(modelStars_);
@@ -81,6 +92,8 @@ void GameScene::Initialize() {
 	planetWorldTransform_.Initialize();
 	camera_.farZ = 2000.0f;
 	camera_.Initialize();
+
+	previousTime_ = std::chrono::steady_clock::now();
 
 }
 
@@ -167,6 +180,36 @@ void GameScene::Update() {
 	//worldTransform_.UpdateMatirx();
 
 	switch (planets_->GetPlanet()) {
+
+      // 現在の時間を取得
+	auto currentTime = std::chrono::steady_clock::now();
+
+	// 前回の時間との差を計算（経過時間）
+	std::chrono::duration<float> deltaTime = currentTime - previousTime_;
+
+	// deltaTime（経過時間）を次回のフレームに使うために記録
+	previousTime_ = currentTime;
+
+
+	ChangeFogAlpha(deltaTime.count());
+	ChangeDedAlpha(deltaTime.count());
+
+	enemies_.remove_if([](Enemy* enemy) {
+
+		if (enemy->IsDead()) {
+
+			delete enemy;
+			return true;
+
+		}
+
+		return false;
+
+		}
+
+	);
+
+	switch (planet_) {
 
 	case Planet::normal:
 
@@ -306,6 +349,22 @@ void GameScene::Update() {
 		break;
 
 	}
+
+	//最終的なクリアまでの時間決めたら戻す!!
+	//clearTimer_--;
+
+	if (clearTimer_ == 0) {
+
+		isCleard_ = true;
+
+	}
+
+	if (player_->IsDead()) {
+
+		finished_ = true;
+
+	}
+
 }
 
 void GameScene::Draw() {
@@ -359,6 +418,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+
+	fogSprite_->Draw();
+	dedSprite_->Draw();
 
 	// スプライト描画後処理
 	KamataEngine::Sprite::PostDraw();
@@ -570,6 +632,56 @@ Vector2 GameScene::GetMousePosition() {
 
 	return mousePosition;
 }
+
+void GameScene::ChangeFogAlpha(float deltaTime) {
+
+	if (planet_ == Planet::fog) {
+		//霧の濃さを増加させる
+		fogAlpha_ += fogAlphaStep_ * deltaTime;
+
+		//アルファ値の制限
+		if (fogAlpha_ > 0.9f) fogAlpha_ = 0.9f;
+	} else {
+		//他のフェーズでは霧を薄くしていく
+		fogAlpha_ -= fogAlphaStep_ * deltaTime;
+
+		//アルファ値の制限
+		if (fogAlpha_ < 0.0f) fogAlpha_ = 0.0f;
+	}
+
+	//スプライトに反映
+	fogSprite_->SetColor({ 1.0f, 1.0f, 1.0f, fogAlpha_ });
+}
+
+void GameScene::ChangeDedAlpha(float deltaTime)
+{
+	
+	if (player_->IsLowHP() && !player_->IsDead()) {
+		
+		if (dedAlpha_ >= 0.9f) {
+			dedAlphaStep_ = -abs(dedAlphaStep_); 
+		}
+		
+		else if (dedAlpha_ <= 0.0f) {
+			dedAlphaStep_ = abs(dedAlphaStep_); 
+		}
+
+	
+		dedAlpha_ += dedAlphaStep_ * deltaTime;
+	}
+	
+	else {
+		
+
+		dedAlpha_ -= abs(dedAlphaStep_) * deltaTime;
+		if (dedAlpha_ < 0.0f) dedAlpha_ = 0.0f;
+
+	}
+
+	// スプライトに反映
+	dedSprite_->SetColor({ 1.0f, 1.0f, 1.0f, dedAlpha_ });
+}
+
 
 // 敵発生コマンド
 void GameScene::LoadEnemyPopData() {

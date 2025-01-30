@@ -23,6 +23,7 @@
 #include "Stars.h"
 #include <sstream>
 #include "Planets.h"
+#include <chrono>
 
 // 惑星
 //enum class Planet {
@@ -111,8 +112,16 @@ public: // メンバ関数
 	// マウスの移動量の取得
 	KamataEngine::Vector2 GetMousePos() const { return mousePos_; }
 
+	//霧の濃さを変える
+	void ChangeFogAlpha(float deltaTime);
+
+	//瀕死エフェクトの濃さを変える
+	void ChangeDedAlpha(float deltaTime);
+
 	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
+
+	bool IsCleared() const {return isCleard_; }
 
 private: // メンバ変数
 	KamataEngine::DirectXCommon* dxCommon_ = nullptr;
@@ -146,6 +155,14 @@ private: // メンバ変数
 	// 天球
 	Skydome* skyDome_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
+
+	//霧
+	KamataEngine::Sprite* fogSprite_ = nullptr;
+	uint32_t fogTextureHandle_ = 0;
+
+	//瀕死エフェクト
+	KamataEngine::Sprite* dedSprite_ = nullptr;
+	uint32_t dedTextureHandle_ = 0;
 
 	// レールカメラ
 	RailCamera* railCamera_ = nullptr;
@@ -183,13 +200,29 @@ private: // メンバ変数
 	// 惑星
 	Planets* planets_ = nullptr;
 	KamataEngine::Model* modelPlanets_ = nullptr;
+ 
+	bool isCleard_ = false;
 
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
 	Planet planet_ = Planet::normal;
 
+	//霧の透明度
+	float fogAlpha_ = 0.0f;
+	float fogAlphaStep_ = 0.1f;
+
+	//瀕死エフェクトの透明度
+	float dedAlpha_ = 0.0f;
+	float dedAlphaStep_ = 0.9f;
+
+	std::chrono::steady_clock::time_point previousTime_;
+
 	// 移動演出
 	Stars* stars_ = nullptr;
 	KamataEngine::Model* modelStars_;
+
+	//クリアまでのタイマー
+	float clearTimer_ = 300.0f;
+
 };

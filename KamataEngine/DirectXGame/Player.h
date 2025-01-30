@@ -73,8 +73,9 @@ public:
 
 	bool IsTarget() const { return isTarget_; }
 
-	void SetTarget(bool target) { isTarget_ = target; }
+	bool IsLowHP();
 
+	void SetTarget(bool target) { isTarget_ = target; }
 
 	void InvertControls();
 
@@ -170,5 +171,10 @@ private:
 	// ターゲットのワールド座標の取得
 	KamataEngine::Vector3 targetWorldPosition_ = {0.0f, 0.0f, 0.0f};
 
+	//回復タイマー
+	float healTimer_ = 0.0f;
+
+	//ダメージタイマー
+	float damageTimer_ = 0.0f;
 	
 };
