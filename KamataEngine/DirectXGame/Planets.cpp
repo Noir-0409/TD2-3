@@ -141,7 +141,6 @@ void Planets::Update() {
 	if (changePlanetsTimer_ >= changePlanetsTime_) { // 惑星切り替えタイマーが特定の時間を超えたら実行
 		int planetNum = static_cast<int>(rand() % 9); // 惑星のタイプがランダムに選ばれる
 		planet_ = planetTable[planetNum]; // 惑星タイプの代入
-		planet_ = Planet::gravity;
 		int lrudNum = static_cast<int>(rand() % 2);
 		if (planet_ == Planet::gravity) {
 			lrudNum = static_cast<int>(rand() % 4) + 2;
