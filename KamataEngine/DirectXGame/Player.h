@@ -72,8 +72,9 @@ public:
 
 	bool IsTarget() const { return isTarget_; }
 
-	void SetTarget(bool target) { isTarget_ = target; }
+	bool IsLowHP();
 
+	void SetTarget(bool target) { isTarget_ = target; }
 
 	void InvertControls();
 

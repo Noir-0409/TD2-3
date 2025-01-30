@@ -24,6 +24,7 @@ GameScene::~GameScene() {
 	}
 	delete debugCamera_;
 	delete fogSprite_;
+	delete dedSprite_;
 }
 
 void GameScene::Initialize() {
@@ -69,6 +70,10 @@ void GameScene::Initialize() {
 	//霧の初期化
 	fogTextureHandle_ = KamataEngine::TextureManager::Load("fog.png");
 	fogSprite_ = Sprite::Create(fogTextureHandle_, { 0.0f,0.0f });
+
+	//瀕死エフェクトの初期化
+	dedTextureHandle_ = KamataEngine::TextureManager::Load("dedEffect.png");
+	dedSprite_ = Sprite::Create(dedTextureHandle_, { 0.0f,0.0f });
 
 	modelStars_ = Model::CreateFromOBJ("star");
 	stars_ = new Stars();
@@ -175,6 +180,7 @@ void GameScene::Update() {
 
 
 	ChangeFogAlpha(deltaTime.count());
+	ChangeDedAlpha(deltaTime.count());
 
 	switch (planet_) {
 
@@ -386,6 +392,7 @@ void GameScene::Draw() {
 	/// </summary>
 
 	fogSprite_->Draw();
+	dedSprite_->Draw();
 
 	// スプライト描画後処理
 	KamataEngine::Sprite::PostDraw();
@@ -618,6 +625,25 @@ void GameScene::ChangeFogAlpha(float deltaTime) {
 	fogSprite_->SetColor({ 1.0f, 1.0f, 1.0f, fogAlpha_ });
 }
 
+void GameScene::ChangeDedAlpha(float deltaTime)
+{
+	if (player_->IsLowHP() && !player_->IsDead()) {
+		// 透明度を増加（減少方向の修正）
+		dedAlpha_ += dedAlphaStep_ * deltaTime;
+
+		// 透明度の制限
+		if (dedAlpha_ > 0.9f) dedAlpha_ = 0.9f;
+	} else {
+		// 透明度を減少
+		dedAlpha_ -= dedAlphaStep_ * deltaTime;
+
+		// 透明度の制限（透明度が0未満にならないように）
+		if (dedAlpha_ < 0.0f) dedAlpha_ = 0.0f;
+	}
+
+	// スプライトに反映
+	dedSprite_->SetColor({ 1.0f, 1.0f, 1.0f, dedAlpha_ });
+}
 
 // 敵発生コマンド
 void GameScene::LoadEnemyPopData() {
