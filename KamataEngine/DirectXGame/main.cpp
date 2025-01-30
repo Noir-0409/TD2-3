@@ -5,6 +5,7 @@
 #include "Rule.h"
 #include "ClearScene.h"
 #include "OverScene.h"
+#include "Scene.h"
 
 #include <2d\ImGuiManager.h>
 #include <3d\AxisIndicator.h>
@@ -22,16 +23,6 @@ GameScene* gameScene = nullptr;
 ClearScene* clearScene = nullptr;
 OverScene* overScene = nullptr;
 
-// シーン（型）
-enum class Scene {
-	kUnknown = 0,
-
-	kTitle,
-	kRule, // アクション
-	kGame,
-	kClear,
-	kGameOver
-};
 // 現在シーン（型）
 Scene scene = Scene::kTitle;
 

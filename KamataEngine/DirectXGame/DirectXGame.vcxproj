@@ -214,6 +214,7 @@
     <ClInclude Include="PlayerBullet.h" />
     <ClInclude Include="RailCamera.h" />
     <ClInclude Include="Rule.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Sphere.h" />
