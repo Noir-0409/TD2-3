@@ -119,6 +119,7 @@
     <ClCompile Include="PlayerBullet.cpp" />
     <ClCompile Include="RailCamera.cpp" />
     <ClCompile Include="Rule.cpp" />
+    <ClCompile Include="SceneTranslation.cpp" />
     <ClCompile Include="Skydome.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Stars.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="RailCamera.h" />
     <ClInclude Include="Rule.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneTranslation.h" />
     <ClInclude Include="Skydome.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Sphere.h" />

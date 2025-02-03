@@ -645,7 +645,7 @@ void GameScene::ChangeDedAlpha(float deltaTime)
 	
 	if (player_->IsLowHP() && !player_->IsDead()) {
 		
-		if (dedAlpha_ >= 0.9f) {
+		if (dedAlpha_ >= 1.0f) {
 			dedAlphaStep_ = -abs(dedAlphaStep_); 
 		}
 		

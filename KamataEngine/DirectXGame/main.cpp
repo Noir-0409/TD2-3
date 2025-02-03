@@ -5,7 +5,7 @@
 #include "Rule.h"
 #include "ClearScene.h"
 #include "OverScene.h"
-#include "Scene.h"
+#include "SceneTranslation.h"
 
 #include <2d\ImGuiManager.h>
 #include <3d\AxisIndicator.h>
@@ -14,6 +14,7 @@
 #include <base\DirectXCommon.h>
 #include <base\TextureManager.h>
 #include <base\WinApp.h>
+#include "Scene.h"
 
 using namespace KamataEngine;
 
@@ -22,6 +23,8 @@ Rule* ruleScene = nullptr;
 GameScene* gameScene = nullptr;
 ClearScene* clearScene = nullptr;
 OverScene* overScene = nullptr;
+Scene* scene_ = nullptr;
+SceneTranslation* sceneTranslation = nullptr;
 
 // 現在シーン（型）
 Scene scene = Scene::kTitle;
@@ -252,6 +255,23 @@ void UpdateScene() {
 		overScene->Update();
 		break;
 	}
+
+	std::chrono::time_point<std::chrono::high_resolution_clock> previousTime;
+	// 現在の時間を取得
+	auto currentTime = std::chrono::high_resolution_clock::now();
+
+	// 前回の時間との差分を計算（deltaTime）
+	std::chrono::duration<float> deltaTime = currentTime - previousTime;
+
+	// deltaTime をfloat型で取得
+	float deltaTimeInSeconds = deltaTime.count();
+
+	// 次回のフレーム時間を保存
+	previousTime = currentTime;
+
+	// deltaTime を使って SceneTranslation の Update を呼び出す
+	sceneTranslation->Update(deltaTimeInSeconds);
+
 }
 
 void DrawScene() {
@@ -272,4 +292,7 @@ void DrawScene() {
 		overScene->Draw();
 		break;
 	}
+
+	sceneTranslation->Draw();
+
 }
