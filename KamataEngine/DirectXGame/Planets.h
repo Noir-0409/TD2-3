@@ -11,7 +11,7 @@ enum class Planet {
 	normal,   // ノーマル
 	control,  // 操作反転
 	fog,      // 視界悪化(霧)
-	//newEnemy, // 新しい敵
+	newEnemy, // 新しい敵
 	heal,     // HP回復
 	damage,   // HP減少
 	attack,   // 攻撃力変化

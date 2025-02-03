@@ -722,20 +722,18 @@ void GameScene::UpdateEnemyPopCommands() {
 			float z = (float)std::stof(word.c_str());
 
 			// 弾の種類
-			bool normalBullet = true;
+			/*bool normalBullet = true;
 			std::getline(line_stream, word, ',');
 			if (word.find("tracking") == 0) {
 				normalBullet = false;
 			} else {
 				normalBullet = true;
-			}
-
-
+			}*/
 
 			// 敵を発生させる
 			Enemy* enemy = new Enemy();
 			enemy->SetPlayer(player_);
-			if (!normalBullet) {
+			if (planets_->GetPlanet() == Planet::newEnemy) {
 				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::tracking);
 			} else {
 				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::normal);
