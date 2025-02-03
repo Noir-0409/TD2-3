@@ -204,6 +204,16 @@ void GameScene::Update() {
 
 	);
 
+	if (currentPlanet_ != planet_) {
+		currentPlanet_ = planet_; // 現在の惑星を更新
+		  enemyPopCommands.str("");   // 文字列ストリームをクリア
+        enemyPopCommands.clear();   // 状態をリセット
+        LoadEnemyPopData(); 
+		RespawnEnemies(); // 新しい惑星に入るたびに敵を再発生
+	}
+
+	UpdateEnemyPopCommands();
+
 	switch (planets_->GetPlanet()) {
 
 	case Planet::normal:
@@ -224,6 +234,8 @@ void GameScene::Update() {
 			planet_ = Planet::fog;
 		}
 
+		
+
 		break;
 
 	case Planet::fog:
@@ -234,6 +246,8 @@ void GameScene::Update() {
 
 			planet_ = Planet::heal;
 		}
+
+		
 
 	break;
 
@@ -258,6 +272,8 @@ void GameScene::Update() {
 			planet_ = Planet::damage;
 		}
 
+	
+
 		break;
 
 	case Planet::damage:
@@ -270,6 +286,8 @@ void GameScene::Update() {
 			planet_ = Planet::attack;
 		}
 
+	
+
 	break;
 
 	case Planet::attack:
@@ -281,6 +299,8 @@ void GameScene::Update() {
 
 			// planet_ = Planet::bullet;
 		}
+
+		
 
 	break;
 
@@ -304,6 +324,8 @@ void GameScene::Update() {
 			planet_ = Planet::time;
 		}
 
+		
+
 		break;
 
 	case Planet::time:
@@ -316,6 +338,8 @@ void GameScene::Update() {
 			planet_ = Planet::gravity;
 		}
 
+		
+
 		break;
 
 	case Planet::gravity:
@@ -327,6 +351,8 @@ void GameScene::Update() {
 
 			planet_ = Planet::normal;
 		}
+
+		
 
 		break;
 	}
@@ -660,6 +686,19 @@ void GameScene::ChangeDedAlpha(float deltaTime)
 	dedSprite_->SetColor({ 1.0f, 1.0f, 1.0f, dedAlpha_ });
 }
 
+void GameScene::RespawnEnemies()
+{
+
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
+	enemies_.clear();
+
+	// ここで敵を再発生
+	spawnTimer = 0;
+
+}
+
 
 // 敵発生コマンド
 void GameScene::LoadEnemyPopData() {
@@ -685,6 +724,11 @@ void GameScene::UpdateEnemyPopCommands() {
 			// 待機完了
 			waitFlag = false;
 		}
+		return;
+	}
+
+	if (spawnTimer > 0) {
+		spawnTimer--;
 		return;
 	}
 
