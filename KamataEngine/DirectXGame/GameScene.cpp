@@ -41,10 +41,13 @@ void GameScene::Initialize() {
 
 	debugCamera_ = new DebugCamera(1920, 1080);
 
+#ifdef _DEBUG
 	// 軸方向表示の表示を有効にする
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するカメラを指定する(アドレス無し)
 	AxisIndicator::GetInstance()->SetTargetCamera(&camera_);
+
+#endif // _DEBUG
 
 	fade_ = new Fade();
 	fade_->Initialize();
