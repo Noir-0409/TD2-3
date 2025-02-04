@@ -119,6 +119,10 @@ public: // メンバ関数
 	//瀕死エフェクトの濃さを変える
 	void ChangeDedAlpha(float deltaTime);
 
+	void RespawnEnemies();
+
+	void OnPlanetChange();
+
 	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
@@ -229,5 +233,9 @@ private: // メンバ変数
 
 	//クリアまでのタイマー
 	float clearTimer_ = 300.0f;
+
+	Planet currentPlanet_ = Planet::normal;
+	int spawnCooldown = 60;
+	int spawnTimer = 0;
 
 };
