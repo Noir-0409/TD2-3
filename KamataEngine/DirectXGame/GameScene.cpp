@@ -148,7 +148,7 @@ void GameScene::Update() {
 #ifdef _DEBUG
 	player_->UpdateImgui();
 	planets_->UpdateImgui();
-	//railCamera_->UpdateImgui();
+	// railCamera_->UpdateImgui();
 	if (input_->TriggerKey(DIK_AT)) {
 		printf("");
 	}
@@ -159,85 +159,283 @@ void GameScene::Update() {
 #endif // _DEBUG
 
 	// メニューを開いていているかどうか
-	if (!showMenu_) {
-		switch (phase_) {
-		case FadePhase::kFadeIn:
-			if (fade_->IsFinished()) {
-				phase_ = FadePhase::kMain;
-		UpdateEnemyPopCommands();
-		// 現在の時間を取得
-		auto currentTime = std::chrono::steady_clock::now();
+	// 現在の時間を取得
+	//auto currentTime = std::chrono::steady_clock::now();
 
-		// 前回の時間との差を計算（経過時間）
-		std::chrono::duration<float> deltaTime = currentTime - previousTime_;
+	//// 前回の時間との差を計算（経過時間）
+	//std::chrono::duration<float> deltaTime = currentTime - previousTime_;
 
-		// deltaTime（経過時間）を次回のフレームに使うために記録
-		previousTime_ = currentTime;
+	//// deltaTime（経過時間）を次回のフレームに使うために記録
+	//previousTime_ = currentTime;
 
-		ChangeFogAlpha(deltaTime.count());
-		ChangeDedAlpha(deltaTime.count());
-		player_->Update();
-		//railCamera_->Update();
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		}
-		// デスフラグの立った弾を削除
-		enemyBullets_.remove_if([](EnemyBullet* bullet) {
-			if (bullet->IsDead()) {
-				delete bullet;
-				return true;
-			}
+	//ChangeFogAlpha(deltaTime.count());
+	//ChangeDedAlpha(deltaTime.count());
+
+	switch (phase_) {
+	case FadePhase::kFadeIn:
+		if (fade_->IsFinished()) {
+			phase_ = FadePhase::kMain;
 			break;
 		case FadePhase::kMain:
-			UpdateEnemyPopCommands();
-			player_->Update();
-			if (player_->IsDead()) {
-				// マウスカーソルの表示
-				showCursor_ = !showCursor_;
-				cursor = ShowCursor(showCursor_);
-				SetCursorPos(960, 540);
-				if (cursor >= 0) {
-					cursor = 1;
-				} else if (cursor <= 0) {
-					cursor = -1;
+			if (!showMenu_) {
+				UpdateEnemyPopCommands();
+				player_->Update();
+				if (player_->IsDead()) {
+					// マウスカーソルの表示
+					showCursor_ = !showCursor_;
+					cursor = ShowCursor(showCursor_);
+					SetCursorPos(960, 540);
+					if (cursor >= 0) {
+						cursor = 1;
+					} else if (cursor <= 0) {
+						cursor = -1;
+					}
+					fade_->Start(Fade::Status::FadeOut, 1.0f); // フェード
+					phase_ = FadePhase::kFadeOut;
 				}
-				fade_->Start(Fade::Status::FadeOut, 1.0f); // フェード
-				phase_ = FadePhase::kFadeOut;
-			}
-			// railCamera_->Update();
-			for (Enemy* enemy : enemies_) {
-				enemy->Update();
-			}
-			// デスフラグの立った弾を削除
-			enemyBullets_.remove_if([](EnemyBullet* bullet) {
-				if (bullet->IsDead()) {
-					delete bullet;
-					return true;
+				// railCamera_->Update();
+				for (Enemy* enemy : enemies_) {
+					enemy->Update();
 				}
-				return false;
-			});
-			for (EnemyBullet* enemyBullet : enemyBullets_) {
-				enemyBullet->Update();
-			}
-			// デスフラグの立った弾を削除
-			enemyTrackingBullets_.remove_if([](EnemyTrackingBullet* bullet) {
-				if (bullet->IsDead()) {
-					delete bullet;
-					return true;
+				for (Enemy* enemy : enemies_) {
+					if (enemy->IsDead()) {
+						player_->SetTarget(false);
+					}
 				}
-				return false;
-			});
-			for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
-				enemyTrackingBullet->Update();
+				enemies_.remove_if([](Enemy* enemy) {
+					if (enemy->IsDead()) {
+						delete enemy;
+						return true;
+					}
+					return false;
+				});
+				// デスフラグの立った弾を削除
+				enemyBullets_.remove_if([](EnemyBullet* bullet) {
+					if (bullet->IsDead()) {
+						delete bullet;
+						return true;
+					}
+					return false;
+				});
+
+				for (EnemyBullet* enemyBullet : enemyBullets_) {
+					enemyBullet->Update();
+				}
+				// デスフラグの立った弾を削除
+				enemyTrackingBullets_.remove_if([](EnemyTrackingBullet* bullet) {
+					if (bullet->IsDead()) {
+						delete bullet;
+						return true;
+					}
+					return false;
+				});
+				for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
+					enemyTrackingBullet->Update();
+				}
+				skyDome_->Update();
+				stars_->Update();
+				planets_->Update();
+				CheckAllCollisions();
+				if (player_->UseTarget()) {
+					CheckLockOn();
+				}
+
+				switch (planets_->GetPlanet()) {
+				case Planet::normal:
+
+					if (planet_ != Planet::normal) {
+						planet_ = Planet::normal;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+						planet_ = Planet::control;
+					}
+
+					break;
+
+				case Planet::control:
+
+					// 操作を反転
+					player_->InvertControls();
+
+					if (planet_ != Planet::control) {
+						planet_ = Planet::control;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+
+						planet_ = Planet::fog;
+					}
+
+					break;
+
+				case Planet::fog:
+
+					if (planet_ != Planet::fog) {
+						planet_ = Planet::fog;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					// 視界悪化
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+
+						planet_ = Planet::heal;
+					}
+
+					break;
+
+					// case Planet::newEnemy:
+
+					//	//新しい敵
+
+					//	if (input_->TriggerKey(DIK_RETURN)) {
+
+					//		planet_ = Planet::heal;
+
+					//	}
+
+					//	break;
+
+				case Planet::heal:
+
+					// HP回復
+					player_->HealHP();
+
+					if (planet_ != Planet::heal) {
+						planet_ = Planet::heal;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+						planet_ = Planet::damage;
+					}
+
+					break;
+
+				case Planet::damage:
+
+					// HP減少
+					player_->DamageHP();
+
+					if (planet_ != Planet::damage) {
+						planet_ = Planet::damage;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+
+						planet_ = Planet::attack;
+					}
+
+					break;
+
+				case Planet::attack:
+
+					// 攻撃力変化
+					player_->PowerUp();
+
+					if (planet_ != Planet::attack) {
+						planet_ = Planet::attack;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+
+						// planet_ = Planet::bullet;
+					}
+
+					break;
+
+					// case Planet::bullet:
+
+					//	//弾の軌道
+
+					//	if (input_->TriggerKey(DIK_RETURN)) {
+
+					//		planet_ = Planet::obstacle;
+
+					//	}
+
+					//	break;
+
+				case Planet::obstacle:
+
+					// 障害物
+
+					if (planet_ != Planet::obstacle) {
+						planet_ = Planet::obstacle;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+						planet_ = Planet::time;
+					}
+
+					break;
+
+				case Planet::time:
+
+					// 時間の流れ
+					player_->TimeFlow();
+
+					if (planet_ != Planet::time) {
+						planet_ = Planet::time;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+
+						planet_ = Planet::gravity;
+					}
+
+					break;
+
+				case Planet::gravity:
+
+					// 重力
+					player_->AffectGravity();
+
+					if (planet_ != Planet::gravity) {
+						planet_ = Planet::gravity;
+						enemyPopCommands.str(""); // ストリームの内容をクリア
+						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+						OnPlanetChange();
+					}
+
+					if (input_->TriggerKey(DIK_RETURN)) {
+
+						planet_ = Planet::normal;
+					}
+
+					break;
+				}
+
+				planetWorldTransform_.UpdateMatrix();
+			} else {
+				if (input_->TriggerKey(DIK_T)) {
+					useTarget_ = !useTarget_;
+					player_->SetUseTarget(useTarget_);
+				}
 			}
-			skyDome_->Update();
-			stars_->Update();
-			planets_->Update();
-			CheckAllCollisions();
-			if (player_->UseTarget()) {
-				CheckLockOn();
-			}
-			planetWorldTransform_.UpdateMatrix();
 			break;
 		case FadePhase::kFadeOut:
 			if (fade_->IsFinished()) {
@@ -249,11 +447,6 @@ void GameScene::Update() {
 				phase_ = FadePhase::kFadeIn;
 			}
 			break;
-		}
-	} else {
-		if (input_->TriggerKey(DIK_T)) {
-			useTarget_ = !useTarget_;
-			player_->SetUseTarget(useTarget_);
 		}
 	}
 
@@ -268,17 +461,15 @@ void GameScene::Update() {
 		camera_.matProjection = debugCamera_->GetCamera().matProjection;
 		// カメラ行列の転送
 		camera_.TransferMatrix();
-	}
-	else {
+	} else {
 		// カメラ行列の更新と転送
 		camera_.UpdateMatrix();
 	}
-	//camera_.matView = railCamera_->GetCamera().matView;
+	// camera_.matView = railCamera_->GetCamera().matView;
 	camera_.matView = player_->GetCamera().matView;
 	// camera_.matProjection = railCamera_->GetCamera().matProjection;
 	camera_.TransferMatrix();
-	//worldTransform_.UpdateMatirx();
-
+	// worldTransform_.UpdateMatirx();
 
 	// 現在の時間を取得
 	auto currentTime = std::chrono::steady_clock::now();
@@ -289,225 +480,9 @@ void GameScene::Update() {
 	// deltaTime（経過時間）を次回のフレームに使うために記録
 	previousTime_ = currentTime;
 
-
 	ChangeFogAlpha(deltaTime.count());
 	ChangeDedAlpha(deltaTime.count());
 
-	for (Enemy* enemy : enemies_) {
-	enemies_.remove_if([](Enemy* enemy) {
-		if (enemy->IsDead()) {
-			player_->SetTarget(false);
-		}
-	}
-
-	enemies_.remove_if([](Enemy* enemy) {
-		if (enemy->IsDead()) {
-			delete enemy;
-			return true;
-		}
-
-		return false;
-	}
-
-	);
-
-	switch (planets_->GetPlanet()) {
-
-	case Planet::normal:
-
-		if (planet_ != Planet::normal) {
-			planet_ = Planet::normal;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange();
-
-		}
-
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-			planet_ = Planet::control;
-		}
-
-		break;
-
-	case Planet::control:
-
-		// 操作を反転
-		player_->InvertControls();
-
-		if (planet_ != Planet::control) {
-			planet_ = Planet::control;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange(); 
-		}
-
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-
-			planet_ = Planet::fog;
-		}
-
-		break;
-
-	case Planet::fog:
-
-		if (planet_ != Planet::fog) {
-			planet_ = Planet::fog;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange(); 
-		}
-
-
-		// 視界悪化
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-
-			planet_ = Planet::heal;
-		}
-
-	break;
-
-			// case Planet::newEnemy:
-
-			//	//新しい敵
-
-			//	if (input_->TriggerKey(DIK_RETURN)) {
-
-			//		planet_ = Planet::heal;
-
-			//	}
-
-			//	break;
-
-	case Planet::heal:
-
-		// HP回復
-		player_->HealHP();
-
-		if (planet_ != Planet::heal) {
-			planet_ = Planet::heal;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange(); 
-		}
-
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-			planet_ = Planet::damage;
-		}
-
-		break;
-
-	case Planet::damage:
-
-		// HP減少
-		player_->DamageHP();
-
-		if (planet_ != Planet::damage) {
-			planet_ = Planet::damage;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange();
-		}
-
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-
-			planet_ = Planet::attack;
-		}
-
-	break;
-
-	case Planet::attack:
-
-		// 攻撃力変化
-		player_->PowerUp();
-
-		if (planet_ != Planet::attack) {
-			planet_ = Planet::attack;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange();
-		}
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-
-			// planet_ = Planet::bullet;
-		}
-
-	break;
-
-			// case Planet::bullet:
-
-			//	//弾の軌道
-
-			//	if (input_->TriggerKey(DIK_RETURN)) {
-
-			//		planet_ = Planet::obstacle;
-
-			//	}
-
-			//	break;
-
-	case Planet::obstacle:
-
-		// 障害物
-
-		if (planet_ != Planet::obstacle) {
-			planet_ = Planet::obstacle;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange(); 
-		}
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-			planet_ = Planet::time;
-		}
-
-		break;
-
-	case Planet::time:
-
-		// 時間の流れ
-		player_->TimeFlow();
-
-		if (planet_ != Planet::time) {
-			planet_ = Planet::time;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange(); 
-		}
-
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-
-			planet_ = Planet::gravity;
-		}
-
-		break;
-
-	case Planet::gravity:
-
-		// 重力
-		player_->AffectGravity();
-
-		if (planet_ != Planet::gravity) {
-			planet_ = Planet::gravity;
-			enemyPopCommands.str("");   // ストリームの内容をクリア
-			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
-			OnPlanetChange(); 
-		}
-
-
-		if (input_->TriggerKey(DIK_RETURN)) {
-
-			planet_ = Planet::normal;
-		}
-
-		break;
-	}
 
 	// 最終的なクリアまでの時間決めたら戻す!!
 	// clearTimer_--;

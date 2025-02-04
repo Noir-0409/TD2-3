@@ -48,7 +48,7 @@ void ClearScene::Update()
 void ClearScene::Draw()
 {
 	dxCommon_ = KamataEngine::DirectXCommon::GetInstance();
-	// ƒRƒ}ƒ“ƒhƒŠƒXƒg‚ÌŽæ“¾
+	// ã‚³ãƒžãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®å–å¾—
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	KamataEngine::Sprite::PreDraw(commandList);
