@@ -164,6 +164,28 @@ void GameScene::Update() {
 		case FadePhase::kFadeIn:
 			if (fade_->IsFinished()) {
 				phase_ = FadePhase::kMain;
+		UpdateEnemyPopCommands();
+		// 現在の時間を取得
+		auto currentTime = std::chrono::steady_clock::now();
+
+		// 前回の時間との差を計算（経過時間）
+		std::chrono::duration<float> deltaTime = currentTime - previousTime_;
+
+		// deltaTime（経過時間）を次回のフレームに使うために記録
+		previousTime_ = currentTime;
+
+		ChangeFogAlpha(deltaTime.count());
+		ChangeDedAlpha(deltaTime.count());
+		player_->Update();
+		//railCamera_->Update();
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		}
+		// デスフラグの立った弾を削除
+		enemyBullets_.remove_if([](EnemyBullet* bullet) {
+			if (bullet->IsDead()) {
+				delete bullet;
+				return true;
 			}
 			break;
 		case FadePhase::kMain:
@@ -272,6 +294,7 @@ void GameScene::Update() {
 	ChangeDedAlpha(deltaTime.count());
 
 	for (Enemy* enemy : enemies_) {
+	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->IsDead()) {
 			player_->SetTarget(false);
 		}
@@ -292,6 +315,15 @@ void GameScene::Update() {
 
 	case Planet::normal:
 
+		if (planet_ != Planet::normal) {
+			planet_ = Planet::normal;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange();
+
+		}
+
+
 		if (input_->TriggerKey(DIK_RETURN)) {
 			planet_ = Planet::control;
 		}
@@ -303,6 +335,14 @@ void GameScene::Update() {
 		// 操作を反転
 		player_->InvertControls();
 
+		if (planet_ != Planet::control) {
+			planet_ = Planet::control;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange(); 
+		}
+
+
 		if (input_->TriggerKey(DIK_RETURN)) {
 
 			planet_ = Planet::fog;
@@ -311,6 +351,14 @@ void GameScene::Update() {
 		break;
 
 	case Planet::fog:
+
+		if (planet_ != Planet::fog) {
+			planet_ = Planet::fog;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange(); 
+		}
+
 
 		// 視界悪化
 
@@ -338,6 +386,14 @@ void GameScene::Update() {
 		// HP回復
 		player_->HealHP();
 
+		if (planet_ != Planet::heal) {
+			planet_ = Planet::heal;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange(); 
+		}
+
+
 		if (input_->TriggerKey(DIK_RETURN)) {
 			planet_ = Planet::damage;
 		}
@@ -348,6 +404,14 @@ void GameScene::Update() {
 
 		// HP減少
 		player_->DamageHP();
+
+		if (planet_ != Planet::damage) {
+			planet_ = Planet::damage;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange();
+		}
+
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
@@ -360,6 +424,13 @@ void GameScene::Update() {
 
 		// 攻撃力変化
 		player_->PowerUp();
+
+		if (planet_ != Planet::attack) {
+			planet_ = Planet::attack;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange();
+		}
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
@@ -384,6 +455,13 @@ void GameScene::Update() {
 
 		// 障害物
 
+		if (planet_ != Planet::obstacle) {
+			planet_ = Planet::obstacle;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange(); 
+		}
+
 		if (input_->TriggerKey(DIK_RETURN)) {
 			planet_ = Planet::time;
 		}
@@ -394,6 +472,14 @@ void GameScene::Update() {
 
 		// 時間の流れ
 		player_->TimeFlow();
+
+		if (planet_ != Planet::time) {
+			planet_ = Planet::time;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange(); 
+		}
+
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
@@ -406,6 +492,14 @@ void GameScene::Update() {
 
 		// 重力
 		player_->AffectGravity();
+
+		if (planet_ != Planet::gravity) {
+			planet_ = Planet::gravity;
+			enemyPopCommands.str("");   // ストリームの内容をクリア
+			enemyPopCommands.clear();   // ストリームのエラー状態をリセット
+			OnPlanetChange(); 
+		}
+
 
 		if (input_->TriggerKey(DIK_RETURN)) {
 
@@ -747,6 +841,28 @@ void GameScene::ChangeDedAlpha(float deltaTime)
 	dedSprite_->SetColor({ 1.0f, 1.0f, 1.0f, dedAlpha_ });
 }
 
+void GameScene::RespawnEnemies()
+{
+
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
+	enemies_.clear();
+
+	// ここで敵を再発生
+	spawnTimer = 0;
+
+}
+
+void GameScene::OnPlanetChange()
+{
+
+	//RespawnEnemies();
+	LoadEnemyPopData();
+	UpdateEnemyPopCommands();
+
+}
+
 
 // 敵発生コマンド
 void GameScene::LoadEnemyPopData() {
@@ -772,6 +888,11 @@ void GameScene::UpdateEnemyPopCommands() {
 			// 待機完了
 			waitFlag = false;
 		}
+		return;
+	}
+
+	if (spawnTimer > 0) {
+		spawnTimer--;
 		return;
 	}
 
