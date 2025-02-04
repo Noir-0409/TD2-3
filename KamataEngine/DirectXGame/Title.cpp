@@ -5,6 +5,7 @@
 #include <numbers>
 
 Title::~Title() {
+	delete fade_;
 	delete model_;
 	delete sprite_;
 
@@ -17,17 +18,35 @@ void Title::Initialize()
 	textureHandle_ = KamataEngine::TextureManager::Load("./Resources/Scene/title.png");
 	sprite_ = KamataEngine::Sprite::Create(textureHandle_, { 0, 0 });
 
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 void Title::Update() {
+	switch (phase_) {
+	case FadePhase::kFadeIn:
+		if (fade_->IsFinished()) {
+			phase_ = FadePhase::kMain;
+		}
+		break;
+	case FadePhase::kMain:
 
-	canFinishCounter_ += 1.0f / 60;
-
-	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE) && canFinishCounter_ >= canFinishCount_) {
-		canFinishCounter_ = 0.0f;
-		finished_ = true;
+		if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)/* && canFinishCounter_ >= canFinishCount_*/) {
+			//canFinishCounter_ = 0.0f;
+			phase_ = FadePhase::kFadeOut;
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+		}
+		break;
+	case FadePhase::kFadeOut:
+		if (fade_->IsFinished()) {
+			phase_ = FadePhase::kFadeIn;
+			finished_ = true;
+		}
+		break;
 	}
-
+	
+	fade_->Update();
 }
 
 void Title::Draw() {
@@ -37,6 +56,7 @@ void Title::Draw() {
 
 	KamataEngine::Sprite::PreDraw(commandList);
 	sprite_->Draw();
+	fade_->Draw(commandList);
 
 	KamataEngine::Sprite::PostDraw();
 	dxCommon_->ClearDepthBuffer();

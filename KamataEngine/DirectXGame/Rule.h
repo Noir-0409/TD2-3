@@ -6,6 +6,9 @@
 #include <2d\Sprite.h>
 #include <base\TextureManager.h>
 #include "PlayerAnime.h"
+#include "Fade.h"
+
+
 
 class Rule
 {
@@ -27,6 +30,10 @@ private:
 	KamataEngine::Model* modelPlayerAnime_ = nullptr;
 
 	PlayerAnime* playerAnime_ = nullptr;
+
+	Fade* fade_ = nullptr;
+
+	FadePhase phase_ = FadePhase::kFadeIn;
 
 	bool startAnimation_ = false;
 

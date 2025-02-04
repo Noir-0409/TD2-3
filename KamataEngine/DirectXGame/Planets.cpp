@@ -109,19 +109,19 @@ bool Planets::animOutPlanet(sumLRUD& lrud, float timer) {
 		color_.w = easeInOut(timer * 2.0f, 1.0f, 0.0f);
 		break;
 	case sumLRUD::rightUp:
-		worldTransform_.translation_.x = easeInOut(timer, 400.0f, 1000.0f);
+		worldTransform_.translation_.x = easeInOut(timer, 400.0f, 600.0f);
 		worldTransform_.translation_.y = easeInOut(timer, -50.0f, 650.0f);
 		break;
 	case sumLRUD::leftUp:
-		worldTransform_.translation_.x = easeInOut(timer, -400.0f, -1000.0f);
+		worldTransform_.translation_.x = easeInOut(timer, -400.0f, -600.0f);
 		worldTransform_.translation_.y = easeInOut(timer, -50.0f, 650.0f);
 		break;
 	case sumLRUD::rightDown:
-		worldTransform_.translation_.x = easeInOut(timer, 400.0f, 1000.0f);
+		worldTransform_.translation_.x = easeInOut(timer, 400.0f, 600.0f);
 		worldTransform_.translation_.y = easeInOut(timer, -50.0f, -650.0f);
 		break;
 	case sumLRUD::leftDown:
-		worldTransform_.translation_.x = easeInOut(timer, -400.0f, -1000.0f);
+		worldTransform_.translation_.x = easeInOut(timer, -400.0f, -600.0f);
 		worldTransform_.translation_.y = easeInOut(timer, -50.0f, -650.0f);
 		break;
 	}
