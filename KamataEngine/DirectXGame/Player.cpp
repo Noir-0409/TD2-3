@@ -320,7 +320,7 @@ void Player::TargetUpdate() {
 	mousePos_.x = std::clamp(mousePos_.x, 380.0f, 1600.0f);
 	mousePos_.y = std::clamp(mousePos_.y, 180.0f, 850.0f);
 	// 照準の回転を変更して動かす
-	targetWorldTransform_.rotation_.y = (mousePos_.x - 990.0f) / 1920;
+	targetWorldTransform_.rotation_.y = (mousePos_.x - 960.0f) / 1920;
 	targetWorldTransform_.rotation_.x = (mousePos_.y - 540.0f) / 2040;
 	targetWorldTransform_.rotation_.y = std::clamp(targetWorldTransform_.rotation_.y, (0 - 990.0f) / 1920, (1919 - 990.0f) / 1920);
 	targetWorldTransform_.rotation_.x = std::clamp(targetWorldTransform_.rotation_.x, (0 - 990.0f) / 2160, (1919 - 990.0f) / 2160);

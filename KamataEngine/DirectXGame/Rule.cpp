@@ -8,6 +8,7 @@ using namespace KamataEngine;
 
 Rule::~Rule()
 {
+	delete fade_;
 	delete modelPlayerAnime_;
 	delete sprite_;
 	delete playerAnime_;
@@ -24,28 +25,47 @@ void Rule::Initialize() {
 
 	playerAnime_ = new PlayerAnime();
 	playerAnime_->Initialize(modelPlayerAnime_, Vector3{0.8f, -0.6f, -48.0f});
+
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 void Rule::Update() {
 #ifdef _DEBUG
 	playerAnime_->UpdateImgui();
 #endif // _DEBUG
+	switch (phase_) {
+	case FadePhase::kFadeIn:
+		if (fade_->IsFinished()) {
+			phase_ = FadePhase::kMain;
+		}
+		break;
+	case FadePhase::kMain:
 
+		if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE)/* && canFinishCounter_ >= canFinishCount_*/) {
+			startAnimation_ = true;
+			/*canFinishCounter_ = 0.0f;
+			finished_ = true;*/
+		}
+		if (startAnimation_) {
+			playerAnime_->Update();
+		}
+		if (playerAnime_->IsFinished()) {
+			startAnimation_ = false;
+			phase_ = FadePhase::kFadeOut;
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+		}
+		break;
+	case FadePhase::kFadeOut:
+		if (fade_->IsFinished()) {
+			phase_ = FadePhase::kFadeIn;
+			finished_ = true;
+		}
+		break;
+	}
 
-	canFinishCounter_ += 1.0f / 60;
-
-	if (KamataEngine::Input::GetInstance()->TriggerKey(DIK_SPACE) && canFinishCounter_ >= canFinishCount_) {
-		startAnimation_ = true;
-		/*canFinishCounter_ = 0.0f;
-		finished_ = true;*/
-	}
-	if (startAnimation_) {
-		playerAnime_->Update();
-	}
-	if (playerAnime_->IsFinished()) {
-		startAnimation_ = false;
-		finished_ = true;
-	}
+	fade_->Update();
 
 }
 
@@ -56,6 +76,7 @@ void Rule::Draw() {
 
 	KamataEngine::Sprite::PreDraw(commandList);
 	sprite_->Draw();
+	fade_->Draw(commandList);
 
 	KamataEngine::Sprite::PostDraw();
 	dxCommon_->ClearDepthBuffer();
@@ -72,4 +93,9 @@ void Rule::Draw() {
 	// 3Dオブジェクト描画後処理
 	KamataEngine::Model::PostDraw();
 #pragma endregion
+
+	KamataEngine::Sprite::PreDraw(commandList);
+	fade_->Draw(commandList);
+
+	KamataEngine::Sprite::PostDraw();
 }

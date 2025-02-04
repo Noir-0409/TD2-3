@@ -2,6 +2,7 @@
 #include <KamataEngine.h>
 #include "base/DirectXCommon.h"
 #include "input/Input.h"
+#include "Fade.h"
 
 class OverScene {
 
@@ -24,6 +25,9 @@ private:
 	KamataEngine::Audio* audio_ = nullptr;
 
 	KamataEngine::Camera camera_;
+
+	Fade* fade_ = nullptr;
+	FadePhase phase_ = FadePhase::kFadeIn;
 
 	bool isFinished_ = false;
 

@@ -11,6 +11,7 @@ using namespace KamataEngine;
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
+	delete fade_;
 	delete player_;
 	delete stars_;
 	delete planets_;
@@ -44,6 +45,9 @@ void GameScene::Initialize() {
 	AxisIndicator::GetInstance()->SetVisible(true);
 	// 軸方向表示が参照するカメラを指定する(アドレス無し)
 	AxisIndicator::GetInstance()->SetTargetCamera(&camera_);
+
+	fade_ = new Fade();
+	fade_->Initialize();
 
 	// プレイヤーの初期化
 	modelPlayer_ = KamataEngine::Model::CreateFromOBJ("player");
@@ -95,6 +99,48 @@ void GameScene::Initialize() {
 
 	previousTime_ = std::chrono::steady_clock::now();
 
+	isCleard_ = false;
+	finished_ = false;
+
+	// Phase移行時のバグ回避のため一度だけInitializeでUpdate
+	UpdateEnemyPopCommands();
+	player_->Update();
+	// railCamera_->Update();
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+	// デスフラグの立った弾を削除
+	enemyBullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+	for (EnemyBullet* enemyBullet : enemyBullets_) {
+		enemyBullet->Update();
+	}
+	// デスフラグの立った弾を削除
+	enemyTrackingBullets_.remove_if([](EnemyTrackingBullet* bullet) {
+		if (bullet->IsDead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
+	for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
+		enemyTrackingBullet->Update();
+	}
+	skyDome_->Update();
+	stars_->Update();
+	planets_->Update();
+	CheckAllCollisions();
+	if (player_->UseTarget()) {
+		CheckLockOn();
+	}
+	planetWorldTransform_.UpdateMatrix();
+
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 void GameScene::Update() {
@@ -114,42 +160,74 @@ void GameScene::Update() {
 
 	// メニューを開いていているかどうか
 	if (!showMenu_) {
-		UpdateEnemyPopCommands();
-		player_->Update();
-		//railCamera_->Update();
-		for (Enemy* enemy : enemies_) {
-			enemy->Update();
-		}
-		// デスフラグの立った弾を削除
-		enemyBullets_.remove_if([](EnemyBullet* bullet) {
-			if (bullet->IsDead()) {
-				delete bullet;
-				return true;
+		switch (phase_) {
+		case FadePhase::kFadeIn:
+			if (fade_->IsFinished()) {
+				phase_ = FadePhase::kMain;
 			}
-			return false;
-		});
-		for (EnemyBullet* enemyBullet : enemyBullets_) {
-			enemyBullet->Update();
-		}
-		// デスフラグの立った弾を削除
-		enemyTrackingBullets_.remove_if([](EnemyTrackingBullet* bullet) {
-			if (bullet->IsDead()) {
-				delete bullet;
-				return true;
+			break;
+		case FadePhase::kMain:
+			UpdateEnemyPopCommands();
+			player_->Update();
+			if (player_->IsDead()) {
+				// マウスカーソルの表示
+				showCursor_ = !showCursor_;
+				cursor = ShowCursor(showCursor_);
+				SetCursorPos(960, 540);
+				if (cursor >= 0) {
+					cursor = 1;
+				} else if (cursor <= 0) {
+					cursor = -1;
+				}
+				fade_->Start(Fade::Status::FadeOut, 1.0f); // フェード
+				phase_ = FadePhase::kFadeOut;
 			}
-			return false;
-		});
-		for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
-			enemyTrackingBullet->Update();
+			// railCamera_->Update();
+			for (Enemy* enemy : enemies_) {
+				enemy->Update();
+			}
+			// デスフラグの立った弾を削除
+			enemyBullets_.remove_if([](EnemyBullet* bullet) {
+				if (bullet->IsDead()) {
+					delete bullet;
+					return true;
+				}
+				return false;
+			});
+			for (EnemyBullet* enemyBullet : enemyBullets_) {
+				enemyBullet->Update();
+			}
+			// デスフラグの立った弾を削除
+			enemyTrackingBullets_.remove_if([](EnemyTrackingBullet* bullet) {
+				if (bullet->IsDead()) {
+					delete bullet;
+					return true;
+				}
+				return false;
+			});
+			for (EnemyTrackingBullet* enemyTrackingBullet : enemyTrackingBullets_) {
+				enemyTrackingBullet->Update();
+			}
+			skyDome_->Update();
+			stars_->Update();
+			planets_->Update();
+			CheckAllCollisions();
+			if (player_->UseTarget()) {
+				CheckLockOn();
+			}
+			planetWorldTransform_.UpdateMatrix();
+			break;
+		case FadePhase::kFadeOut:
+			if (fade_->IsFinished()) {
+				if (!player_->IsDead()) {
+					isCleard_ = true;
+				} else {
+					finished_ = true;
+				}
+				phase_ = FadePhase::kFadeIn;
+			}
+			break;
 		}
-		skyDome_->Update();
-		stars_->Update();
-		planets_->Update();
-		CheckAllCollisions();
-		if (player_->UseTarget()) {
-			CheckLockOn();
-		}
-		planetWorldTransform_.UpdateMatrix();
 	} else {
 		if (input_->TriggerKey(DIK_T)) {
 			useTarget_ = !useTarget_;
@@ -189,12 +267,18 @@ void GameScene::Update() {
 	// deltaTime（経過時間）を次回のフレームに使うために記録
 	previousTime_ = currentTime;
 
+
 	ChangeFogAlpha(deltaTime.count());
 	ChangeDedAlpha(deltaTime.count());
 
+	for (Enemy* enemy : enemies_) {
+		if (enemy->IsDead()) {
+			player_->SetTarget(false);
+		}
+	}
+
 	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->IsDead()) {
-
 			delete enemy;
 			return true;
 		}
@@ -334,7 +418,7 @@ void GameScene::Update() {
 	// 最終的なクリアまでの時間決めたら戻す!!
 	// clearTimer_--;
 
-	if (clearTimer_ == 0) {
+	/*if (clearTimer_ == 0) {
 
 		isCleard_ = true;
 	}
@@ -342,7 +426,8 @@ void GameScene::Update() {
 	if (player_->IsDead()) {
 
 		finished_ = true;
-	}
+	}*/
+	fade_->Update();
 }
 
 void GameScene::Draw() {
@@ -399,6 +484,8 @@ void GameScene::Draw() {
 
 	fogSprite_->Draw();
 	dedSprite_->Draw();
+
+	fade_->Draw(commandList);
 
 	// スプライト描画後処理
 	KamataEngine::Sprite::PostDraw();
@@ -588,7 +675,7 @@ void GameScene::UpdateCursor() {
 	mousePos_.y = std::clamp(mousePos_.y, 0.0f, 1000.0f);
 
 	// メニュー
-	if (input_->TriggerKey(DIK_ESCAPE)) {
+	if (input_->TriggerKey(DIK_ESCAPE) && !player_->IsDead()) {
 		showCursor_ = !showCursor_;
 		showMenu_ = showCursor_;
 		cursor = ShowCursor(showCursor_);

@@ -24,6 +24,7 @@
 #include <sstream>
 #include "Planets.h"
 #include <chrono>
+#include "Fade.h"
 
 // 惑星
 //enum class Planet {
@@ -134,6 +135,10 @@ private: // メンバ変数
 
 	KamataEngine::WorldTransform worldTransform_;
 	KamataEngine::Camera camera_;
+
+	// 画面フェード
+	Fade* fade_ = nullptr;
+	FadePhase phase_ = FadePhase::kFadeIn;
 
 	// 天球移動用
 	KamataEngine::WorldTransform planetWorldTransform_;
