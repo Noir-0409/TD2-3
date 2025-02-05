@@ -35,7 +35,7 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 
 	bool finished_ = false;
-
+	　
 
 	// 終了までの時間
 	float finishTimer_ = 0.0f;
