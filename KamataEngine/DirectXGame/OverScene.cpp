@@ -4,6 +4,8 @@ using namespace KamataEngine;
 OverScene::~OverScene()
 {
 	delete fade_;
+	delete overSprite_;
+
 }
 
 void OverScene::Initialize()
@@ -16,6 +18,9 @@ void OverScene::Initialize()
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	camera_.Initialize();
+
+	overTextureHandle_ = TextureManager::Load("fog.png");
+	overSprite_ = Sprite::Create(overTextureHandle_, { 0.0f,0.0f });
 
 }
 
@@ -48,6 +53,12 @@ void OverScene::Draw()
 	dxCommon_ = KamataEngine::DirectXCommon::GetInstance();
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
+
+	KamataEngine::Sprite::PreDraw(commandList);
+
+	overSprite_->Draw();
+
+	KamataEngine::Sprite::PostDraw();
 
 	KamataEngine::Sprite::PreDraw(commandList);
 	fade_->Draw(commandList);

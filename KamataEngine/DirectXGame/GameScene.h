@@ -232,7 +232,7 @@ private: // メンバ変数
 	KamataEngine::Model* modelStars_;
 
 	//クリアまでのタイマー
-	float clearTimer_ = 300.0f;
+	float clearTimer_ = 1800.0f;
 
 	Planet currentPlanet_ = Planet::normal;
 	int spawnCooldown = 60;

@@ -29,6 +29,9 @@ private:
 	Fade* fade_ = nullptr;
 	FadePhase phase_ = FadePhase::kFadeIn;
 
+	KamataEngine::Sprite* overSprite_ = nullptr;
+	uint32_t overTextureHandle_ = 0;
+
 	bool isFinished_ = false;
 
 };

@@ -485,17 +485,18 @@ void GameScene::Update() {
 
 
 	// 最終的なクリアまでの時間決めたら戻す!!
-	// clearTimer_--;
+	 clearTimer_--;
 
-	/*if (clearTimer_ == 0) {
+	if (clearTimer_ == 0) {
 
 		isCleard_ = true;
 	}
 
-	if (player_->IsDead()) {
+	//if (player_->IsDead()) {
 
-		finished_ = true;
-	}*/
+		//finished_ = true;
+	//}*/
+
 	fade_->Update();
 }
 
