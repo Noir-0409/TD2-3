@@ -250,9 +250,9 @@ void GameScene::Update() {
 						OnPlanetChange();
 					}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+					/*if (input_->TriggerKey(DIK_RETURN)) {
 						planet_ = Planet::control;
-					}
+					}*/
 
 					break;
 
@@ -268,10 +268,10 @@ void GameScene::Update() {
 						OnPlanetChange();
 					}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+					/*if (input_->TriggerKey(DIK_RETURN)) {
 
 						planet_ = Planet::fog;
-					}
+					}*/
 
 					break;
 
@@ -286,10 +286,10 @@ void GameScene::Update() {
 
 					// 視界悪化
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+					/*if (input_->TriggerKey(DIK_RETURN)) {
 
 						planet_ = Planet::heal;
-					}
+					}*/
 
 					break;
 
@@ -305,61 +305,61 @@ void GameScene::Update() {
 
 					//	break;
 
-				case Planet::heal:
+				//case Planet::heal:
 
-					// HP回復
-					player_->HealHP();
+				//	// HP回復
+				//	player_->HealHP();
 
-					if (planet_ != Planet::heal) {
-						planet_ = Planet::heal;
-						enemyPopCommands.str(""); // ストリームの内容をクリア
-						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
-						OnPlanetChange();
-					}
+				//	if (planet_ != Planet::heal) {
+				//		planet_ = Planet::heal;
+				//		enemyPopCommands.str(""); // ストリームの内容をクリア
+				//		enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+				//		OnPlanetChange();
+				//	}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
-						planet_ = Planet::damage;
-					}
+				//	if (input_->TriggerKey(DIK_RETURN)) {
+				//		planet_ = Planet::damage;
+				//	}
 
-					break;
+				//	break;
 
-				case Planet::damage:
+				//case Planet::damage:
 
-					// HP減少
-					player_->DamageHP();
+				//	// HP減少
+				//	player_->DamageHP();
 
-					if (planet_ != Planet::damage) {
-						planet_ = Planet::damage;
-						enemyPopCommands.str(""); // ストリームの内容をクリア
-						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
-						OnPlanetChange();
-					}
+				//	if (planet_ != Planet::damage) {
+				//		planet_ = Planet::damage;
+				//		enemyPopCommands.str(""); // ストリームの内容をクリア
+				//		enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+				//		OnPlanetChange();
+				//	}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+				//	if (input_->TriggerKey(DIK_RETURN)) {
 
-						planet_ = Planet::attack;
-					}
+				//		planet_ = Planet::attack;
+				//	}
 
-					break;
+				//	break;
 
-				case Planet::attack:
+				//case Planet::attack:
 
-					// 攻撃力変化
-					player_->PowerUp();
+				//	// 攻撃力変化
+				//	player_->PowerUp();
 
-					if (planet_ != Planet::attack) {
-						planet_ = Planet::attack;
-						enemyPopCommands.str(""); // ストリームの内容をクリア
-						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
-						OnPlanetChange();
-					}
+				//	if (planet_ != Planet::attack) {
+				//		planet_ = Planet::attack;
+				//		enemyPopCommands.str(""); // ストリームの内容をクリア
+				//		enemyPopCommands.clear(); // ストリームのエラー状態をリセット
+				//		OnPlanetChange();
+				//	}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+				//	if (input_->TriggerKey(DIK_RETURN)) {
 
-						// planet_ = Planet::bullet;
-					}
+				//		// planet_ = Planet::bullet;
+				//	}
 
-					break;
+				//	break;
 
 					// case Planet::bullet:
 
@@ -384,9 +384,9 @@ void GameScene::Update() {
 						OnPlanetChange();
 					}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+				/*	if (input_->TriggerKey(DIK_RETURN)) {
 						planet_ = Planet::time;
-					}
+					}*/
 
 					break;
 
@@ -402,10 +402,10 @@ void GameScene::Update() {
 						OnPlanetChange();
 					}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+				/*	if (input_->TriggerKey(DIK_RETURN)) {
 
 						planet_ = Planet::gravity;
-					}
+					}*/
 
 					break;
 
@@ -421,10 +421,10 @@ void GameScene::Update() {
 						OnPlanetChange();
 					}
 
-					if (input_->TriggerKey(DIK_RETURN)) {
+				/*	if (input_->TriggerKey(DIK_RETURN)) {
 
 						planet_ = Planet::normal;
-					}
+					}*/
 
 					break;
 				}

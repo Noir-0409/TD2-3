@@ -11,12 +11,12 @@ std::map<int, Planet> planetTable = {
     {0, Planet::normal},
     {1, Planet::control},
 	{2, Planet::fog},
-	{3, Planet::heal},
-	{4, Planet::damage},
-	{5, Planet::attack},
-	{6, Planet::obstacle},
-	{7, Planet::time},
-	{8, Planet::gravity},
+	//{3, Planet::heal},
+	//{4, Planet::damage},
+	//{5, Planet::attack},
+	{3, Planet::obstacle},
+	{4, Planet::time},
+	{5, Planet::gravity},
 };
 
 std::map<int, sumLRUD> lrudTable = {
@@ -159,7 +159,7 @@ void Planets::Update() {
 		case Planet::fog:
 			color_ = {0.7f, 0.7f, 0.2f, 0.0f};
 			break;
-		case Planet::heal:
+	/*	case Planet::heal:
 			color_ = {0.1f, 1.0f, 0.1f, 0.0f};
 			break;
 		case Planet::damage:
@@ -167,7 +167,7 @@ void Planets::Update() {
 			break;
 		case Planet::attack:
 			color_ = {1.0f, 0.0f, 1.0f, 0.0f};
-			break;
+			break;*/
 		case Planet::obstacle:
 			color_ = {1.0f, 1.0f, 0.0f, 0.0f};
 			break;

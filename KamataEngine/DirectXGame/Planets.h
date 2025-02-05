@@ -12,9 +12,9 @@ enum class Planet {
 	control,  // 操作反転
 	fog,      // 視界悪化(霧)
 	newEnemy, // 新しい敵
-	heal,     // HP回復
-	damage,   // HP減少
-	attack,   // 攻撃力変化
+	//heal,     // HP回復
+	//damage,   // HP減少
+//	attack,   // 攻撃力変化
 	//bullet,   // 弾の軌道
 	obstacle, // 障害物
 	time,     // 時間の流れ
