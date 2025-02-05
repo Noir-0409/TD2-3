@@ -89,6 +89,16 @@ private:
 	// 行動するかどうか
 	bool isMove_ = false;
 
+	void Move(bool isMove);
+
+	// 移動限界座標
+	const float kMoveLimitX_ = 50.0f;
+	const float kMoveLimitY_ = 50.0f;
+	const float kMoveLimitZ_ = 100.0f;
+
+	// 向かう先を指定したか
+	bool enterMovePoint_ = false;
+
 	// HP
 	float hp_ = 100.0f;
 	// 生きているかのフラグ
@@ -111,7 +121,7 @@ private:
 	uint32_t textureHandle_ = 0;
 
 	// 移動速度
-	KamataEngine::Vector3 velocity_ = { 0.1f, 0.0f, 0.0f };
+	KamataEngine::Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
 
 
 	// 行動
