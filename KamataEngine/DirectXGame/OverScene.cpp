@@ -19,7 +19,7 @@ void OverScene::Initialize()
 	audio_ = Audio::GetInstance();
 	camera_.Initialize();
 
-	overTextureHandle_ = TextureManager::Load("fog.png");
+	overTextureHandle_ = TextureManager::Load("./Resources/Scene/gameover.png");
 	overSprite_ = Sprite::Create(overTextureHandle_, { 0.0f,0.0f });
 
 }
@@ -33,7 +33,7 @@ void OverScene::Update()
 		}
 		break;
 	case FadePhase::kMain:
-		if (input_->TriggerKey(DIK_SPACE)) {
+		if (input_->TriggerKey(DIK_RETURN)) {
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 			phase_ = FadePhase::kFadeOut;
 		}

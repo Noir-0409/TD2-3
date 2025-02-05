@@ -21,7 +21,7 @@ void ClearScene::Initialize()
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 
-	clearTextureHandle_ = TextureManager::Load("dedEffect.png");
+	clearTextureHandle_ = TextureManager::Load("./Resources/Scene/clear.png");
 	clearSprite_ = Sprite::Create(clearTextureHandle_, { 0.0f,0.0f });
 
 }
@@ -36,7 +36,7 @@ void ClearScene::Update()
 		}
 		break;
 	case FadePhase::kMain:
-		if (input_->TriggerKey(DIK_SPACE)) {
+		if (input_->TriggerKey(DIK_RETURN)) {
 			phase_ = FadePhase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
 		}

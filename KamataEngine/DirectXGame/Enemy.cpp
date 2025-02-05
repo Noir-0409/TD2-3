@@ -18,9 +18,11 @@ Vector3 Enemy::GetWorldPosition() {
 	return worldPos;
 }
 
-void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& velocity, const float& health, BulletType bulletType) {
+void Enemy::Initialize(Model* model, const Vector3& position, const bool move, const float& health, BulletType bulletType) {
 	assert(model);
 	model_ = model;
+
+	isMove_ = move;
 
 	textureHandle_ = TextureManager::Load("uvChecker.png");
 	
@@ -40,6 +42,7 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 	} else {
 		bulletType_ = BulletType::normal;
 	}
+
 
 	velocity_ = velocity;
 
@@ -72,8 +75,7 @@ void Enemy::Update() {
 		}
 		inDamageDrawCounter_ += 1;
 	}
-
-	//worldTransform_.translation_ -= velocity_;
+	worldTransform_.translation_ += velocity_;
 	worldTransform_.UpdateMatrix();
 }
 
