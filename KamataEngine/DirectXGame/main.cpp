@@ -164,6 +164,93 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	return 0;
 }
 
+//void ChangeScene() {
+//	switch (scene) {
+//	case Scene::kTitle:
+//		if (titleScene->IsFinished()) {
+//			// シーン変更
+//			scene = Scene::kRule;
+//			// 旧シーンの解放
+//			delete titleScene;
+//			titleScene = nullptr;
+//			// 新しいシーンの生成と初期化
+//			ruleScene = new Rule;
+//			ruleScene->Initialize();
+//		}
+//		break;
+//	case Scene::kRule:
+//		if (ruleScene->IsFinished()) {
+//			// シーン変更
+//			scene = Scene::kGame;
+//			// 旧シーンの解放
+//			delete ruleScene;
+//			ruleScene = nullptr;
+//			// 新しいシーンの生成と初期化
+//			gameScene = new GameScene;
+//			gameScene->Initialize();
+//		}
+//		break;
+//	case Scene::kGame:
+//		if (gameScene->IsCleared()) {
+//			// シーン変更
+//			scene = Scene::kClear;
+//			// 旧シーンの解放
+//			delete gameScene;
+//			gameScene = nullptr;
+//			// 新しいシーンの生成と初期化
+//			clearScene = new ClearScene();
+//			clearScene->Initialize();
+//
+//		}else if (gameScene->IsFinished()) {
+//
+//			//シーン変更
+//			scene = Scene::kGameOver;
+//			//旧シーンの解放
+//			delete gameScene;
+//			gameScene = nullptr;
+//			//新しいシーンの生成と初期化
+//			overScene = new OverScene();
+//			overScene->Initialize();
+//
+//		}
+//		break;
+//	case Scene::kClear:
+//		if (clearScene->IsFinished()) {
+//			//シーン変更
+//			scene = Scene::kGame;
+//			//旧シーンの解放
+//			delete clearScene;
+//			clearScene = nullptr;
+//			//新しいシーンの生成と初期化
+//			/*gameScene = new GameScene();
+//			gameScene->Initialize();*/
+//
+//			titleScene = new Title();
+//			titleScene->Initialize();
+//
+//		}
+//		break;
+//	case Scene::kGameOver:
+//		if (overScene->IsFinished()) {
+//			//シーン変更
+//			scene = Scene::kGame;
+//			//旧シーンの解放
+//			delete overScene;
+//			overScene = nullptr;
+//			//新しいシーンの生成と初期化
+//			/*gameScene = new GameScene();
+//			gameScene->Initialize();*/
+//
+//			titleScene = new Title();
+//			titleScene->Initialize();
+//
+//		}
+//
+//	}
+//
+//
+//}
+
 void ChangeScene() {
 	switch (scene) {
 	case Scene::kTitle:
@@ -201,14 +288,13 @@ void ChangeScene() {
 			clearScene = new ClearScene();
 			clearScene->Initialize();
 
-		}else if (gameScene->IsFinished()) {
-
-			//シーン変更
+		} else if (gameScene->IsFinished()) {
+			// シーン変更
 			scene = Scene::kGameOver;
-			//旧シーンの解放
+			// 旧シーンの解放
 			delete gameScene;
 			gameScene = nullptr;
-			//新しいシーンの生成と初期化
+			// 新しいシーンの生成と初期化
 			overScene = new OverScene();
 			overScene->Initialize();
 
@@ -216,35 +302,31 @@ void ChangeScene() {
 		break;
 	case Scene::kClear:
 		if (clearScene->IsFinished()) {
-			//シーン変更
-			scene = Scene::kGame;
-			//旧シーンの解放
+			// シーン変更
+			scene = Scene::kTitle;  // タイトルシーンに遷移
+			// 旧シーンの解放
 			delete clearScene;
 			clearScene = nullptr;
-			//新しいシーンの生成と初期化
-			gameScene = new GameScene();
-			gameScene->Initialize();
-
+			// 新しいシーンの生成と初期化
+			titleScene = new Title();  // 新しいタイトルシーンを生成
+			titleScene->Initialize();
 		}
 		break;
 	case Scene::kGameOver:
 		if (overScene->IsFinished()) {
-			//シーン変更
-			scene = Scene::kGame;
-			//旧シーンの解放
+			// シーン変更
+			scene = Scene::kTitle;  // タイトルシーンに遷移
+			// 旧シーンの解放
 			delete overScene;
 			overScene = nullptr;
-			//新しいシーンの生成と初期化
-			gameScene = new GameScene();
-			gameScene->Initialize();
-
-		
+			// 新しいシーンの生成と初期化
+			titleScene = new Title();  // 新しいタイトルシーンを生成
+			titleScene->Initialize();
 		}
-
+		break;
 	}
-
-
 }
+
 
 void UpdateScene() {
 	switch (scene) {
