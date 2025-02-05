@@ -43,6 +43,11 @@ void Enemy::Initialize(Model* model, const Vector3& position, const Vector3& vel
 
 	velocity_ = velocity;
 
+	audio_= KamataEngine::Audio::GetInstance();
+
+	bulletDataHandle = audio_->LoadWave("./Resources./sound./enemy./attack.mp3");
+	deadDataHandle = audio_->LoadWave("./Resources./sound./enemy./dead.mp3");
+
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	InitializeFirePhase();
@@ -135,6 +140,7 @@ void Enemy::movePhase() {
 		if (fireTimer_ == 0) {
 			Fire();
 			fireTimer_ = kFireInterval;
+			bulletVoiceHandle = audio_->PlayWave(bulletDataHandle, false, 0.7f);
 		}
 	}
 }
@@ -163,6 +169,7 @@ void Enemy::OnCollision() {
 	if (hp_ <= 0) {
 
 		isDead_ = true;
+		bulletVoiceHandle = audio_->PlayWave(deadDataHandle, false, 0.7f);
 
 		}
 

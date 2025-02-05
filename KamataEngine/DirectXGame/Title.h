@@ -5,6 +5,7 @@
 #include <input\Input.h>
 #include <2d\Sprite.h>
 #include <base\TextureManager.h>
+#include "audio/Audio.h"
 #include "Fade.h"
 
 class Title
@@ -26,6 +27,7 @@ private:
 	KamataEngine::WorldTransform worldTransformTitle_;
 	KamataEngine::WorldTransform worldTransformPlayer_;
 	KamataEngine::Model* model_ = nullptr;
+	KamataEngine::Audio* audio_ = nullptr;
 
 	// フェード
 	Fade* fade_ = nullptr;
@@ -45,6 +47,11 @@ private:
 	uint32_t textureHandle_ = 0;
 	KamataEngine::Sprite* sprite_ = nullptr;
 
+	uint32_t keyDataHandle = 0;
+	uint32_t keyVoiceHandle = 0;
+
+	uint32_t bgmDataHandle = 0;
+	uint32_t bgmVoicehadle = 0;
 
 };
 
