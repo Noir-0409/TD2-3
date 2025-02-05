@@ -416,6 +416,10 @@ void GameScene::Update() {
 
 					if (planet_ != Planet::gravity) {
 						planet_ = Planet::gravity;
+						/*for (Enemy* enemy : enemies_) {
+							delete enemy;
+							enemies_.remove(enemy);
+						}*/
 						enemyPopCommands.str(""); // ストリームの内容をクリア
 						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
 						OnPlanetChange();
@@ -715,6 +719,11 @@ void GameScene::CheckLockOn() {
 			enemy->SetTarget(true);
 			player_->SetTarget(true);
 			player_->SetTargetPositoin(posC);
+			player_->SetTargetVelocity(enemy->GetVelocity());
+		}
+		if (enemy->IsTarget() && player_->IsTarget()) {
+			player_->SetTargetPositoin(posC);
+			player_->SetTargetVelocity(enemy->GetVelocity());
 		}
 	}
 }
@@ -907,21 +916,21 @@ void GameScene::UpdateEnemyPopCommands() {
 			float z = (float)std::stof(word.c_str());
 
 			// 弾の種類
-			/*bool normalBullet = true;
+			bool isMove = true;
 			std::getline(line_stream, word, ',');
-			if (word.find("tracking") == 0) {
-				normalBullet = false;
+			if (word.find("true") == 0) {
+				isMove = true;
 			} else {
-				normalBullet = true;
-			}*/
+				isMove = false;
+			}
 
 			// 敵を発生させる
 			Enemy* enemy = new Enemy();
 			enemy->SetPlayer(player_);
 			if (planets_->GetPlanet() == Planet::newEnemy) {
-				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::tracking);
+				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, isMove, 100.0f, BulletType::tracking);
 			} else {
-				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, Vector3{0.0f, 0.0f, 0.0f}, 100.0f, BulletType::normal);
+				enemy->Initialize(modelEnemy_, Vector3{x, y, z}, isMove, 100.0f, BulletType::normal);
 			}
 			enemy->SetGameScene(this);
 			enemy->SetPlanets(planets_);
