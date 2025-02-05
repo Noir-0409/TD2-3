@@ -90,6 +90,14 @@ private:
 
 	void Move(bool isMove);
 
+	// 移動限界座標
+	const float kMoveLimitX_ = 50.0f;
+	const float kMoveLimitY_ = 50.0f;
+	const float kMoveLimitZ_ = 100.0f;
+
+	// 向かう先を指定したか
+	bool enterMovePoint_ = false;
+
 	// HP
 	float hp_ = 100.0f;
 	// 生きているかのフラグ

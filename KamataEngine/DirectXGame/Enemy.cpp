@@ -3,6 +3,7 @@
 #include <time.h>
 #include "Player.h"
 #include "GameScene.h"
+#include <algorithm>
 
 using namespace KamataEngine;
 
@@ -52,7 +53,23 @@ void Enemy::Initialize(Model* model, const Vector3& position, const bool move, c
 
 void Enemy::Move(bool isMove) {
 	if (isMove) {
-		return;
+		if (!enterMovePoint_) {
+			float moveX = static_cast<float>(rand() % int(kMoveLimitX_ * 2) - int(kMoveLimitX_));
+			float moveY = static_cast<float>(rand() % int(kMoveLimitY_ * 2) - int(kMoveLimitY_));
+			float moveZ = static_cast<float>(rand() & int(kMoveLimitZ_ * 2) - int(kMoveLimitZ_));
+
+			Vector3 point = {moveX, moveY, moveZ};
+			Vector3 pointPosition = GetWorldPosition() + point;
+			if (pointPosition.x > kMoveLimitX_ || pointPosition.x < kMoveLimitX_ * -1) {
+				moveX = std::clamp(moveX, GetWorldPosition().x - kMoveLimitX_ * -1, GetWorldPosition().x - kMoveLimitX_);
+			}
+			if (pointPosition.y > kMoveLimitY_ || pointPosition.y < kMoveLimitY_ * -1) {
+				moveY = std::clamp(moveY, GetWorldPosition().y - kMoveLimitY_ * -1, GetWorldPosition().y - kMoveLimitY_);
+			}
+			if (pointPosition.z > kMoveLimitZ_ || pointPosition.z < kMoveLimitZ_ * -1) {
+				moveZ = std::clamp(moveZ, GetWorldPosition().z - kMoveLimitZ_ * -1, GetWorldPosition().z - kMoveLimitZ_);
+			}
+		}
 	}
 }
 
