@@ -9,10 +9,15 @@ Title::~Title() {
 	delete model_;
 	delete sprite_;
 
+	audio_->StopWave(bgmVoicehadle);
+
 }
 
 void Title::Initialize()
 {
+
+	audio_ = KamataEngine::Audio::GetInstance();
+
 	viewProjection_.Initialize();
 	finished_ = false;
 	textureHandle_ = KamataEngine::TextureManager::Load("./Resources/Scene/title.png");
@@ -21,6 +26,10 @@ void Title::Initialize()
 	fade_ = new Fade();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
+
+	bgmDataHandle = audio_->LoadWave("./Resources./sound./scene./main./BGM5.wav");
+	bgmVoicehadle = audio_->PlayWave(bgmDataHandle, true, 0.3f);
+
 }
 
 void Title::Update() {

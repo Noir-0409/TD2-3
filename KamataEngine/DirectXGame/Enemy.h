@@ -7,6 +7,7 @@
 #include "base/TextureManager.h"
 #include "EnemyBullet.h"
 #include <list>
+#include "audio/Audio.h"
 
 // 行動フェーズ
 enum class Phase {
@@ -140,6 +141,15 @@ private:
 
 	// ターゲットされているか
 	bool target_ = false;
+
+	KamataEngine::Audio* audio_ = nullptr;
+
+	uint32_t bulletDataHandle = 0;
+	uint32_t bulletVoiceHandle = 0;
+
+	uint32_t deadDataHandle = 0;
+	uint32_t deadVoiceHandle = 0;
+
 };
 
 
