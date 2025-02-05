@@ -39,7 +39,7 @@ private:
 
 	// 終了までの時間
 	float finishTimer_ = 0.0f;
-	const float finishTime_ = 1.0f;
+	const float finishTime_ = 2.0f;
 
 	// 自機の速度
 	const float moveSpeed_ = 1.0f;
