@@ -21,10 +21,10 @@ void Rule::Initialize() {
 	textureHandle_ = KamataEngine::TextureManager::Load("./Resources/Scene/rule.png");
 	sprite_ = KamataEngine::Sprite::Create(textureHandle_, { 0, 0 });
 	// プレイヤーの初期化
-	modelPlayerAnime_ = KamataEngine::Model::CreateFromOBJ("enemy");
+	modelPlayerAnime_ = KamataEngine::Model::CreateFromOBJ("player_action");
 
 	playerAnime_ = new PlayerAnime();
-	playerAnime_->Initialize(modelPlayerAnime_, Vector3{0.8f, -0.6f, -48.0f});
+	playerAnime_->Initialize(modelPlayerAnime_, Vector3{0.8f, -0.6f, -60.0f});
 
 	fade_ = new Fade();
 	fade_->Initialize();

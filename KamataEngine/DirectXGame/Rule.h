@@ -40,7 +40,7 @@ private:
 	float counter_ = 0.0f;
 	// 終了フラグ
 	bool finished_ = false;
-	static inline const float kTimeTitleMove = 2.0f;
+	static inline const float kTimeTitleMove = 5.0f;
 
 	// キーが反応するようになるまでの時間
 	float canFinishCounter_ = 0.0f;
