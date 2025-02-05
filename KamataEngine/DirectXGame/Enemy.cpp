@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include <cassert>
+#include <time.h>
 #include "Player.h"
 #include "GameScene.h"
 
@@ -19,6 +20,7 @@ Vector3 Enemy::GetWorldPosition() {
 }
 
 void Enemy::Initialize(Model* model, const Vector3& position, const bool move, const float& health, BulletType bulletType) {
+	srand(static_cast<unsigned int>(time(NULL)));
 	assert(model);
 	model_ = model;
 
@@ -48,6 +50,12 @@ void Enemy::Initialize(Model* model, const Vector3& position, const bool move, c
 	InitializeFirePhase();
 }
 
+void Enemy::Move(bool isMove) {
+	if (isMove) {
+		return;
+	}
+}
+
 void Enemy::Update() {
 	// デスフラグの立った弾を削除
 	movePhase();
@@ -67,6 +75,10 @@ void Enemy::Update() {
 		}
 		inDamageDrawCounter_ += 1;
 	}
+
+	// isMoveがtureなら動くようになる
+	Move(isMove_);
+
 	worldTransform_.translation_ += velocity_;
 	worldTransform_.UpdateMatrix();
 }

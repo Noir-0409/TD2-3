@@ -88,6 +88,8 @@ private:
 	// 行動するかどうか
 	bool isMove_ = false;
 
+	void Move(bool isMove);
+
 	// HP
 	float hp_ = 100.0f;
 	// 生きているかのフラグ
@@ -110,7 +112,7 @@ private:
 	uint32_t textureHandle_ = 0;
 
 	// 移動速度
-	KamataEngine::Vector3 velocity_ = { 0.1f, 0.0f, 0.0f };
+	KamataEngine::Vector3 velocity_ = { 0.0f, 0.0f, 0.0f };
 
 
 	// 行動
