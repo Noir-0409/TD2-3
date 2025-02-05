@@ -58,6 +58,9 @@ void Player::Initialize(Model* model, Model* bulletModel, const Vector3& positio
 	targetObjectColor_.Initialize();
 	targetObjectColor_.SetColor(Vector4{65.0f, 255.0f, 75.0f, 1.0f});
 	
+	audio_ = Audio::GetInstance();
+	playerSound_ = audio_->LoadWave("./Resource/sound/player/");
+
 }
 
 void Player::Update() {
@@ -331,6 +334,7 @@ void Player::Attack() {
 	if (useTarget_ && isTarget_) {
 		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
 
+			audio_->PlayWave(playerSound_);
 			isAttack_ = true;
 			// 弾の速度
 			const float kBulletSpeed = 5.0f;
@@ -354,6 +358,8 @@ void Player::Attack() {
 				fireDelayTimer_ = 0.0f;
 				/*fireDelayTime_ -= 0.08f;
 				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+				audio_->StopWave(playerSound_);
+
 			}
 		}
 	} else {
