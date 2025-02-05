@@ -100,7 +100,7 @@ private:
 	bool enterMovePoint_ = false;
 
 	// HP
-	float hp_ = 100.0f;
+	float hp_ = 350.0f;
 	// 生きているかのフラグ
 	bool isDead_ = false;
 
