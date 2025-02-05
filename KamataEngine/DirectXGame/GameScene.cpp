@@ -498,6 +498,7 @@ void GameScene::Update() {
 	//}*/
 
 	fade_->Update();
+
 }
 
 void GameScene::Draw() {
