@@ -5,6 +5,8 @@ using namespace KamataEngine;
 ClearScene::~ClearScene()
 { 
 	delete fade_;
+	delete clearSprite_;
+
 }
 
 void ClearScene::Initialize()
@@ -18,6 +20,10 @@ void ClearScene::Initialize()
 	fade_ = new Fade();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
+
+	clearTextureHandle_ = TextureManager::Load("dedEffect.png");
+	clearSprite_ = Sprite::Create(clearTextureHandle_, { 0.0f,0.0f });
+
 }
 
 void ClearScene::Update()
@@ -52,8 +58,15 @@ void ClearScene::Draw()
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
 	KamataEngine::Sprite::PreDraw(commandList);
+
+	clearSprite_->Draw();
+
+	KamataEngine::Sprite::PostDraw();
+
+	KamataEngine::Sprite::PreDraw(commandList);
 	fade_->Draw(commandList);
 
 	KamataEngine::Sprite::PostDraw();
+
 	dxCommon_->ClearDepthBuffer();
 }
