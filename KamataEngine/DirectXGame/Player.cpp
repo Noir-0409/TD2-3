@@ -335,6 +335,14 @@ void Player::Attack() {
 			// 弾の速度
 			const float kBulletSpeed = 5.0f;
 			Vector3 worldPos = GetWorldPosition();
+
+			// ターゲットとの距離を算出してそこにたどり着くまでのフレーム数を計算
+			// ターゲットの移動量を考慮してvelocityを求める
+
+			float hitFrame = Length(targetWorldPosition_) - Length(worldPos);
+			hitFrame = hitFrame * kBulletSpeed / 60;
+			targetWorldPosition_ += targetVelocity_ * hitFrame;
+
 			Vector3 velocity = targetWorldPosition_ - worldPos;
 			velocity = Normalize(velocity);
 			velocity *= kBulletSpeed;

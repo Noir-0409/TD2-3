@@ -47,7 +47,11 @@ public:
 
 	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
+	// 標的の座標
 	void SetTargetPositoin(KamataEngine::Vector3 targetPos) { targetWorldPosition_ = targetPos; }
+
+	// 標的の移動量
+	void SetTargetVelocity(KamataEngine::Vector3 targetVel) { targetVelocity_ = targetVel; }
 
 	const KamataEngine::WorldTransform& GetWorldTransform() { return worldTransform_; }
 
@@ -71,6 +75,7 @@ public:
 
 	void UpdateImgui();
 
+	// 標的をターゲットしているか
 	bool IsTarget() const { return isTarget_; }
 
 	bool IsLowHP();
@@ -104,6 +109,9 @@ private:
 	KamataEngine::Model* bulletModel_ = nullptr;
 	KamataEngine::ObjectColor objectColor_;
 	KamataEngine::ObjectColor targetObjectColor_;
+
+	// ターゲットの移動量
+	KamataEngine::Vector3 targetVelocity_ = {0.0f, 0.0f, 0.0f};
 
 	GameScene* gameScene_ = nullptr;
 	Planets* planets_ = nullptr;

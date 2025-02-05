@@ -37,7 +37,7 @@ public:
 	/// <param name="model">: モデル</param>
 	/// <param name="position">: 初期位置</param>
 	/// <param name="bulletType">: 弾のタイプ (1 = ノーマル / 2 = 追尾)</param>
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const KamataEngine::Vector3& velocity, const float& health, BulletType bulletType);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, const bool move, const float& health, BulletType bulletType);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -50,6 +50,8 @@ public:
 	void SetPlayer(Player* player) { player_ = player; }
 
 	KamataEngine::Vector3 GetWorldPosition();
+
+	KamataEngine::Vector3 GetVelocity() const { return velocity_; }
 
 	// 発射間隔
 	int kFireInterval = 60 * 1;
@@ -67,6 +69,7 @@ public:
 
 	bool IsDamage() { return isDamage_; }
 
+	// ターゲットされているか
 	bool IsTarget() const { return target_; }
 
 	void SetTarget(bool target) { target_ = target; }
@@ -81,6 +84,9 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 
 	Planets* planets_ = nullptr;
+
+	// 行動するかどうか
+	bool isMove_ = false;
 
 	// HP
 	float hp_ = 100.0f;
@@ -104,7 +110,7 @@ private:
 	uint32_t textureHandle_ = 0;
 
 	// 移動速度
-	KamataEngine::Vector3 velocity_ = { 0.0f, 0.0f, 0.02f };
+	KamataEngine::Vector3 velocity_ = { 0.1f, 0.0f, 0.0f };
 
 
 	// 行動
