@@ -146,16 +146,16 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	UpdateCursor();
 #ifdef _DEBUG
-	player_->UpdateImgui();
-	planets_->UpdateImgui();
+//	player_->UpdateImgui();
+//	planets_->UpdateImgui();
 	// railCamera_->UpdateImgui();
-	if (input_->TriggerKey(DIK_AT)) {
+	/*if (input_->TriggerKey(DIK_AT)) {
 		printf("");
 	}
 	ImGui::Begin("mouseSensi");
 	ImGui::DragFloat2("sensi", &mouseSensi_.x, 0.1f);
 	ImGui::DragFloat("fov", &camera_.fovAngleY, 0.01f);
-	ImGui::End();
+	ImGui::End();*/
 #endif // _DEBUG
 
 	// メニューを開いていているかどうか
