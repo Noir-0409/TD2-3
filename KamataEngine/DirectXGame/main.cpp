@@ -150,6 +150,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	delete gameScene;
 	delete clearScene;
 	delete overScene;
+	delete titleScene;
 
 	// 3Dモデル解放
 	Model::StaticFinalize();
@@ -236,6 +237,8 @@ void ChangeScene() {
 			//新しいシーンの生成と初期化
 			gameScene = new GameScene();
 			gameScene->Initialize();
+
+		
 		}
 
 	}

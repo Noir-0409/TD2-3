@@ -244,6 +244,7 @@ void GameScene::Update() {
 				case Planet::normal:
 
 					if (planet_ != Planet::normal) {
+
 						planet_ = Planet::normal;
 						enemyPopCommands.str(""); // ストリームの内容をクリア
 						enemyPopCommands.clear(); // ストリームのエラー状態をリセット
