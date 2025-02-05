@@ -27,7 +27,7 @@ void Title::Initialize()
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 
-	bgmDataHandle = audio_->LoadWave("./Resources./sound./scene./main./BGM5.wav");
+	bgmDataHandle = audio_->LoadWave("./Resources./sound./scene./main./maou_bgm_fantasy12.mp3");
 	bgmVoicehadle = audio_->PlayWave(bgmDataHandle, true, 0.3f);
 
 }
