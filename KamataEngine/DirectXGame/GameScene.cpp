@@ -764,7 +764,10 @@ void GameScene::RespawnEnemies()
 void GameScene::OnPlanetChange()
 {
 
-	//RespawnEnemies();
+	for (Enemy* enemy : GetEnemies()) {
+		delete enemy;  // 各Enemyオブジェクトを削除
+	}
+	GetEnemies().clear();
 	LoadEnemyPopData();
 	UpdateEnemyPopCommands();
 
