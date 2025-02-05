@@ -13,7 +13,7 @@ Rule::~Rule()
 	delete sprite_;
 	delete playerAnime_;
 }
-
+　
 void Rule::Initialize() {
 	
 	camera_.Initialize();
