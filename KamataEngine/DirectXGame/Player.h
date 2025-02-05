@@ -11,6 +11,7 @@
 #include <list>
 #include <Windows.h>
 #include <iostream>
+#include "audio/Audio.h"
 
 class Planets;
 class PlayerBullet;
@@ -176,5 +177,10 @@ private:
 
 	//ダメージタイマー
 	float damageTimer_ = 0.0f;
+
+	KamataEngine::Audio* audio_ = nullptr;
+
+	uint32_t bulletDataHandle = 0;
+	uint32_t bulletVoiceHandle = 0;
 	
 };

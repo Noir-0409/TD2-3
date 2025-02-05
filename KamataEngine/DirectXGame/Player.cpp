@@ -58,6 +58,9 @@ void Player::Initialize(Model* model, Model* bulletModel, const Vector3& positio
 	targetObjectColor_.Initialize();
 	targetObjectColor_.SetColor(Vector4{65.0f, 255.0f, 75.0f, 1.0f});
 	
+	audio_ = KamataEngine::Audio::GetInstance();
+	bulletDataHandle = audio_->LoadWave("./Resources./sound./player./attack.mp3");
+	
 }
 
 void Player::Update() {
@@ -330,61 +333,115 @@ void Player::TargetUpdate() {
 void Player::Attack() {
 	if (useTarget_ && isTarget_) {
 		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
-
+			bulletVoiceHandle = audio_->PlayWave(bulletDataHandle, false, 0.7f); // 🔈音を鳴らす
 			isAttack_ = true;
+
 			// 弾の速度
 			const float kBulletSpeed = 5.0f;
 			Vector3 worldPos = GetWorldPosition();
 			Vector3 velocity = targetWorldPosition_ - worldPos;
 			velocity = Normalize(velocity);
 			velocity *= kBulletSpeed;
-			// 速度ベクトルを自機の向きに合わせて回転させる
 			velocity = TransformNormal(velocity, worldTransform_.matWorld_);
 
 			// 弾を生成し、初期化
 			PlayerBullet* newBullet = new PlayerBullet();
-			newBullet->Initialize(bulletModel_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
+			newBullet->Initialize(bulletModel_, Vector3{ worldPos.x, worldPos.y - 0.4f, worldPos.z + 1.0f }, velocity);
 
 			// 弾を登録する
 			bullets_.push_back(newBullet);
-		} else if (isAttack_) { // 攻撃間隔
-			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
-			if (fireDelayTimer_ >= 1.0f) {
-				isAttack_ = false;
-				fireDelayTimer_ = 0.0f;
-				/*fireDelayTime_ -= 0.08f;
-				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
-			}
 		}
 	} else {
 		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
+			bulletVoiceHandle = audio_->PlayWave(bulletDataHandle, false, 0.7f); // 🔈ターゲットなしでも音を鳴らす
 			isAttack_ = true;
+
 			// 弾の速度
 			const float kBulletSpeed = 5.0f;
 			Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
-			// 速度ベクトルを自機の向きに合わせて回転させる
 			velocity = TransformNormal(velocity, targetWorldTransform_.matWorld_);
 
 			// 弾を生成し、初期化
 			PlayerBullet* newBullet = new PlayerBullet();
-			newBullet->Initialize(bulletModel_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
+			newBullet->Initialize(bulletModel_, Vector3{ GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f }, velocity);
 
 			// 弾を登録する
 			bullets_.push_back(newBullet);
-		} else if (isAttack_) { // 攻撃間隔
-			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
-			if (fireDelayTimer_ >= 1.0f) {
-				isAttack_ = false;
-				fireDelayTimer_ = 0.0f;
-				/*fireDelayTime_ -= 0.08f;
-				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
-			}
 		}
 	}
-	/*if (!input_->PushKey(DIK_SPACE)) {
-		fireDelayTime_ = 0.5f;
-	}*/
+
+	// 攻撃間隔の処理（変更なし）
+	if (isAttack_) {
+		fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
+		if (fireDelayTimer_ >= 1.0f) {
+			isAttack_ = false;
+			fireDelayTimer_ = 0.0f;
+		}
+	}
 }
+
+
+//void Player::Attack() {
+//	
+//	if (useTarget_ && isTarget_) {
+//		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
+//
+//			bulletVoiceHandle = audio_->PlayWave(bulletDataHandle, false, 0.7f);
+//			isAttack_ = true;
+//			// 弾の速度
+//			const float kBulletSpeed = 5.0f;
+//			Vector3 worldPos = GetWorldPosition();
+//			Vector3 velocity = targetWorldPosition_ - worldPos;
+//			velocity = Normalize(velocity);
+//			velocity *= kBulletSpeed;
+//			// 速度ベクトルを自機の向きに合わせて回転させる
+//			velocity = TransformNormal(velocity, worldTransform_.matWorld_);
+//
+//			// 弾を生成し、初期化
+//			PlayerBullet* newBullet = new PlayerBullet();
+//			newBullet->Initialize(bulletModel_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
+//
+//			// 弾を登録する
+//			bullets_.push_back(newBullet);
+//		} else if (isAttack_) { // 攻撃間隔
+//			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
+//			if (fireDelayTimer_ >= 1.0f) {
+//				isAttack_ = false;
+//				fireDelayTimer_ = 0.0f;
+//				/*fireDelayTime_ -= 0.08f;
+//				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+//			}
+//		}
+//	} else {
+//		if (input_->PushKey(DIK_SPACE) && !isAttack_) {
+//			isAttack_ = true;
+//			// 弾の速度
+//			const float kBulletSpeed = 5.0f;
+//			Vector3 velocity(0.0f, 0.0f, kBulletSpeed);
+//			// 速度ベクトルを自機の向きに合わせて回転させる
+//			velocity = TransformNormal(velocity, targetWorldTransform_.matWorld_);
+//
+//			// 弾を生成し、初期化
+//			PlayerBullet* newBullet = new PlayerBullet();
+//			newBullet->Initialize(bulletModel_, Vector3{GetWorldPosition().x, GetWorldPosition().y - 0.4f, GetWorldPosition().z + 1.0f}, velocity);
+//
+//			// 弾を登録する
+//			bullets_.push_back(newBullet);
+//		} else if (isAttack_) { // 攻撃間隔
+//			fireDelayTimer_ += 1.0f / 60 / fireDelayTime_;
+//			if (fireDelayTimer_ >= 1.0f) {
+//				isAttack_ = false;
+//				fireDelayTimer_ = 0.0f;
+//				/*fireDelayTime_ -= 0.08f;
+//				fireDelayTime_ = std::clamp(fireDelayTime_, 0.05f, 0.5f);*/
+//			}
+//		}
+//	}
+//
+//	/*if (!input_->PushKey(DIK_SPACE)) {
+//		fireDelayTime_ = 0.5f;
+//	}*/
+//}
 
 
 void Player::Draw(KamataEngine::Camera& camera) {
