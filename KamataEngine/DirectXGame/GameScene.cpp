@@ -65,7 +65,7 @@ void GameScene::Initialize() {
 	//railCamera_->SetParent(&player_->GetWorldTransform());
 
 	// 敵の初期化
-	modelEnemy_ = KamataEngine::Model::CreateFromOBJ("cube");
+	modelEnemy_ = KamataEngine::Model::CreateFromOBJ("enemy");
 	LoadEnemyPopData();
 
 	// 天球の初期化
