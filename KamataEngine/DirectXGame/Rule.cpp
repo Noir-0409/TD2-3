@@ -33,7 +33,7 @@ void Rule::Initialize() {
 
 void Rule::Update() {
 #ifdef _DEBUG
-	playerAnime_->UpdateImgui();
+playerAnime_->UpdateImgui();
 #endif // _DEBUG
 	switch (phase_) {
 	case FadePhase::kFadeIn:
