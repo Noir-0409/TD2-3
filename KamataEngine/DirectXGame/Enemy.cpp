@@ -44,7 +44,7 @@ void Enemy::Initialize(Model* model, const Vector3& position, const bool move, c
 	}
 
 
-	velocity_ = velocity;
+	//velocity_ = velocity;
 
 	audio_= KamataEngine::Audio::GetInstance();
 

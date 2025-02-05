@@ -134,7 +134,7 @@ void Player::UpdateImgui() {
 
 bool Player::IsLowHP()
 {
-	return hp_ <= 20;
+	return hp_ <= 40;
 }
 
 void Player::InvertControls()

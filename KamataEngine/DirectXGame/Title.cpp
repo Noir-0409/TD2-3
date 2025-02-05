@@ -9,7 +9,7 @@ Title::~Title() {
 	delete model_;
 	delete sprite_;
 
-	audio_->StopWave(bgmVoicehadle);
+	//audio_->StopWave(bgmVoicehadle);
 
 }
 

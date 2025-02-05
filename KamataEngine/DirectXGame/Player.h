@@ -118,7 +118,7 @@ private:
 	Planets* planets_ = nullptr;
 
 	// HP
-	float hp_ = 100.0f;
+	float hp_ = 200.0f;
 	// 生きているかのフラグ
 	bool isDead_ = false;
 
