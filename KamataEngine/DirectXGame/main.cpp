@@ -222,8 +222,11 @@ void ChangeScene() {
 			delete clearScene;
 			clearScene = nullptr;
 			//新しいシーンの生成と初期化
-			gameScene = new GameScene();
-			gameScene->Initialize();
+			/*gameScene = new GameScene();
+			gameScene->Initialize();*/
+
+			titleScene = new Title();
+			titleScene->Initialize();
 
 		}
 		break;
@@ -235,10 +238,12 @@ void ChangeScene() {
 			delete overScene;
 			overScene = nullptr;
 			//新しいシーンの生成と初期化
-			gameScene = new GameScene();
-			gameScene->Initialize();
+			/*gameScene = new GameScene();
+			gameScene->Initialize();*/
 
-		
+			titleScene = new Title();
+			titleScene->Initialize();
+
 		}
 
 	}
